@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('business_name');
             $table->string('address1')->nullable();
             $table->string('address2')->nullable();
+            $table->string('city')->nullable();
             $table->string('zip_code', 5)->nullable();
             $table->string('state', 2)->nullable();
             $table->string('location_zip')->nullable();

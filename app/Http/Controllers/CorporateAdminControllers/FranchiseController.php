@@ -22,34 +22,34 @@ class FranchiseController extends Controller
     }
 
     // Store franchise
-    public function store(Request $request)
-    {
-        // Validate Input Fields
-        $request->validate([
-            'business_name' => 'required|string|max:255',
-            // 'join_date' => 'required|date',
-            'address1' => 'required|string|max:255',
-            'zip_code' => 'required|string|regex:/^\d{5}$/',
-            'state' => 'required|string|max:2',
-            'location_zip' => 'required|array', // Ensure it's an array of zip codes
-            'location_zip.*' => 'string|max:10', // Validate each zip code
-        ]);
-    
-        // Convert array of zip codes into a comma-separated string before storing
-        $requestData = $request->all();
-        $requestData['location_zip'] = implode(',', $request->location_zip);
-    
-        // Insert Data into Database
-        Franchisee::create($requestData);
-    
-        // Notify success message
-        notify()->success('Franchise created successfully.');
-    
-        // Redirect to Index Page
-        return redirect()->route('corporate_admin.franchise.index');
-    }
-    
-    
+  
+public function store(Request $request)
+{
+    // Validate Input Fields
+    $request->validate([
+        'business_name' => 'required|string|max:255',
+        'address1' => 'required|string|max:255',
+        'city' => 'required|string|max:255',
+        'zip_code' => 'required|string|regex:/^\d{5}$/',
+        'state' => 'required|string|max:2',
+        'location_zip' => 'required|array', // Ensure it's an array of zip codes
+        'location_zip.*' => 'string|max:10', // Validate each zip code
+    ]);
+
+    // Convert array of zip codes into a comma-separated string before storing
+    $requestData = $request->all();
+    $requestData['location_zip'] = implode(',', $request->location_zip);
+
+    // Insert Data into Database
+    Franchisee::create($requestData);
+
+    // Notify success message
+    notify()->success('Franchise created successfully.');
+
+    // Redirect to Index Page
+    return redirect()->route('corporate_admin.franchise.index');
+}
+
     
     // Show edit form
     public function edit(Franchisee $franchise)
@@ -64,17 +64,20 @@ class FranchiseController extends Controller
     {
         $request->validate([
             'business_name' => 'required|string|max:255',
-            // 'join_date' => 'required|date',
             'address1' => 'required|string|max:255',
+            'city' => 'required|string|max:255',
             'zip_code' => 'required|string|regex:/^\d{5}$/',
-            'state' => 'required|string|max:255', // Updated validation to allow full state names
+            'state' => 'required|string|max:255',
             'location_zip' => 'required|array',
             'location_zip.*' => 'string|max:10',
         ]);
     
+        // Ensure unique ZIP codes before storing
+        $uniqueZips = array_unique($request->location_zip);
+        
         // Convert ZIP codes array to a comma-separated string
         $requestData = $request->all();
-        $requestData['location_zip'] = implode(',', $request->location_zip);
+        $requestData['location_zip'] = implode(',', $uniqueZips);
     
         $franchise->update($requestData);
     

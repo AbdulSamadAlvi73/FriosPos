@@ -119,7 +119,7 @@
                                         </th>
                                         <th>Franchisee ID</th>
                                         <th>Business Name</th>
-                                        <th>Address</th>
+                                        <th>City</th>
                                         <th>State</th>
                                         <th>Zip Code</th>
                                         <th>Location Zip</th>
@@ -137,7 +137,7 @@
                                             </td>
                                             <td>#{{ str_pad($franchisee->franchisee_id, 7, '0', STR_PAD_LEFT) }}</td>
                                             <td>{{ $franchisee->business_name }}</td>
-                                            <td>{{ $franchisee->address1 }}</td>
+                                            <td>{{ $franchisee->city }}</td>
                                             {{-- <td>{{ $franchisee->created_at->format('d/m/Y') }}</td> --}}
                                             <td>{{ $franchisee->state }}</td> <!-- No data available for 'Ticket Ordered' -->
                                             <td>{{ $franchisee->zip_code }}</td>

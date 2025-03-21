@@ -16,6 +16,7 @@ class Franchisee extends Model
         'business_name',
         'address1',
         'address2',
+        'city',
         'zip_code',
         'state',
         'location_zip',

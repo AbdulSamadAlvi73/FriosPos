@@ -15,17 +15,17 @@
 
 
     <!--**********************************
-                Content body start
-            ***********************************-->
+                        Content body start
+                    ***********************************-->
     <div class=" content-body default-height">
         <!-- row -->
         <div class="container-fluid">
             <!-- <div class="page-titles">
-                        <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="javascript:void(0)">Dashboard</a></li>
-                            <li class="breadcrumb-item active"><a href="javascript:void(0)">Analytics</a></li>
-                        </ol>
-                    </div> -->
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a href="javascript:void(0)">Dashboard</a></li>
+                                    <li class="breadcrumb-item active"><a href="javascript:void(0)">Analytics</a></li>
+                                </ol>
+                            </div> -->
             <div class="form-head mb-4 d-flex flex-wrap align-items-center">
                 <div class="me-auto">
                     <h2 class="font-w600 mb-0">Dashboard \</h2>
@@ -72,17 +72,6 @@
                                                         @enderror
                                                     </div>
 
-                                                    {{-- <div class="mb-3 col-md-6">
-                                                        <label class="form-label">Join Date <span
-                                                                class="text-danger">*</span></label>
-                                                        <input type="date"
-                                                            class="form-control @error('join_date') is-invalid @enderror"
-                                                            name="join_date" value="{{ old('join_date') }}">
-                                                        @error('join_date')
-                                                            <div class="text-danger">{{ $message }}</div>
-                                                        @enderror
-                                                    </div> --}}
-
                                                     <div class="mb-3 col-md-6">
                                                         <label class="form-label">Address 1 <span
                                                                 class="text-danger">*</span></label>
@@ -90,7 +79,8 @@
                                                             class="form-control @error('address1') is-invalid @enderror"
                                                             name="address1" value="{{ old('address1') }}"
                                                             placeholder="Address Line 1">
-                                                            <small class="form-text text-muted">Street address, P.O box, company name, c/o</small>
+                                                        <small class="form-text text-muted">Street address, P.O box, company
+                                                            name, c/o</small>
                                                         @error('address1')
                                                             <div class="text-danger">{{ $message }}</div>
                                                         @enderror
@@ -102,8 +92,20 @@
                                                             class="form-control @error('address2') is-invalid @enderror"
                                                             name="address2" value="{{ old('address2') }}"
                                                             placeholder="Address Line 2">
-                                                            <small class="form-text text-muted">Aprtment, suite, unit, building, floor, etc</small>
+                                                        <small class="form-text text-muted">Aprtment, suite, unit, building,
+                                                            floor, etc</small>
                                                         @error('address2')
+                                                            <div class="text-danger">{{ $message }}</div>
+                                                        @enderror
+                                                    </div>
+
+                                                    <div class="mb-3 col-md-6">
+                                                        <label class="form-label">City <span
+                                                                class="text-danger">*</span></label>
+                                                        <input type="text"
+                                                            class="form-control @error('city') is-invalid @enderror"
+                                                            name="city" value="{{ old('city') }}" placeholder="City">
+                                                        @error('city')
                                                             <div class="text-danger">{{ $message }}</div>
                                                         @enderror
                                                     </div>
@@ -128,57 +130,157 @@
                                                             <div class="text-danger">{{ $message }}</div>
                                                         @enderror
                                                     </div>
-                                                    <!-- Include jQuery & Select2 -->
-                                                    <script
-                                                        src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-                                                    <link rel="stylesheet"
-                                                        href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" />
-                                                    <script
-                                                        src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 
-                                                    <!-- Multi-select Dropdown for ZIP Codes -->
-                                                    <div class="mb-3 col-md-6">
+                                                    {{-- <h2>Franchise ZIP Codes</h2> --}}
+
+
+                                                    <!-- Multi-select Dropdown for ZIP Codes (Generated by JS) -->
+                                                    <div class="mb-3 col-md-12">
                                                         <label class="form-label">Location ZIP Codes</label>
                                                         <select class="form-control" name="location_zip[]" id="location_zip"
-                                                            multiple>
-                                                            <option value="35004">35004</option>
-                                                            <option value="99501">99501</option>
-                                                            <option value="85001">85001</option>
-                                                            <option value="71601">71601</option>
-                                                            <option value="90001">90001</option>
-                                                            <option value="80001">80001</option>
-                                                            <option value="06001">06001</option>
-                                                            <option value="19701">19701</option>
-                                                            <option value="32003">32003</option>
-                                                            <option value="30002">30002</option>
-                                                            <option value="96701">96701</option>
-                                                            <option value="83201">83201</option>
-                                                            <option value="60001">60001</option>
-                                                            <option value="46001">46001</option>
-                                                            <option value="50001">50001</option>
-                                                        </select>
-                                                        <small class="form-text text-muted">Select ZIP
-                                                            codes.</small>
+                                                            multiple></select>
+                                                        <small class="form-text text-muted">Select or add ZIP codes.</small>
                                                         @error('location_zip')
                                                             <div class="text-danger">{{ $message }}</div>
                                                         @enderror
                                                     </div>
 
-                                                    <!-- JavaScript -->
+                                                    <!-- Paste ZIP Codes -->
+                                                    <div class="mb-3">
+                                                        <label for="paste-zipcodes" class="form-label">Paste ZIP Codes
+                                                            (comma or newline separated)</label>
+                                                        <small id="success-message" class="text-success"
+                                                            style="display:none;">
+                                                            ZIP codes updated successfully.
+                                                        </small>
+                                                        <!-- Error Message -->
+                                                        <small id="error-message" class="text-danger" style="display:none;">
+                                                            Invalid ZIP code entered. Please enter a valid 5-digit ZIP code.
+                                                        </small>
+
+                                                        <!-- Duplicate Message -->
+                                                        <small id="duplicate-message" class="text-warning"
+                                                            style="display:none;">
+                                                            This ZIP code already exists.
+                                                        </small>
+                                                        <textarea id="paste-zipcodes" class="form-control" rows="3"
+                                                            placeholder="Enter ZIP codes..."></textarea>
+                                                        <button id="parse-zipcodes"
+                                                            class="btn btn-secondary bg-secondary mt-2"
+                                                            type="button">Process ZIP Codes</button>
+                                                    </div>
+
+                                                    <!-- Editable ZIP Codes -->
+                                                    <div class="mb-3">
+                                                        <label for="zipcodes" class="form-label">Editable ZIP Codes</label>
+                                                        <div id="zipcodes-list"></div>
+                                                    </div>
+
+
                                                     <script>
                                                         $(document).ready(function () {
-                                                            $('#location_zip').select2({
-                                                                tags: true,  // Allow user to enter new values
-                                                                tokenSeparators: [',', ' '], // Allow separating with commas or spaces
-                                                                placeholder: "Type or select ZIP codes...",
-                                                                allowClear: true,
-                                                                createTag: function (params) {
-                                                                    let term = $.trim(params.term);
-                                                                    if (term.match(/^\d{5}$/)) {  // Ensure only valid 5-digit ZIP codes
-                                                                        return { id: term, text: term, newTag: true };
-                                                                    }
-                                                                    return null; // Prevent invalid input
+                                                            let zipSet = new Set();
+                                                            let zipDropdown = $('#location_zip');
+
+                                                            // Predefined ZIP codes
+                                                            let predefinedZips = [
+                                                            "30188", "30144", "30101", "30157", "30132", "30102", "30701", "30165", "30120", "30189", 
+                                                            "30161", "30141", "30121", "30125", "30153", "30747", "30103", "30145", "30184", "30147", 
+                                                            "30173", "30104", "30124", "30178", "30731", "30733", "30137", "30149", "30105", "30730", 
+                                                            "35984", "30525", "30568", "30546", "30582", "30512", "30523", "30552", "30571", "30528", 
+                                                            "30572", "30533", "30531", "30535", "30577", "30573", "30538", "30557", "30554", "30527", 
+                                                            "30564", "30563", "30506", "30543", "30507", "30542", "30562", "28707", "28717", "28723", 
+                                                            "28725", "28736", "28779", "28783", "28788", "28789", "28734", "28741", "28744", "28763", 
+                                                            "28775", "30121"
+                                                        ];
+                                                            predefinedZips.forEach(zip => zipSet.add(zip));
+
+                                                            // Function to show messages
+                                                            function showMessage(type, message) {
+                                                                let msgBox = $(`#${type}-message`);
+                                                                msgBox.text(message).fadeIn();
+                                                                setTimeout(() => msgBox.fadeOut(), 3000);
+                                                            }
+
+                                                            function initializeZipDropdown() {
+                                                                zipDropdown.empty();
+                                                                zipSet.forEach(zip => {
+                                                                    let newOption = new Option(zip, zip, false, false);
+                                                                    zipDropdown.append(newOption);
+                                                                });
+
+                                                                if ($.fn.select2) {
+                                                                    zipDropdown.select2({
+                                                                        tags: true,
+                                                                        tokenSeparators: [',', ' '],
+                                                                        placeholder: "Type or select ZIP codes...",
+                                                                        allowClear: true
+                                                                    });
+
+                                                                    // Capture manual ZIP entry
+                                                                    zipDropdown.on('select2:select', function (e) {
+                                                                        let selectedZip = e.params.data.id;
+                                                                        if (!zipSet.has(selectedZip)) {
+                                                                            if (/^\d{5}$/.test(selectedZip)) {
+                                                                                zipSet.add(selectedZip);
+                                                                                addToZipList(selectedZip);
+                                                                                showMessage("success", "ZIP code added successfully.");
+                                                                            } else {
+                                                                                showMessage("error", "Invalid ZIP code entered.");
+                                                                                zipDropdown.find(`option[value="${selectedZip}"]`).remove();
+                                                                                zipDropdown.trigger('change.select2');
+                                                                            }
+                                                                        } else {
+                                                                            showMessage("duplicate", "This ZIP code already exists.");
+                                                                        }
+                                                                    });
                                                                 }
+                                                            }
+
+                                                            initializeZipDropdown();
+
+                                                            $('#parse-zipcodes').click(function () {
+                                                                let input = $('#paste-zipcodes').val().trim();
+                                                                $('#paste-zipcodes').val("");
+
+                                                                let newZipcodes = input.split(/[ ,\n]+/)
+                                                                    .map(zip => zip.trim())
+                                                                    .filter(zip => zip !== "");
+
+                                                                newZipcodes.forEach(zip => {
+                                                                    if (/^\d{5}$/.test(zip)) {
+                                                                        if (!zipSet.has(zip)) {
+                                                                            zipSet.add(zip);
+                                                                            let newOption = new Option(zip, zip, false, false);
+                                                                            zipDropdown.append(newOption);
+                                                                            zipDropdown.trigger('change.select2');
+                                                                            addToZipList(zip);
+                                                                            showMessage("success", "ZIP code added successfully.");
+                                                                        } else {
+                                                                            showMessage("duplicate", "This ZIP code already exists.");
+                                                                        }
+                                                                    } else {
+                                                                        showMessage("error", "Invalid ZIP code entered.");
+                                                                    }
+                                                                });
+                                                            });
+
+                                                            function addToZipList(zip) {
+                                                                let zipList = $('#zipcodes-list');
+                                                                let div = $('<div class="d-flex mb-2"></div>');
+                                                                div.append(`<input type="text" class="form-control zip-input me-2" name="location_zip[]" value="${zip}">`);
+                                                                div.append('<button class="btn btn-danger bg-danger remove-zip" type="button">Remove</button>');
+                                                                zipList.append(div);
+                                                            }
+
+                                                            $(document).on('click', '.remove-zip', function () {
+                                                                let zipValue = $(this).siblings('.zip-input').val();
+                                                                if (zipSet.has(zipValue)) {
+                                                                    zipSet.delete(zipValue);
+                                                                }
+                                                                $(this).parent().remove();
+                                                                $('#location_zip option[value="' + zipValue + '"]').remove();
+                                                                zipDropdown.trigger('change.select2');
                                                             });
                                                         });
                                                     </script>
@@ -188,7 +290,8 @@
 
                                                 </div>
 
-                                                <button type="submit" class="btn btn-primary bg-primary">Add Franchise</button>
+                                                <button type="submit" class="btn btn-primary bg-primary">Add
+                                                    Franchise</button>
                                             </form>
                                         </div>
                                     </div>
@@ -204,8 +307,8 @@
         </div>
     </div>
     <!--**********************************
-                Content body end
-            ***********************************-->
+                        Content body end
+                    ***********************************-->
 
 
 @endsection
