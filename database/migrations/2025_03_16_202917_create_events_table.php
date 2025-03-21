@@ -18,7 +18,12 @@ return new class extends Migration
             $table->date('date');
             $table->time('time');
             $table->string('location');
-            $table->json('inventory_allocated')->nullable(); // List of case flavors and quantities
+            $table->text('staff')->nullable();
+            $table->text('type')->nullable();
+            $table->enum('status', ['Tentative', 'Confirmed', 'Staffed'])->nullable();
+            $table->text('resource_needed')->nullable();
+            $table->text('comments')->nullable();
+            $table->json('inventory_allocated')->nullable();
             $table->timestamps();
         
             // Foreign Key

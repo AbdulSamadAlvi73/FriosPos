@@ -8,7 +8,10 @@
     "require": {
         "php": "^8.2",
         "laravel/framework": "^11.31",
+        "laravel/socialite": "^5.18",
         "laravel/tinker": "^2.9",
+        "mckenziearts/laravel-notify": "^2.7",
+        "spatie/laravel-flash": "^1.10",
         "spatie/laravel-permission": "^6.16"
     },
     "require-dev": {

@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
+<x-notify::notify />
+
 <!--**********************************
             Content body start
         ***********************************-->

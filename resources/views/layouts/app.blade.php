@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -11,19 +12,26 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
+    <!-- Favicon icon -->
+    <link rel="shortcut icon" type="image/x-icon"
+        href="https://friospops.wpenginepowered.com/wp-content/uploads/2022/04/Frios-Logo-2022-light-yellow-orange-pop-01.png">
+
     <!-- Styles -->
     <link href="{{ asset('assets/vendor/bootstrap-select/css/bootstrap-select.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('assets/vendor/chartist/css/chartist.min.css') }}">
-    <link href="{{ asset('assets/vendor/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/vendor/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css') }}"
+        rel="stylesheet">
     <link href="{{ asset('assets/css/jquery.localizationTool.css') }}" rel="stylesheet">
-    <link class="main-css" href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
 
-    {{-- <!-- Scripts -->
-    @vite(['resources/css/app.css', 'resources/js/app.js']) --}}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    @notifyCss
+
 </head>
+
+
 <body class="font-sans antialiased">
-    		<!--*******************
+    <!--*******************
         Preloader start
     ********************-->
     <div id="preloader">
@@ -46,7 +54,6 @@
     ***********************************-->
     <div id="main-wrapper">
         <div class="min-h-screen bg-gray-100">
-            {{-- @include('layouts.navigation') --}}
 
             <!-- Header -->
             @include('layouts.header')
@@ -57,7 +64,9 @@
 
                 <!-- Main Content -->
                 <div class="flex-1 p-6">
+                    <x-notify::notify />
                     @yield('content')
+                    
                 </div>
             </div>
 
@@ -65,33 +74,37 @@
             @include('layouts.footer')
         </div>
     </div>
-    
+
     <!--**********************************
         Scripts
     ***********************************-->
+    <!-- Laravel Notify JS -->
+    @notifyJs
     <!-- Required vendors -->
     <script src="{{ asset('assets/vendor/global/global.min.js') }}"></script>
-	<script src="{{ asset('assets/vendor/chartjs/chart.bundle.min.js') }}"></script>
-	<script src="{{ asset('assets/vendor/bootstrap-datetimepicker/js/moment.js') }}"></script>
-	<script src="{{ asset('assets/vendor/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js') }}"></script>
-	<script src="{{ asset('assets/vendor/bootstrap-select/js/bootstrap-select.min.js') }}"></script>
-	
-	<!-- Chart piety plugin files -->
+    <script src="{{ asset('assets/vendor/chartjs/chart.bundle.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/bootstrap-datetimepicker/js/moment.js') }}"></script>
+    <script src="{{ asset('assets/vendor/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/bootstrap-select/js/bootstrap-select.min.js') }}"></script>
+
+    <!-- Chart piety plugin files -->
     <script src="{{ asset('assets/vendor/peity/jquery.peity.min.js') }}"></script>
-	
-	<!-- Apex Chart -->
-	<script src="{{ asset('assets/vendor/apexchart/apexchart.js') }}"></script>
-	
-	<!-- Dashboard 1 -->
-	<script src="{{ asset('assets/js/dashboard/dashboard-1.js') }}"></script>
-	
-	<!-- localizationTool -->
-	<script src="{{ asset('assets/js/jquery.localizationTool.js') }}"></script>
-	<script src="{{ asset('assets/js/translator.js') }}"></script>
-	
+
+    <!-- Apex Chart -->
+    <script src="{{ asset('assets/vendor/apexchart/apexchart.js') }}"></script>
+
+    <!-- Dashboard 1 -->
+    <script src="{{ asset('assets/js/dashboard/dashboard-1.js') }}"></script>
+
+    <!-- localizationTool -->
+    <script src="{{ asset('assets/js/jquery.localizationTool.js') }}"></script>
+    <script src="{{ asset('assets/js/translator.js') }}"></script>
+
     <script src="{{ asset('assets/js/custom.min.js') }}"></script>
-	<script src="{{ asset('assets/js/deznav-init.js') }}"></script>
-	<script src="{{ asset('assets/js/demo.js') }}"></script>
-    <script src="{{ asset('assets/js/styleSwitcher.js') }}"></script>
+    <script src="{{ asset('assets/js/deznav-init.js') }}"></script>
+    <script src="{{ asset('assets/js/demo.js') }}"></script>
+    {{-- <script src="{{ asset('assets/js/styleSwitcher.js') }}"></script> --}}
+
 </body>
+
 </html>

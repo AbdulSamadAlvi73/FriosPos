@@ -3,15 +3,19 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CorporateAdminControllers\CorporateAdminController;
+use App\Http\Controllers\CorporateAdminControllers\FranchiseController;
+use App\Http\Controllers\CorporateAdminControllers\OwnerController;
 use App\Http\Controllers\FranchiseAdminControllers\FranchiseAdminController;
 use App\Http\Controllers\FranchiseManagerControllers\FranchiseManagerController;
 use App\Http\Controllers\FranchiseStaffController\FranchiseStaffController;
+use App\Http\Controllers\Auth\GoogleController;
 
 Route::get('/', function () {
     return view('auth.login');
 });
 
 Route::get('/dashboard', function () {
+    notify()->success('Welcome to Laravel Notify ⚡️');
     return view('dashboard');
 })->name('dashboard')->middleware('auth');
 
@@ -22,9 +26,32 @@ Route::middleware('auth')->group(function () {
 });
 
 
-Route::middleware(['auth', 'role:corporate_admin'])->group(function () {
+Route::get('/auth/google', [GoogleController::class, 'redirectToGoogle'])->name('auth.google');
+Route::get('/auth/google/callback', [GoogleController::class, 'handleGoogleCallback']);
+
+
+Route::middleware(['auth', 'role:corporate_admin'])->prefix('corporate_admin')->name('corporate_admin.')->group(function () {
     Route::get('/corporate/dashboard', [CorporateAdminController::class, 'dashboard']);
+    
+     // Franchise routes
+     Route::get('/franchisee', [FranchiseController::class, 'index'])->name('franchise.index');
+     Route::get('/franchisee/create', [FranchiseController::class, 'create'])->name('franchise.create');
+     Route::post('/franchisee', [FranchiseController::class, 'store'])->name('franchise.store');
+     Route::get('/franchisee/{franchise}/edit', [FranchiseController::class, 'edit'])->name('franchise.edit');
+     Route::put('/franchisee/{franchise}', [FranchiseController::class, 'update'])->name('franchise.update');
+     Route::delete('/franchisee/{franchise}', [FranchiseController::class, 'destroy'])->name('franchise.destroy');
+
+    // Owner routes
+    Route::get('/owner', [OwnerController::class, 'index'])->name('owner.index');
+    Route::get('/owner/create', [OwnerController::class, 'create'])->name('owner.create');
+    Route::post('/owner', [OwnerController::class, 'store'])->name('owner.store');
+    Route::get('/owner/{owner}/edit', [OwnerController::class, 'edit'])->name('owner.edit');
+    Route::put('/owner/{owner}', [OwnerController::class, 'update'])->name('owner.update');
+    Route::delete('/owner/{owner}', [OwnerController::class, 'destroy'])->name('owner.destroy');
+     
+     
 });
+
 
 Route::middleware(['auth', 'role:franchise_admin'])->group(function () {
     Route::get('/franchise/dashboard', [FranchiseAdminController::class, 'dashboard']);
@@ -37,5 +64,61 @@ Route::middleware(['auth', 'role:franchise_manager'])->group(function () {
 Route::middleware(['auth', 'role:franchise_staff'])->group(function () {
     Route::get('/staff/dashboard', [FranchiseStaffController::class, 'dashboard']);
 });
+
+
+
+
+
+// TEMP ROUTE
+Route::get('/linkstorage', function () {
+    $targetFolder = base_path() . '/storage/app/public';
+    $linkFolder = $_SERVER['DOCUMENT_ROOT'] . '/storage';
+    symlink($targetFolder, $linkFolder);
+});
+
+Route::get('/linkstorage2', function () {
+    $targetFolder = base_path() . '/storage/app/public';
+    $linkFolder = $_SERVER['DOCUMENT_ROOT'] . '/public/storage';
+    symlink($targetFolder, $linkFolder);
+});
+
+// Clear Cache facade value:
+Route::get('/clear_cache', function () {
+    $exitCode = Artisan::call('cache:clear');
+    return '<h1>Cache facade value cleared</h1>';
+});
+
+// Reoptimized class loader:
+Route::get('/optimize', function () {
+    $exitCode = Artisan::call('optimize');
+    return '<h1>Reoptimized class loader</h1>';
+});
+
+// Route cache:
+Route::get('/route_cache', function () {
+    $exitCode = Artisan::call('route:cache');
+    return '<h1>Routes cached</h1>';
+});
+
+// Clear Route cache:
+Route::get('/route_clear', function () {
+    $exitCode = Artisan::call('route:clear');
+    return '<h1>Route cache cleared</h1>';
+});
+
+// Clear View cache:
+Route::get('/view_clear', function () {
+    $exitCode = Artisan::call('view:clear');
+    return '<h1>View cache cleared</h1>';
+});
+
+// Clear Config cache:
+Route::get('/config_cache', function () {
+    $exitCode = Artisan::call('config:cache');
+    return '<h1>Config cache cleared</h1>';
+});
+
+
+
 
 require __DIR__.'/auth.php';

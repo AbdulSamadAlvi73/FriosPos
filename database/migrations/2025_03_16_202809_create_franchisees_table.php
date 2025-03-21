@@ -13,9 +13,13 @@ return new class extends Migration
     {
         Schema::create('franchisees', function (Blueprint $table) {
             $table->id('franchisee_id');
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('user_id')->nullable()->default(0);
             $table->string('business_name');
-            $table->string('location_zip');
+            $table->string('address1')->nullable();
+            $table->string('address2')->nullable();
+            $table->string('zip_code', 5)->nullable();
+            $table->string('state', 2)->nullable();
+            $table->string('location_zip')->nullable();
             $table->json('ACH_data_API')->nullable();
             $table->json('pos_service_API')->nullable();
             $table->timestamps();

@@ -56,5 +56,15 @@ class DatabaseSeeder extends Seeder
             'role' => 'franchise_staff',
         ]);
         $user->assignRole('franchise_staff');
+        
+
+        // Creating a sample corporate admin
+        $user = User::create([
+            'name' => 'Samad',
+            'email' => 'abdulsamadalvi73@gmail.com',
+            'password' => bcrypt('AbdulSamadPassword'),
+            'role' => 'corporate_admin', 
+        ]);
+        $user->assignRole('corporate_admin');
     }
 }
