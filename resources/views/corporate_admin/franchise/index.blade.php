@@ -122,7 +122,7 @@
                                         <th>City</th>
                                         <th>State</th>
                                         <th>Zip Code</th>
-                                        <th>Location Zip</th>
+                                        <th>Territory Zip codes</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>                                
@@ -141,7 +141,17 @@
                                             {{-- <td>{{ $franchisee->created_at->format('d/m/Y') }}</td> --}}
                                             <td>{{ $franchisee->state }}</td> <!-- No data available for 'Ticket Ordered' -->
                                             <td>{{ $franchisee->zip_code }}</td>
-                                            <td>{{ $franchisee->location_zip }}</td></td> <!-- No data available for 'Last Order' -->
+                                            <td>
+                                                @php
+                                                    $zipCodes = explode(',', $franchisee->location_zip); // Convert ZIP codes into an array
+                                                    $chunks = array_chunk($zipCodes, 5); // Split array into chunks of 5
+                                                @endphp
+                                            
+                                                @foreach($chunks as $chunk)
+                                                    {{ implode(', ', $chunk) }}<br>
+                                                @endforeach
+                                            </td>                                            
+                                            <!-- No data available for 'Last Order' -->
                                             {{-- <td class="text-secondary font-w500">$0</td> <!-- No data available for 'Total Spent' --> --}}
                                             <td>
                                                 <div class="d-flex">
