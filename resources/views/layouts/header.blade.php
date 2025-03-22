@@ -104,7 +104,13 @@
                                 <span class="ms-2">Profile</span>
                             </a>
                             @role('franchise_admin')
-                            <a href="" class="dropdown-item ai-icon d-flex">
+                            <a href="{{ route('franchise_admin.staff.index') }}" class="dropdown-item ai-icon d-flex">
+                                <i class="bi bi-people-fill text-primary"></i>
+                                <span class="ms-2">Manage Users</span>
+                            </a>
+                            @endrole
+                            @role('franchise_manager')
+                            <a href="{{ route('franchise_manager.staff.index') }}" class="dropdown-item ai-icon d-flex">
                                 <i class="bi bi-people-fill text-primary"></i>
                                 <span class="ms-2">Manage Users</span>
                             </a>

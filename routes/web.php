@@ -6,6 +6,7 @@ use App\Http\Controllers\CorporateAdminControllers\CorporateAdminController;
 use App\Http\Controllers\CorporateAdminControllers\FranchiseController;
 use App\Http\Controllers\CorporateAdminControllers\OwnerController;
 use App\Http\Controllers\FranchiseAdminControllers\FranchiseAdminController;
+use App\Http\Controllers\FranchiseAdminControllers\StaffController;
 use App\Http\Controllers\FranchiseManagerControllers\FranchiseManagerController;
 use App\Http\Controllers\FranchiseStaffController\FranchiseStaffController;
 use App\Http\Controllers\Auth\GoogleController;
@@ -53,12 +54,29 @@ Route::middleware(['auth', 'role:corporate_admin'])->prefix('corporate_admin')->
 });
 
 
-Route::middleware(['auth', 'role:franchise_admin'])->group(function () {
+Route::middleware(['auth', 'role:franchise_admin'])->prefix('franchise_admin')->name('franchise_admin.')->group(function () {
     Route::get('/franchise/dashboard', [FranchiseAdminController::class, 'dashboard']);
+
+    // Staff routes
+    Route::get('/staff', [StaffController::class, 'index'])->name('staff.index');
+    Route::get('/staff/create', [StaffController::class, 'create'])->name('staff.create');
+    Route::post('/staff', [StaffController::class, 'store'])->name('staff.store');
+    Route::get('/staff/{staff}/edit', [StaffController::class, 'edit'])->name('staff.edit');
+    Route::put('/staff/{staff}', [StaffController::class, 'update'])->name('staff.update');
+    Route::delete('/staff/{staff}', [StaffController::class, 'destroy'])->name('staff.destroy');
+     
 });
 
-Route::middleware(['auth', 'role:franchise_manager'])->group(function () {
+Route::middleware(['auth', 'role:franchise_manager'])->prefix('franchise_manager')->name('franchise_manager.')->group(function () {
     Route::get('/manager/dashboard', [FranchiseManagerController::class, 'dashboard']);
+
+    // Staff routes
+    Route::get('/staff', [StaffController::class, 'index'])->name('staff.index');
+    Route::get('/staff/create', [StaffController::class, 'create'])->name('staff.create');
+    Route::post('/staff', [StaffController::class, 'store'])->name('staff.store');
+    Route::get('/staff/{staff}/edit', [StaffController::class, 'edit'])->name('staff.edit');
+    Route::put('/staff/{staff}', [StaffController::class, 'update'])->name('staff.update');
+    Route::delete('/staff/{staff}', [StaffController::class, 'destroy'])->name('staff.destroy');
 });
 
 Route::middleware(['auth', 'role:franchise_staff'])->group(function () {

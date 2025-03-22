@@ -134,126 +134,54 @@
 				</a></li> --}}
 			@endrole
 			@role('franchise_manager')
-			<li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
-					<!-- <i class="flaticon-033-feather"></i> -->
-					<i class="bi bi-basket3-fill"></i>
-					<span class="nav-text"><span>Flavors</span></span>
-				</a>
-				<ul aria-expanded="false">
-					<li><a href="viewflavor.html">Flavors List</a></li>
-					{{-- <li><a href="addflavor.html">Add Flavor</a></li> --}}
-				</ul>
-			</li>
-			<li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
-					<!-- <i class="flaticon-033-feather"></i> -->
-					<i class="bi bi-cart-plus-fill"></i>
-					<span class="nav-text"><span>Orders</span></span>
-				</a>
-				<ul aria-expanded="false">
-					<li><a href="vieworder.html">Orders List</a></li>
-					<li><a href="addorder.html">Add Order</a></li>
-				</ul>
-			</li>
-			<li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
-					<!-- <i class="flaticon-033-feather"></i> -->
+			{{-- <li><a class="ai-icon" href="javascript:void()" aria-expanded="false">
+					<i class="bi bi-house-door-fill"></i>
+					<span class="nav-text">Return to Main</span>
+				</a></li> --}}
+				<li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
 					<i class="bi bi-shop-window"></i>
-					<span class="nav-text"><span>Inventory</span></span>
+					<span class="nav-text">Inventory</span>
 				</a>
 				<ul aria-expanded="false">
-					<li><a href="viewcustomers.html">Inventories List</a></li>
-					<li><a href="addcustomer.html">Add Inventory</a></li>
+					<li><a href="inventory_list.html">Inventory List</a></li>
+					<li><a href="edit_inventory_locations.html">Edit Inventory Locations</a></li>
 				</ul>
 			</li>
-			<li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
-					<!-- <i class="flaticon-033-feather"></i> -->
-					<i class="bi bi-geo-alt-fill"></i>
-					<span class="nav-text"><span>Location</span></span>
+			{{-- <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
+					<i class="bi bi-cash-coin"></i>
+					<span class="nav-text">Get Paid</span>
 				</a>
 				<ul aria-expanded="false">
-					<li><a href="viewcustomers.html">Locations List</a></li>
-					<li><a href="addcustomer.html">Add Location</a></li>
+					<li><a href="invoices.html">Invoices</a></li>
+					<li><a href="sales.html">Sales</a></li>
+					<li><a href="payments.html">Payments</a></li>
 				</ul>
-			</li>
+			</li> --}}
 			<li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
-					<!-- <i class="flaticon-033-feather"></i> -->
-					<i class="bi bi-receipt"></i>
-					<span class="nav-text"><span>Invoice</span></span>
-				</a>
-				<ul aria-expanded="false">
-					<li><a href="viewcustomers.html">Invoices List</a></li>
-					<li><a href="addcustomer.html">Add Invoice</a></li>
-				</ul>
-			</li>
-			<li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
-					<!-- <i class="flaticon-033-feather"></i> -->
-					<i class="bi bi-cart-plus-fill"></i>
-					<span class="nav-text"><span>Orders</span></span>
-				</a>
-				<ul aria-expanded="false">
-					<li><a href="vieworder.html">Orders List</a></li>
-					<li><a href="addorder.html">Add Order</a></li>
-				</ul>
-			</li>
-			<li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
-					<!-- <i class="flaticon-033-feather"></i> -->
-					<i class="bi bi-credit-card-2-back-fill"></i>
-					<span class="nav-text"><span>Payment</span></span>
-				</a>
-				<ul aria-expanded="false">
-					<li><a href="vieworder.html">Payments List</a></li>
-					{{-- <li><a href="addorder.html">Add Order</a></li> --}}
-				</ul>
-			</li>
-			<li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
-					<!-- <i class="flaticon-033-feather"></i> -->
-					<i class="bi bi-calendar-week-fill"></i>
-					<span class="nav-text"><span>Event</span></span>
-				</a>
-				<ul aria-expanded="false">
-					<li><a href="event.html">Events List</a></li>
-					<li><a href="calender.html">Calender</a></li>
-				</ul>
-			</li>
-			<li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
-					<!-- <i class="flaticon-033-feather"></i> -->
-					<i class="bi bi-person-fill-add"></i>
-					<span class="nav-text"><span>Customer</span></span>
-				</a>
-				<ul aria-expanded="false">
-					<li><a href="viewcustomers.html">Customers List</a></li>
-					<li><a href="addcustomer.html">Add Customer</a></li>
-				</ul>
-			</li>
-			<li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
-					<!-- <i class="flaticon-033-feather"></i> -->
-					<i class="bi bi-coin"></i>
-					<span class="nav-text"><span>Sales</span></span>
-				</a>
-				<ul aria-expanded="false">
-					<li><a href="viewcustomers.html">Sales List</a></li>
-					{{-- <li><a href="addcustomer.html">Add Expenses</a></li> --}}
-				</ul>
-			</li>
-			<li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
-					<!-- <i class="flaticon-033-feather"></i> -->
 					<i class="bi bi-cup-hot-fill"></i>
-					<span class="nav-text"><span>Expense</span></span>
+					<span class="nav-text">Expenses</span>
 				</a>
 				<ul aria-expanded="false">
-					<li><a href="viewcustomers.html">Expenses List</a></li>
-					<li><a href="addcustomer.html">Add Expenses</a></li>
+					<li><a href="expenses_list.html">Expenses List</a></li>
+					<li><a href="expense_categories.html">Expense Categories</a></li>
 				</ul>
 			</li>
-			<li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
-					<!-- <i class="flaticon-033-feather"></i> -->
-					<i class="bi bi-menu-button-wide-fill"></i>
-					<span class="nav-text"><span>Expense Ctg</span></span>
-				</a>
-				<ul aria-expanded="false">
-					<li><a href="viewcustomers.html">Expenses List</a></li>
-					{{-- <li><a href="addcustomer.html">Add Expenses</a></li> --}}
-				</ul>
-			</li>
+			<li><a class="ai-icon" href="customers.html" aria-expanded="false">
+					<i class="bi bi-person-fill-add"></i>
+					<span class="nav-text">Customers</span>
+				</a></li>
+			<li><a class="ai-icon" href="events.html" aria-expanded="false">
+					<i class="bi bi-calendar-week-fill"></i>
+					<span class="nav-text">Events</span>
+				</a></li>
+			<li><a class="ai-icon" href="order_pops.html" aria-expanded="false">
+					<i class="bi bi-cart-plus-fill"></i>
+					<span class="nav-text">Order Pops</span>
+				</a></li>
+			{{-- <li><a class="ai-icon" href="manage_users.html" aria-expanded="false">
+					<i class="bi bi-people-fill"></i>
+					<span class="nav-text">Manage Users</span>
+				</a></li> --}}
 			@endrole
 			@role('franchise_staff')
 			<li><a class="ai-icon" href="pos.html" aria-expanded="false">
