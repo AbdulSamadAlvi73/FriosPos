@@ -38,7 +38,7 @@ class StaffController extends Controller
              'email' => 'required|email|unique:users,email',
              'password' => 'required|min:6',
              'role' => 'required',
-             'clearance' => 'nullable|string',
+             'phone_number' => 'nullable|string|regex:/^\(\d{3}\) \d{3}-\d{4}$/',
              'security' => 'nullable|string',
          ]);
      
@@ -50,7 +50,7 @@ class StaffController extends Controller
              'password' => bcrypt($request->password),
              'role' => $request->role, // Storing role in the database
              'franchisee_id' => $franchiseeId,
-             'clearance' => $request->clearance,
+             'phone_number' => $request->phone_number,
              'security' => $request->security,
              'created_date' => Carbon::now()->toDateString(), // Storing the current date
          ]);
@@ -82,7 +82,7 @@ class StaffController extends Controller
             'email' => 'required|email|unique:users,email,' . $staff->user_id . ',user_id',
             'password' => 'nullable|min:6',
             'role' => 'required',
-            'clearance' => 'nullable|string',
+            'phone_number' => 'nullable|string|regex:/^\(\d{3}\) \d{3}-\d{4}$/',
             'security' => 'nullable|string',
         ]);
         $franchiseeId = auth()->user()->franchisee_id; 
@@ -93,7 +93,7 @@ class StaffController extends Controller
             'password' => bcrypt($request->password),
             'role' => $request->role, // Storing role in the database
             'franchisee_id' => $franchiseeId,
-            'clearance' => $request->clearance,
+            'phone_number' => $request->phone_number,
             'security' => $request->security,
         ]);
         

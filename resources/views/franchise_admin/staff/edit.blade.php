@@ -96,17 +96,16 @@
                                                     </div>
                                                     
                                             
-                                                    <div class="mb-3 col-md-6">
-                                                        <label class="form-label">Clearance</label>
-                                                        <input type="text" class="form-control @error('clearance') is-invalid @enderror" name="clearance" value="{{ old('clearance', $staff->clearance) }}">
-                                                        @error('clearance') <div class="text-danger">{{ $message }}</div> @enderror
+                                                    <div class="mb-3 col-md-12">
+                                                        <label class="form-label">Phone number</label>
+                                                        <input type="text" class="form-control" id="phone_number"
+                                                            name="phone_number" value="{{ old('phone_number', $staff->phone_number) }}" 
+                                                            placeholder="Phone number"  class="form-control @error('phone_number') is-invalid @enderror">
+                                                        @error('phone_number')
+                                                            <div class="text-danger">{{ $message }}</div>
+                                                        @enderror
                                                     </div>
                                         
-                                                    <div class="mb-3 col-md-6">
-                                                        <label class="form-label">Security</label>
-                                                        <input type="text" class="form-control @error('security') is-invalid @enderror" name="security" value="{{ old('security', $staff->security) }}">
-                                                        @error('security') <div class="text-danger">{{ $message }}</div> @enderror
-                                                    </div>
                                                 </div>
                                         
                                                 <button type="submit" class="btn btn-primary bg-primary">Update staff</button>
@@ -129,5 +128,41 @@
                 Content body end
             ***********************************-->
 
-
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    const phoneInput = document.getElementById("phone_number");
+                    const phoneError = document.getElementById("phoneError");
+            
+                    phoneInput.addEventListener("input", function (e) {
+                        let value = phoneInput.value.replace(/\D/g, ""); // Remove non-numeric characters
+            
+                        // Format as (123) 456-7890
+                        if (value.length > 0) {
+                            value = "(" + value;
+                        }
+                        if (value.length > 4) {
+                            value = value.slice(0, 4) + ") " + value.slice(4);
+                        }
+                        if (value.length > 9) {
+                            value = value.slice(0, 9) + "-" + value.slice(9, 13);
+                        }
+            
+                        phoneInput.value = value;
+            
+                        // Validate phone format
+                        const phoneValid = /^\(\d{3}\) \d{3}-\d{4}$/.test(phoneInput.value);
+                        if (!phoneValid) {
+                            phoneError.textContent = "Invalid phone number format.";
+                        } else {
+                            phoneError.textContent = "";
+                        }
+                    });
+            
+                    phoneInput.addEventListener("keypress", function (e) {
+                        if (!/[0-9]/.test(e.key)) {
+                            e.preventDefault(); // Allow only numbers
+                        }
+                    });
+                });
+            </script>
 @endsection

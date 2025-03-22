@@ -7,6 +7,7 @@ use App\Http\Controllers\CorporateAdminControllers\FranchiseController;
 use App\Http\Controllers\CorporateAdminControllers\OwnerController;
 use App\Http\Controllers\FranchiseAdminControllers\FranchiseAdminController;
 use App\Http\Controllers\FranchiseAdminControllers\StaffController;
+use App\Http\Controllers\FranchiseAdminControllers\AdminProfileController;
 use App\Http\Controllers\FranchiseManagerControllers\FranchiseManagerController;
 use App\Http\Controllers\FranchiseStaffController\FranchiseStaffController;
 use App\Http\Controllers\Auth\GoogleController;
@@ -21,9 +22,18 @@ Route::get('/dashboard', function () {
 })->name('dashboard')->middleware('auth');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    // Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    // Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    // Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    // Profile routes
+    Route::get('/profile', [AdminProfileController::class, 'index'])->name('profile.index');
+    Route::get('/profile/create', [AdminProfileController::class, 'create'])->name('profile.create');
+    Route::post('/profile', [AdminProfileController::class, 'store'])->name('profile.store');
+    Route::get('/profile/{profile}/edit', [AdminProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile/{profile}', [AdminProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile/{profile}', [AdminProfileController::class, 'destroy'])->name('profile.destroy');
+    
 });
 
 

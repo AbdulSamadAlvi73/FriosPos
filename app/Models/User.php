@@ -42,6 +42,7 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'phone_number',
         'franchisee_id',
         'created_date',
         'clearance',

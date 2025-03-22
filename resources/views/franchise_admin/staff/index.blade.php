@@ -94,11 +94,12 @@
                                                 <label class="form-check-label" for="checkAll"></label>
                                             </div>
                                         </th>
-                                        <th>Staff ID</th>
+                                        {{-- <th>Staff ID</th> --}}
                                         <th>Staff Name</th>
                                         <th>Staff Of</th>
                                         <th>Email</th>
                                         <th>Role</th>
+                                        <th>Phone no</th>
                                         <th>Created Date</th>
                                         <th>Actions</th>
                                     </tr>
@@ -112,7 +113,7 @@
                                                     <label class="form-check-label" for="flexCheckDefault{{ $user->user_id }}"></label>
                                                 </div>
                                             </td>
-                                            <td>#{{ str_pad($user->user_id, 7, '0', STR_PAD_LEFT) }}</td>
+                                            {{-- <td>#{{ str_pad($user->user_id, 7, '0', STR_PAD_LEFT) }}</td> --}}
                                             <td>{{ $user->name }}</td>
                                             <td>
                                                 @if ($user->franchisee)
@@ -123,6 +124,13 @@
                                             </td>
                                             <td>{{ $user->email }}</td>
                                             <td>{{ ucwords(str_replace('_', ' ', $user->role)) }}</td>
+                                            <td>
+                                            @if ($user->phone_number)
+                                                    {{ $user->phone_number }}
+                                                @else
+                                                    No Phone number
+                                                @endif
+                                            </td>
                                             <td>{{ $user->created_date ? \Carbon\Carbon::parse($user->created_date)->format('d/m/Y') : 'N/A' }}</td>
                                             <td>
                                                 @role('franchise_admin')

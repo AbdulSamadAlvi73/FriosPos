@@ -149,7 +149,7 @@
                                                         </div>
                                             
                                                         <div class="mb-3">
-                                                            <label for="zipcodes" class="form-label">Editable ZIP Codes</label>
+                                                            <label for="zipcodes" class="form-label">ZIP Codes</label>
                                                             <div id="zipcodes-list"></div>
                                                         </div>
                                                     </div>
@@ -267,7 +267,7 @@
             function addToZipList(zip) {
                 let zipList = $('#zipcodes-list');
                 let div = $('<div class="d-flex mb-2"></div>');
-                div.append(`<input type="text" class="form-control zip-input me-2" name="location_zip[]" value="${zip}">`);
+                div.append(`<input type="text" class="form-control zip-input me-2 border-0" name="location_zip[]" readonly value="${zip}">`);
                 div.append('<button class="btn btn-danger bg-danger remove-zip" type="button">Remove</button>');
                 zipList.append(div);
             }

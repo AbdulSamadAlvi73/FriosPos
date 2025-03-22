@@ -147,7 +147,7 @@
                                                             <button id="parse-zipcodes" class="btn btn-secondary bg-secondary mt-2" type="button">Process ZIP Codes</button>
                                                         </div>
                                                         <div class="mb-3">
-                                                            <label for="zipcodes-list" class="form-label">Editable ZIP Codes</label>
+                                                            <label for="zipcodes-list" class="form-label">ZIP Codes</label>
                                                             <div id="zipcodes-list"></div>
                                                         </div>
                                                     </div>
@@ -222,7 +222,7 @@ setTimeout(() => msgBox.fadeOut(), 3000);
 function addToZipList(zip) {
 let zipList = $('#zipcodes-list');
 let div = $(`<div class="d-flex mb-2">
-<input type="text" class="form-control zip-input me-2" name="location_zip[]" value="${zip}">
+<input type="text" class="form-control zip-input me-2 border-0" name="location_zip[]" readonly value="${zip}">
 <button class="btn btn-danger bg-danger remove-zip" type="button">Remove</button>
 </div>`);
 zipList.append(div);
