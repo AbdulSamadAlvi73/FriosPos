@@ -34,8 +34,8 @@
 					<span class="nav-text">Frios Flavors</span>
 				</a>
 				<ul aria-expanded="false">
-					<li><a href="flavor_list.html">Flavor List</a></li>
-					<li><a href="edit_flavor_categories.html">Edit Flavor Categories</a></li>
+					<li><a href="{{ route('corporate_admin.fpgitem.index') }}">Flavor List</a></li>
+					<li><a href="{{ route('corporate_admin.fpgcategory.index') }}">Edit Flavor Categories</a></li>
 				</ul>
 			</li>
 			<li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">

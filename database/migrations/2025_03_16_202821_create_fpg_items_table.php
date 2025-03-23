@@ -13,18 +13,19 @@ return new class extends Migration
     {
         Schema::create('fpg_items', function (Blueprint $table) {
             $table->id('fgp_item_id');
+            $table->foreignId('category_ID')->nullable()->constrained('fpg_categories')->onDelete('cascade');
             $table->string('name');
             $table->text('description')->nullable();
             $table->decimal('case_cost', 10, 2);
             $table->integer('internal_inventory');
             $table->json('dates_available')->nullable();
-            $table->json('category_ID_list')->nullable();
             $table->string('image1')->nullable();
             $table->string('image2')->nullable();
             $table->string('image3')->nullable();
             $table->boolean('orderable');
             $table->timestamps();
         });
+        
         
     }
 

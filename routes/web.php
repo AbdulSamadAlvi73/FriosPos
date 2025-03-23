@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CorporateAdminControllers\CorporateAdminController;
 use App\Http\Controllers\CorporateAdminControllers\FranchiseController;
 use App\Http\Controllers\CorporateAdminControllers\OwnerController;
+use App\Http\Controllers\CorporateAdminControllers\FpgCategoryController;
+use App\Http\Controllers\CorporateAdminControllers\FpgItemsController;
 use App\Http\Controllers\FranchiseAdminControllers\FranchiseAdminController;
 use App\Http\Controllers\FranchiseAdminControllers\StaffController;
 use App\Http\Controllers\FranchiseAdminControllers\AdminProfileController;
@@ -59,7 +61,24 @@ Route::middleware(['auth', 'role:corporate_admin'])->prefix('corporate_admin')->
     Route::get('/owner/{owner}/edit', [OwnerController::class, 'edit'])->name('owner.edit');
     Route::put('/owner/{owner}', [OwnerController::class, 'update'])->name('owner.update');
     Route::delete('/owner/{owner}', [OwnerController::class, 'destroy'])->name('owner.destroy');
-     
+    
+    // fpg Category routes
+    Route::get('/fpgcategory', [FpgCategoryController::class, 'index'])->name('fpgcategory.index');
+    Route::get('/fpgcategory/create', [FpgCategoryController::class, 'create'])->name('fpgcategory.create');
+    Route::post('/fpgcategory', [FpgCategoryController::class, 'store'])->name('fpgcategory.store');
+    Route::get('/fpgcategory/{fpgcategory}/edit', [FpgCategoryController::class, 'edit'])->name('fpgcategory.edit');
+    Route::put('/fpgcategory/{fpgcategory}', [FpgCategoryController::class, 'update'])->name('fpgcategory.update');
+    Route::delete('/fpgcategory/{fpgcategory}', [FpgCategoryController::class, 'destroy'])->name('fpgcategory.destroy');
+    
+    // fpg items routes
+    Route::get('/fpgitem', [FpgItemsController::class, 'index'])->name('fpgitem.index');
+    Route::get('/fpgitem/create', [FpgItemsController::class, 'create'])->name('fpgitem.create');
+    Route::post('/fpgitem', [FpgItemsController::class, 'store'])->name('fpgitem.store');
+    Route::get('/fpgitem/{fpgitem}/edit', [FpgItemsController::class, 'edit'])->name('fpgitem.edit');
+    Route::put('/fpgitem/{fpgitem}', [FpgItemsController::class, 'update'])->name('fpgitem.update');
+    Route::delete('/fpgitem/{fpgitem}', [FpgItemsController::class, 'destroy'])->name('fpgitem.destroy');
+    Route::post('/fpgitem/update-orderable', [FpgItemsController::class, 'updateOrderable'])->name('fpgitem.updateOrderable');
+
      
 });
 
