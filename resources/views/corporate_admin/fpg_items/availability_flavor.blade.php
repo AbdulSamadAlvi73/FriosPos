@@ -1,6 +1,54 @@
 @extends('layouts.app')
 @section('content')
+  
+<!-- Add CSS for the toggle switch -->
+<style>
+    .toggle-switch {
+        position: relative;
+        display: inline-block;
+        width: 40px;
+        height: 20px;
+        padding-left: 0px !important;
+    }
 
+    .toggle-switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: 0.4s;
+        border-radius: 20px;
+    }
+
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 14px;
+        width: 14px;
+        left: 3px;
+        bottom: 3px;
+        background-color: white;
+        transition: 0.4s;
+        border-radius: 50%;
+    }
+
+    input:checked + .slider {
+        background-color: #00abc7;
+    }
+
+    input:checked + .slider:before {
+        transform: translateX(20px);
+    }
+</style>
 <!--**********************************
             Content body start
         ***********************************-->
@@ -11,7 +59,7 @@
 				<div class="form-head mb-4 d-flex flex-wrap align-items-center">
 					<div class="me-auto">
 						<h2 class="font-w600 mb-0">Dashboard \</h2>
-						<p>Category List</p>
+						<p>Flover Availability List</p>
 					</div>	
 					<div class="input-group search-area2 d-xl-inline-flex mb-2 me-lg-4 me-md-2">
 						<button class="input-group-text"><i class="flaticon-381-search-2 text-primary"></i></button>
@@ -37,7 +85,7 @@
 				</div>
                 <div class="row mb-4 align-items-center">
                     <div class="col-xl-3 col-lg-4 mb-4 mb-lg-0">
-                        <a href="{{ route('corporate_admin.fpgcategory.create') }}" class="btn btn-secondary btn-lg btn-block rounded text-white">+ New Category</a>
+                        <a href="{{ route('corporate_admin.fpgitem.create') }}" class="btn btn-secondary btn-lg btn-block rounded text-white">+ New Item</a>
                     </div>
                     <div class="col-xl-9 col-lg-8">
                         <div class="card m-0">
@@ -55,8 +103,8 @@
                                             </defs>
                                         </svg>
                                         <div class="media-body">
-                                            <p class="mb-1 fs-12">Total Category</p>
-                                            <h3 class="mb-0 font-w600 fs-22">{{ $totalCategories }} categories</h3>
+                                            <p class="mb-1 fs-12">Total Flavor Items</p>
+                                            <h3 class="mb-0 font-w600 fs-22">{{ $totalItems }} Flavor Items</h3>
                                         </div>
                                     </div>
                                     <div>
@@ -80,81 +128,95 @@
 				<div class="row">
 					<div class="col-lg-12">
 						<div class="table-responsive rounded">
-							<table id="example5" class="table customer-table display mb-4 fs-14 card-table">
-								<thead>
+                            <table id="example5" class="table customer-table display mb-4 fs-14 card-table">
+                                <thead>
                                     <tr>
-                                        <th>
-                                            <div class="form-check checkbox-secondary">
-                                                <input class="form-check-input" type="checkbox" value="" id="checkAll">
-                                                <label class="form-check-label" for="checkAll"></label>
-                                            </div>
-                                        </th>
-                                        <th>Category ID</th>
-                                        <th>Category Name</th>
-                                        <th>Category Type</th>
-                                        <th>Created Date</th>
-                                        <th>Actions</th>
+                                        <th>Orderable?</th>
+                                        <th>Flavor</th>
+                                        <th>Jan</th><th>Feb</th><th>Mar</th><th>Apr</th><th>May</th><th>Jun</th>
+                                        <th>Jul</th><th>Aug</th><th>Sep</th><th>Oct</th><th>Nov</th><th>Dec</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    @foreach ($categories as $category)
-                                        <tr>
+                                <tbody id="table-body">
+                                    @foreach ($flavors as $flavor)
+                                    <tr>
+                                        <!-- Toggle Switch for Active Status -->
+                                        <td>
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" class="toggle-input" data-id="{{ $flavor->fgp_item_id }}" {{ $flavor->orderable ? 'checked' : '' }}>
+                                                <span class="slider"></span>
+                                            </label>
+                                        </td>
+                                        <td>{{ $flavor->name }}</td>
+                                        @php $datesAvailable = json_decode($flavor->dates_available, true) ?? []; @endphp
+                                        @foreach(range(1, 12) as $month)
                                             <td>
-                                                <div class="form-check checkbox-secondary">
-                                                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault{{ $category->category_ID }}">
-                                                    <label class="form-check-label" for="flexCheckDefault{{ $category->category_ID }}"></label>
-                                                </div>
+                                                <input type="checkbox" class="month-checkbox" data-flavor-id="{{ $flavor->fgp_item_id }}" data-month="{{ $month }}" 
+                                                {{ in_array($month, $datesAvailable) ? 'checked' : '' }}>
                                             </td>
-                                            <td>#{{ str_pad($category->category_ID, 7, '0', STR_PAD_LEFT) }}</td>
-                                            <td>{{ $category->name }}</td>
-                                            <td>{{ implode(', ', json_decode($category->type, true)) }}</td>
-                                            <td>{{ $category->created_at ? \Carbon\Carbon::parse($category->created_at)->format('d/m/Y') : 'N/A' }}</td>
-                                            <td>
-                                                <div class="d-flex">
-                                                    <a href="{{ route('corporate_admin.fpgcategory.edit', $category->category_ID) }}" class="edit-user">
-                                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                            <path d="M17 3C17.2626 2.73735 17.5744 2.52901 17.9176 2.38687C18.2608 2.24473 18.6286 2.17157 19 2.17157C19.3714 2.17157 19.7392 2.24473 20.0824 2.38687C20.4256 2.52901 20.7374 2.73735 21 3C21.2626 3.26264 21.471 3.57444 21.6131 3.9176C21.7553 4.26077 21.8284 4.62856 21.8284 5C21.8284 5.37143 21.7553 5.73923 21.6131 6.08239C21.471 6.42555 21.2626 6.73735 21 7L7.5 20.5L2 22L3.5 16.5L17 3Z" stroke="#FF7B31" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                                        </svg>
-                                                    </a>
-                                                    
-                                                    <form action="{{ route('corporate_admin.fpgcategory.destroy', $category->category_ID) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this category?')">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="ms-4 delete-user">
-                                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"> 
-                                                                <path d="M3 6H5H21" stroke="#FF3131" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                                                <path d="M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6M19 6V20C19 20.5304 18.7893 21.0391 18.4142 21.4142C18.0391 21.7893 17.5304 22 17 22H7C6.46957 22 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20V6H19Z" stroke="#FF3131" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                                            </svg>
-                                                        </button>
-                                                    </form>
-                                                    
-                                                </div>
-                                            </td>
-                                        </tr>
+                                        @endforeach
+                                    </tr>
                                     @endforeach
-                                </tbody>
-                                
-                                
-							</table>
+                                </tbody>                                
+                            </table>
+                            
 						</div>
 					</div>
 				</div>
             </div>
 			
         </div>
-        <!--**********************************
-            Content body end
-        ***********************************-->
-		
-		<script>
-            document.addEventListener("DOMContentLoaded", function () {
-    document.querySelectorAll(".edit-franchisee").forEach(button => {
-        button.addEventListener("click", function () {
-            let franchiseeId = this.getAttribute("data-id");
-            window.location.href = `/franchisee/${franchiseeId}/edit`;
-        });
-    });
-});
+      
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                // Update Orderable Status
+                $('.toggle-input').change(function () {
+                    let flavorId = $(this).data('id'); // Using fgp_item_id
+                    let orderable = $(this).is(':checked') ? 1 : 0;
 
+                    $.ajax({
+                        url: `/corporate_admin/fpgitem/update-status/${flavorId}`,
+                        type: "POST",
+                        data: {
+                            _token: "{{ csrf_token() }}",
+                            orderable: orderable
+                        },
+                        success: function (response) {
+                            console.log("Orderable Updated:", response);
+                        },
+                        error: function (xhr) {
+                            console.error(xhr.responseText);
+                            alert("Error updating orderable status.");
+                        }
+                    });
+                });
+
+                // Update Month Availability
+                $('.month-checkbox').change(function () {
+                    let flavorId = $(this).data('flavor-id'); // Using fgp_item_id
+                    let month = $(this).data('month');
+                    let available = $(this).is(':checked') ? 1 : 0;
+
+                    $.ajax({
+                        url: `/corporate_admin/fpgitem/update-month/${flavorId}`,
+                        type: "POST",
+                        data: {
+                            _token: "{{ csrf_token() }}",
+                            month: month,
+                            available: available
+                        },
+                        success: function (response) {
+                            console.log("Month Updated:", response);
+                        },
+                        error: function (xhr) {
+                            console.error(xhr.responseText);
+                            alert("Error updating month availability.");
+                        }
+                    });
+                });
+            });
         </script>
+        
+
 @endsection

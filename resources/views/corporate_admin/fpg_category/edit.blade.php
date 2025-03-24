@@ -47,23 +47,45 @@
                                             <form action="{{ route('corporate_admin.fpgcategory.update', $fpgcategory->category_ID) }}" method="POST">
                                                 @csrf
                                                 @method('PUT')
-                                        
+                                            
                                                 <div class="row">
                                                     <div class="mb-3 col-md-6">
                                                         <label class="form-label">Category Name <span class="text-danger">*</span></label>
-                                                        <input type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name', $fpgcategory->name) }}" required>
+                                                        <input type="text" class="form-control @error('name') is-invalid @enderror" 
+                                                            name="name" value="{{ old('name', $fpgcategory->name) }}" required>
                                                         @error('name') <div class="text-danger">{{ $message }}</div> @enderror
                                                     </div>
-                                        
+                                            
                                                     <div class="mb-3 col-md-6">
-                                                        <label class="form-label">Category type <span class="text-danger">*</span></label>
-                                                        <input type="text" class="form-control @error('type') is-invalid @enderror" name="type" value="{{ old('type', $fpgcategory->type) }}" required>
+                                                        <label class="form-label">Category Type <span class="text-danger">*</span></label>
+                                                        <select class="form-control @error('type') is-invalid @enderror" name="type[]" multiple>
+                                                            @php
+                                                            $selectedTypes = is_array($fpgcategory->type) ? $fpgcategory->type : json_decode($fpgcategory->type, true) ?? [];
+                                                        @endphp
+                                                        
+                                                            <option value="Availability" {{ in_array('Availability', $selectedTypes) ? 'selected' : '' }}>Availability</option>
+                                                            <option value="Flavor" {{ in_array('Flavor', $selectedTypes) ? 'selected' : '' }}>Flavor</option>
+                                                            <option value="Allergen" {{ in_array('Allergen', $selectedTypes) ? 'selected' : '' }}>Allergen</option>
+                                                        </select>
                                                         @error('type') <div class="text-danger">{{ $message }}</div> @enderror
                                                     </div>
                                                 </div>
-                                        
+                                            
                                                 <button type="submit" class="btn btn-primary bg-primary">Update Category</button>
                                             </form>
+                                            
+                                            <!-- Include Select2 for better UI -->
+                                            <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/css/select2.min.css" rel="stylesheet">
+                                            <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/js/select2.min.js"></script>
+                                            <script>
+                                                $(document).ready(function() {
+                                                    $('select[name="type[]"]').select2({
+                                                        placeholder: "Select Category Type",
+                                                        allowClear: true
+                                                    });
+                                                });
+                                            </script>
+                                            
                                             
                                         </div>
                                     </div>

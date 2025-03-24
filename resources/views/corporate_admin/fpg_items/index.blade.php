@@ -93,7 +93,7 @@
                                         <th>Name</th>
                                         <th>Description</th>
                                         <th>Category</th>
-                                        <th>Orderable</th>
+                                        {{-- <th>Orderable</th> --}}
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
@@ -109,13 +109,26 @@
                                             <td>#{{ str_pad($item->fgp_item_id, 7, '0', STR_PAD_LEFT) }}</td>
                                             <td>{{ $item->name }}</td>
                                             <td>{{ $item->description }}</td>
-                                            <td>{{ $item->category ? $item->category->name : 'No Category' }}</td>
                                             <td>
+                                                @if($item->categories->isNotEmpty())
+                                                    @php
+                                                        $chunks = $item->categories->pluck('name')->chunk(5);
+                                                    @endphp
+                                                    @foreach($chunks as $chunk)
+                                                        {{ $chunk->join(', ') }} <br>
+                                                    @endforeach
+                                                @else
+                                                    No Category
+                                                @endif
+                                            </td>
+                                            
+                                            
+                                            {{-- <td>
                                                 <select class="orderable-dropdown" data-id="{{ $item->fgp_item_id }}" style="width:5rem;">
                                                     <option value="1" {{ $item->orderable == 1 ? 'selected' : '' }}>Yes</option>
                                                     <option value="0" {{ $item->orderable == 0 ? 'selected' : '' }}>No</option>
                                                 </select>
-                                            </td>
+                                            </td> --}}
                                             
                                             <td>
                                                 <div class="d-flex">

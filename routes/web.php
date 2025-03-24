@@ -79,6 +79,11 @@ Route::middleware(['auth', 'role:corporate_admin'])->prefix('corporate_admin')->
     Route::delete('/fpgitem/{fpgitem}', [FpgItemsController::class, 'destroy'])->name('fpgitem.destroy');
     Route::post('/fpgitem/update-orderable', [FpgItemsController::class, 'updateOrderable'])->name('fpgitem.updateOrderable');
 
+    Route::get('/fpgitemavailability', [FpgItemsController::class, 'availability'])->name('fpgitem.availability');
+
+    Route::post('/fpgitem/update-status/{id}', [FpgItemsController::class, 'updateStatus'])->name('fpgitem.updateStatus');
+    Route::post('/fpgitem/update-month/{id}', [FpgItemsController::class, 'updateMonth']);
+
      
 });
 
@@ -118,17 +123,20 @@ Route::middleware(['auth', 'role:franchise_staff'])->group(function () {
 
 // TEMP ROUTE
 Route::get('/linkstorage', function () {
-    $targetFolder = base_path() . '/storage/app/public';
-    $linkFolder = $_SERVER['DOCUMENT_ROOT'] . '/storage';
-    symlink($targetFolder, $linkFolder);
+    Artisan::call('storage:link');
+    return "Storage link created successfully!";
 });
+// Route::get('/linkstorage', function () {
+//     $targetFolder = base_path() . '/storage/app/public';
+//     $linkFolder = $_SERVER['DOCUMENT_ROOT'] . '/storage';
+//     symlink($targetFolder, $linkFolder);
+// });
 
 Route::get('/linkstorage2', function () {
     $targetFolder = base_path() . '/storage/app/public';
     $linkFolder = $_SERVER['DOCUMENT_ROOT'] . '/public/storage';
     symlink($targetFolder, $linkFolder);
 });
-
 // Clear Cache facade value:
 Route::get('/clear_cache', function () {
     $exitCode = Artisan::call('cache:clear');

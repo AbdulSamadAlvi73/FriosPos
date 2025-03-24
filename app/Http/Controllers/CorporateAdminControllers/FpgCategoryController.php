@@ -27,32 +27,46 @@ class FpgCategoryController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'type' => 'required|string|max:255',
+            'type' => 'required|array', // Ensure type is an array
+            'type.*' => 'string|max:255', // Validate each item in the array
         ]);
-
-        FpgCategory::create($request->all());
-
+    
+        FpgCategory::create([
+            'name' => $request->name,
+            'type' => json_encode($request->type), // Store as JSON
+        ]);
+    
         return redirect()->route('corporate_admin.fpgcategory.index')->with('success', 'Category created successfully.');
     }
 
     // Show edit form
     public function edit(FpgCategory $fpgcategory)
     {
+        if (!is_array($fpgcategory->type)) {
+            $fpgcategory->type = json_decode($fpgcategory->type, true) ?? [];
+        }
+        
         return view('corporate_admin.fpg_category.edit', compact('fpgcategory'));
     }
+    
 
     // Update category
     public function update(Request $request, FpgCategory $fpgcategory)
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'type' => 'required|string|max:255',
+            'type' => 'required|array', // Ensure type is an array
+            'type.*' => 'string|max:255', // Validate each item in the array
         ]);
-
-        $fpgcategory->update($request->all());
-
+    
+        $fpgcategory->update([
+            'name' => $request->name,
+            'type' => json_encode($request->type), // Store as JSON
+        ]);
+    
         return redirect()->route('corporate_admin.fpgcategory.index')->with('success', 'Category updated successfully.');
     }
+    
 
     // Delete category
     public function destroy(FpgCategory $fpgcategory)

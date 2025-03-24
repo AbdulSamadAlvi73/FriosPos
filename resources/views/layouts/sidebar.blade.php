@@ -35,6 +35,7 @@
 				</a>
 				<ul aria-expanded="false">
 					<li><a href="{{ route('corporate_admin.fpgitem.index') }}">Flavor List</a></li>
+					<li><a href="{{ route('corporate_admin.fpgitem.availability') }}">Availability</a></li>
 					<li><a href="{{ route('corporate_admin.fpgcategory.index') }}">Edit Flavor Categories</a></li>
 				</ul>
 			</li>

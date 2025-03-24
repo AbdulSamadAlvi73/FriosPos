@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('fpg_items', function (Blueprint $table) {
             $table->id('fgp_item_id');
-            $table->foreignId('category_ID')->nullable()->constrained('fpg_categories')->onDelete('cascade');
+            $table->unsignedBigInteger('category_ID')->nullable();
             $table->string('name');
             $table->text('description')->nullable();
             $table->decimal('case_cost', 10, 2);
@@ -22,11 +22,12 @@ return new class extends Migration
             $table->string('image1')->nullable();
             $table->string('image2')->nullable();
             $table->string('image3')->nullable();
-            $table->boolean('orderable');
+            $table->boolean('orderable')->default(1);
             $table->timestamps();
+
+            // Ensure category_ID exists in fpg_categories
+            $table->foreign('category_ID')->references('category_ID')->on('fpg_categories')->onDelete('cascade');
         });
-        
-        
     }
 
     /**

@@ -33,7 +33,7 @@
                             <div class="col-xl-12 col-lg-12">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h4 class="card-title">Add Flaover Item</h4>
+                                        <h4 class="card-title">Add Flavor Item</h4>
                                     </div>
                                     <div class="card-body">
                                         <div class="basic-form">
@@ -45,162 +45,111 @@
                                                 </div>
                                             @endif
 
-                                            <form action="{{ route('corporate_admin.fpgitem.store') }}" method="POST"
-                                                enctype="multipart/form-data">
+                                            <form action="{{ route('corporate_admin.fpgitem.store') }}" method="POST" enctype="multipart/form-data">
                                                 @csrf
-
+                                            
                                                 <div class="row">
-                                                    <!-- Item Name -->
-                                                    <div class="mb-3 col-md-6">
-                                                        <label class="form-label">Item Name <span
-                                                                class="text-danger">*</span></label>
-                                                        <input type="text"
-                                                            class="form-control @error('name') is-invalid @enderror"
-                                                            name="name" value="{{ old('name') }}"
-                                                            placeholder="Enter Item Name">
-                                                        @error('name')
-                                                            <div class="text-danger">{{ $message }}</div>
-                                                        @enderror
+                                                    <!-- Left Column -->
+                                                    <div class="col-md-6">
+                                                        <!-- Item Name -->
+                                                        <div class="mb-3">
+                                                            <label class="form-label">Item Name <span class="text-danger">*</span></label>
+                                                            <input type="text" class="form-control @error('name') is-invalid @enderror" name="name" 
+                                                                   value="{{ old('name') }}" placeholder="Enter Item Name">
+                                                            @error('name')
+                                                                <div class="text-danger">{{ $message }}</div>
+                                                            @enderror
+                                                        </div>
+                                            
+                                                        <!-- Case Cost -->
+                                                        <div class="mb-3">
+                                                            <label class="form-label">Case Cost <span class="text-danger">*</span></label>
+                                                            <input type="number" step="0.01" class="form-control @error('case_cost') is-invalid @enderror" 
+                                                                   name="case_cost" value="{{ old('case_cost') }}" placeholder="Enter Case Cost">
+                                                            @error('case_cost')
+                                                                <div class="text-danger">{{ $message }}</div>
+                                                            @enderror
+                                                        </div>
+                                            
+                                                       <!-- Category Selection -->
+                                                        <div class="mb-3">
+                                                            <label class="form-label">Category <span class="text-danger">*</span></label>
+                                                            <div class="form-control" style="height: auto; padding: 10px;">
+                                                                @foreach ($categorizedCategories as $categoryGroup => $categories)
+                                                                    <h6 class="fw-bold p-2">{{ $categoryGroup }}</h6>
+                                                                    @foreach ($categories as $category)
+                                                                        <div class="form-check">
+                                                                            <input class="form-check-input" type="checkbox" name="category_ID[]" 
+                                                                                value="{{ $category->category_ID }}" id="category_{{ $category->category_ID }}">
+                                                                            <label class="form-check-label" for="category_{{ $category->category_ID }}">
+                                                                                {{ $category->name }}
+                                                                            </label>
+                                                                        </div>
+                                                                    @endforeach
+                                                                    <hr>
+                                                                @endforeach
+                                                            </div>
+                                                            @error('category_ID')
+                                                                <div class="text-danger">{{ $message }}</div>
+                                                            @enderror
+                                                        </div>
+
                                                     </div>
-
-                                                    <!-- Description -->
-                                                    <div class="mb-3 col-md-6">
-                                                        <label class="form-label">Description</label>
-                                                        <input type="text"
-                                                            class="form-control @error('description') is-invalid @enderror"
-                                                            name="description" value="{{ old('description') }}"
-                                                            placeholder="Enter Description">
-                                                        @error('description')
-                                                            <div class="text-danger">{{ $message }}</div>
-                                                        @enderror
-                                                    </div>
-
-                                                    <!-- Case Cost -->
-                                                    <div class="mb-3 col-md-6">
-                                                        <label class="form-label">Case Cost <span
-                                                                class="text-danger">*</span></label>
-                                                        <input type="number" step="0.01"
-                                                            class="form-control @error('case_cost') is-invalid @enderror"
-                                                            name="case_cost" value="{{ old('case_cost') }}"
-                                                            placeholder="Enter Case Cost">
-                                                        @error('case_cost')
-                                                            <div class="text-danger">{{ $message }}</div>
-                                                        @enderror
-                                                    </div>
-
-                                                    <!-- Internal Inventory -->
-                                                    <div class="mb-3 col-md-6">
-                                                        <label class="form-label">Internal Inventory <span
-                                                                class="text-danger">*</span></label>
-                                                        <input type="number"
-                                                            class="form-control @error('internal_inventory') is-invalid @enderror"
-                                                            name="internal_inventory"
-                                                            value="{{ old('internal_inventory') }}"
-                                                            placeholder="Enter Inventory Count">
-                                                        @error('internal_inventory')
-                                                            <div class="text-danger">{{ $message }}</div>
-                                                        @enderror
-                                                    </div>
-
-                                                    <div class="mb-3 col-md-6">
-                                                        <label class="form-label">Category <span
-                                                                class="text-danger">*</span></label>
-                                                        <select
-                                                            class="form-control @error('category_ID') is-invalid @enderror"
-                                                            name="category_ID">
-                                                            <option value="">Select Category</option>
-                                                            @foreach ($categories as $category)
-                                                                <option value="{{ $category->category_ID }}">
-                                                                    {{ $category->name }}
-                                                                </option>
-                                                            @endforeach
-                                                        </select>
-                                                        @error('category_ID')
-                                                            <div class="text-danger">{{ $message }}</div>
-                                                        @enderror
-                                                    </div>
-                                                    <!-- Orderable Dropdown -->
-                                                    <div class="mb-3 col-md-6">
-                                                        <label class="form-label">Orderable <span
-                                                                class="text-danger">*</span></label>
-                                                        <select
-                                                            class="form-control @error('orderable') is-invalid @enderror"
-                                                            name="orderable">
-                                                            <option value="">Select Option</option>
-                                                            <option value="1" {{ old('orderable') == 1 ? 'selected' : '' }}>
-                                                                Yes</option>
-                                                            <option value="0" {{ old('orderable') == 0 ? 'selected' : '' }}>No
-                                                            </option>
-                                                        </select>
-                                                        @error('orderable')
-                                                            <div class="text-danger">{{ $message }}</div>
-                                                        @enderror
-                                                    </div>
-
-
-                                                    <!-- Available Dates -->
-                                                    <div class="mb-3 col-md-6">
-                                                        <label class="form-label">Available Dates</label>
-                                                        <input type="text" id="dates_available"
-                                                            class="form-control @error('dates_available') is-invalid @enderror"
-                                                            name="dates_available" placeholder="Select multiple dates">
-                                                        @error('dates_available')
-                                                            <div class="text-danger">{{ $message }}</div>
-                                                        @enderror
-                                                    </div>
-
-                                                    <!-- Flatpickr CSS -->
-                                                    <link rel="stylesheet"
-                                                        href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-
-                                                    <!-- Flatpickr JS -->
-                                                    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-
-                                                    <script>
-                                                        document.addEventListener("DOMContentLoaded", function () {
-                                                            flatpickr("#dates_available", {
-                                                                mode: "multiple", // Enable multi-date selection
-                                                                dateFormat: "Y-m-d", // Format as YYYY-MM-DD
-                                                                allowInput: true // Allow users to type dates
-                                                            });
-                                                        });
-                                                    </script>
-
-                                                    <!-- Image Uploads -->
-                                                    <div class="mb-3 col-md-6">
-                                                        <label class="form-label">Image 1</label>
-                                                        <input type="file"
-                                                            class="form-control @error('image1') is-invalid @enderror"
-                                                            name="image1">
-                                                        @error('image1')
-                                                            <div class="text-danger">{{ $message }}</div>
-                                                        @enderror
-                                                    </div>
-
-                                                    <div class="mb-3 col-md-6">
-                                                        <label class="form-label">Image 2</label>
-                                                        <input type="file"
-                                                            class="form-control @error('image2') is-invalid @enderror"
-                                                            name="image2">
-                                                        @error('image2')
-                                                            <div class="text-danger">{{ $message }}</div>
-                                                        @enderror
-                                                    </div>
-
-                                                    <div class="mb-3 col-md-6">
-                                                        <label class="form-label">Image 3</label>
-                                                        <input type="file"
-                                                            class="form-control @error('image3') is-invalid @enderror"
-                                                            name="image3">
-                                                        @error('image3')
-                                                            <div class="text-danger">{{ $message }}</div>
-                                                        @enderror
+                                            
+                                                    <!-- Right Column -->
+                                                    <div class="col-md-6">
+                                                        <!-- Description -->
+                                                        <div class="mb-3">
+                                                            <label class="form-label">Description</label>
+                                                            <input type="text" class="form-control @error('description') is-invalid @enderror" 
+                                                                   name="description" value="{{ old('description') }}" placeholder="Enter Description">
+                                                            @error('description')
+                                                                <div class="text-danger">{{ $message }}</div>
+                                                            @enderror
+                                                        </div>
+                                            
+                                                        <!-- Internal Inventory -->
+                                                        <div class="mb-3">
+                                                            <label class="form-label">Internal Inventory <span class="text-danger">*</span></label>
+                                                            <input type="number" class="form-control @error('internal_inventory') is-invalid @enderror" 
+                                                                   name="internal_inventory" value="{{ old('internal_inventory') }}" 
+                                                                   placeholder="Enter Inventory Count">
+                                                            @error('internal_inventory')
+                                                                <div class="text-danger">{{ $message }}</div>
+                                                            @enderror
+                                                        </div>
+                                            
+                                                        <!-- Image Uploads -->
+                                                        <div class="mb-3">
+                                                            <label class="form-label">Image 1</label>
+                                                            <input type="file" class="form-control @error('image1') is-invalid @enderror" name="image1">
+                                                            @error('image1')
+                                                                <div class="text-danger">{{ $message }}</div>
+                                                            @enderror
+                                                        </div>
+                                            
+                                                        <div class="mb-3">
+                                                            <label class="form-label">Image 2</label>
+                                                            <input type="file" class="form-control @error('image2') is-invalid @enderror" name="image2">
+                                                            @error('image2')
+                                                                <div class="text-danger">{{ $message }}</div>
+                                                            @enderror
+                                                        </div>
+                                            
+                                                        <div class="mb-3">
+                                                            <label class="form-label">Image 3</label>
+                                                            <input type="file" class="form-control @error('image3') is-invalid @enderror" name="image3">
+                                                            @error('image3')
+                                                                <div class="text-danger">{{ $message }}</div>
+                                                            @enderror
+                                                        </div>
                                                     </div>
                                                 </div>
-
-                                                <button type="submit" class="btn btn-primary bg-primary">Add Item</button>
-
+                                            
+                                                <!-- Submit Button -->
+                                                    <button type="submit" class="btn btn-primary bg-primary">Add Item</button>
                                             </form>
+                                            
 
 
                                         </div>
@@ -219,6 +168,41 @@
     <!--**********************************
                     Content body end
                 ***********************************-->
-
-
+   <!-- Orderable Dropdown -->
+{{-- <div class="mb-3 col-md-6">
+    <label class="form-label">Orderable <span
+            class="text-danger">*</span></label>
+    <select
+        class="form-control @error('orderable') is-invalid @enderror"
+        name="orderable">
+        <option value="">Select Option</option>
+        <option value="1" {{ old('orderable') == 1 ? 'selected' : '' }}>
+            Yes</option>
+        <option value="0" {{ old('orderable') == 0 ? 'selected' : '' }}>No
+        </option>
+    </select>
+    @error('orderable')
+        <div class="text-danger">{{ $message }}</div>
+    @enderror
+</div> --}}
+<!-- Available Dates with Checkboxes for Each Month -->
+{{-- <div class="mb-3 col-md-6">
+    <label class="form-label">Select Flavor Availability</label>
+    <div class="form-control" style="height: auto; padding: 10px;">
+        @foreach ([
+            'January', 'February', 'March', 'April', 'May', 'June',
+            'July', 'August', 'September', 'October', 'November', 'December'] as $month)
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="dates_available[]" 
+                       value="{{ $month }}" id="month_{{ $month }}">
+                <label class="form-check-label" for="month_{{ $month }}">
+                    {{ $month }}
+                </label>
+            </div>
+        @endforeach
+    </div>
+    @error('dates_available')
+        <div class="text-danger">{{ $message }}</div>
+    @enderror
+</div> --}}
 @endsection

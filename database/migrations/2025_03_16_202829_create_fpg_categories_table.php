@@ -9,16 +9,16 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+        public function up(): void
     {
         Schema::create('fpg_categories', function (Blueprint $table) {
             $table->id('category_ID');
             $table->string('name');
-            $table->string('type'); // Class or Nutritional
+            $table->json('type'); // Change from string to json for multiple values
             $table->timestamps();
         });
-        
     }
+
 
     /**
      * Reverse the migrations.

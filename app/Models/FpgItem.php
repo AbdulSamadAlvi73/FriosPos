@@ -26,9 +26,10 @@ class FpgItem extends Model
         'orderable'
     ];
 
-    // Correct belongsTo relationship with FpgCategory
-    public function category()
+    // Many-to-many relationship with FpgCategory
+    public function categories()
     {
-        return $this->belongsTo(FpgCategory::class, 'category_ID', 'category_ID');
+        return $this->belongsToMany(FpgCategory::class, 'fpg_category_fpg_item', 'fgp_item_id', 'category_ID');
     }
+    
 }
