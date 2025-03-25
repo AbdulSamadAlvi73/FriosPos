@@ -1,18 +1,24 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\CorporateAdminControllers\CorporateAdminController;
-use App\Http\Controllers\CorporateAdminControllers\FranchiseController;
-use App\Http\Controllers\CorporateAdminControllers\OwnerController;
-use App\Http\Controllers\CorporateAdminControllers\FpgCategoryController;
-use App\Http\Controllers\CorporateAdminControllers\FpgItemsController;
-use App\Http\Controllers\FranchiseAdminControllers\FranchiseAdminController;
-use App\Http\Controllers\FranchiseAdminControllers\StaffController;
-use App\Http\Controllers\FranchiseAdminControllers\AdminProfileController;
-use App\Http\Controllers\FranchiseManagerControllers\FranchiseManagerController;
-use App\Http\Controllers\FranchiseStaffController\FranchiseStaffController;
+use Illuminate\Support\Facades\Artisan;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\GoogleController;
+// Corporate Admin Controllers
+use App\Http\Controllers\CorporateAdminControllers\OwnerController;
+use App\Http\Controllers\CorporateAdminControllers\FpgItemsController;
+use App\Http\Controllers\CorporateAdminControllers\FranchiseController;
+use App\Http\Controllers\CorporateAdminControllers\FpgCategoryController;
+use App\Http\Controllers\CorporateAdminControllers\CorporateAdminController;
+// Franchise Admin Controller
+use App\Http\Controllers\FranchiseAdminControllers\StaffController;
+use App\Http\Controllers\FranchiseAdminControllers\OrderPopsController;
+use App\Http\Controllers\FranchiseAdminControllers\AdminProfileController;
+use App\Http\Controllers\FranchiseAdminControllers\FranchiseAdminController;
+// Franchise Manager Controllers
+use App\Http\Controllers\FranchiseManagerControllers\FranchiseManagerController;
+// Franchise Staff Controllers
+use App\Http\Controllers\FranchiseStaffController\FranchiseStaffController;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -98,7 +104,18 @@ Route::middleware(['auth', 'role:franchise_admin'])->prefix('franchise_admin')->
     Route::get('/staff/{staff}/edit', [StaffController::class, 'edit'])->name('staff.edit');
     Route::put('/staff/{staff}', [StaffController::class, 'update'])->name('staff.update');
     Route::delete('/staff/{staff}', [StaffController::class, 'destroy'])->name('staff.destroy');
-     
+
+    // Order pops routes
+    Route::get('/orderpops', [OrderPopsController::class, 'index'])->name('orderpops.index');
+    Route::get('/orderpops/create', [OrderPopsController::class, 'create'])->name('orderpops.create');
+    // Route::post('/orderpops', [OrderPopsController::class, 'store'])->name('orderpops.store');
+    Route::get('/orderpops/{orderpops}/edit', [OrderPopsController::class, 'edit'])->name('orderpops.edit');
+    Route::put('/orderpops/{orderpops}', [OrderPopsController::class, 'update'])->name('orderpops.update');
+    Route::delete('/orderpops/{orderpops}', [OrderPopsController::class, 'destroy'])->name('orderpops.destroy');
+        
+    Route::post('/orderpops/store', [OrderPopsController::class, 'store'])->name('orderpops.store');
+    Route::get('/orderpops/confirm', [OrderPopsController::class, 'confirmOrder'])->name('orderpops.confirm');
+    
 });
 
 Route::middleware(['auth', 'role:franchise_manager'])->prefix('franchise_manager')->name('franchise_manager.')->group(function () {

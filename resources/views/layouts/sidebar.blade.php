@@ -125,7 +125,7 @@
 					<i class="bi bi-calendar-week-fill"></i>
 					<span class="nav-text">Events</span>
 				</a></li>
-			<li><a class="ai-icon" href="order_pops.html" aria-expanded="false">
+			<li><a class="ai-icon" href="{{ route('franchise_admin.orderpops.index') }}" aria-expanded="false">
 					<i class="bi bi-cart-plus-fill"></i>
 					<span class="nav-text">Order Pops</span>
 				</a></li>
