@@ -19,21 +19,21 @@
     <!-- Styles -->
     <link href="{{ asset('assets/vendor/bootstrap-select/css/bootstrap-select.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('assets/vendor/chartist/css/chartist.min.css') }}">
-    <link href="{{ asset('assets/vendor/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css') }}"
-        rel="stylesheet">
+    <link href="{{ asset('assets/vendor/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/vendor/datatables/css/jquery.dataTables.min.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/css/jquery.localizationTool.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
 
+    <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
     @notifyCss
+
     <!-- jQuery (Always load first) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
     <!-- Select2 CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" />
-
-    <!-- Select2 JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 
 </head>
 
@@ -88,31 +88,48 @@
     ***********************************-->
     <!-- Laravel Notify JS -->
     @notifyJs
+    <!-- Select2 JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
     <!-- Required vendors -->
     <script src="{{ asset('assets/vendor/global/global.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/chartjs/chart.bundle.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/bootstrap-datetimepicker/js/moment.js') }}"></script>
     <script src="{{ asset('assets/vendor/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/bootstrap-select/js/bootstrap-select.min.js') }}"></script>
-
+    
     <!-- Chart piety plugin files -->
     <script src="{{ asset('assets/vendor/peity/jquery.peity.min.js') }}"></script>
-
+    
     <!-- Apex Chart -->
     <script src="{{ asset('assets/vendor/apexchart/apexchart.js') }}"></script>
-
+    
     <!-- Dashboard 1 -->
     <script src="{{ asset('assets/js/dashboard/dashboard-1.js') }}"></script>
-
-    <!-- localizationTool -->
+    
+    <!-- Datatable -->
+    <script src="{{ asset('assets/vendor/datatables/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins-init/datatables.init.js') }}"></script>
+    <script src="{{ asset('assets/vendor/bootstrap-datepicker-master/js/bootstrap-datepicker.min.js') }}"></script>
+    
+    <!-- Localization Tool -->
     <script src="{{ asset('assets/js/jquery.localizationTool.js') }}"></script>
     <script src="{{ asset('assets/js/translator.js') }}"></script>
-
+    
     <script src="{{ asset('assets/js/custom.min.js') }}"></script>
     <script src="{{ asset('assets/js/deznav-init.js') }}"></script>
     <script src="{{ asset('assets/js/demo.js') }}"></script>
+    
     {{-- <script src="{{ asset('assets/js/styleSwitcher.js') }}"></script> --}}
+	<script>
+		$(function () {
+			  $("#datepicker").datepicker({ 
+					autoclose: true, 
+					todayHighlight: true
+			  }).datepicker('update', new Date());
+		
+		});
 
+	</script>
 </body>
 
 </html>

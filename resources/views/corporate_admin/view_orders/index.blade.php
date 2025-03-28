@@ -11,7 +11,7 @@
 				<div class="form-head mb-4 d-flex flex-wrap align-items-center">
 					<div class="me-auto">
 						<h2 class="font-w600 mb-0">Dashboard \</h2>
-						<p>Flover Pops List</p>
+						<p>Pops Order List</p>
 					</div>	
 					<div class="input-group search-area2 d-xl-inline-flex mb-2 me-lg-4 me-md-2">
 						<button class="input-group-text"><i class="flaticon-381-search-2 text-primary"></i></button>
@@ -55,8 +55,8 @@
                                             </defs>
                                         </svg>
                                         <div class="media-body">
-                                            <p class="mb-1 fs-12">Total Flavor Pops</p>
-                                            <h3 class="mb-0 font-w600 fs-22">{{ $totalPops }} Flavor Pops</h3>
+                                            <p class="mb-1 fs-12">Total Orders Pops</p>
+                                            <h3 class="mb-0 font-w600 fs-22">{{ $totalOrders }} Flavor Pops</h3>
                                         </div>
                                     </div>
                                     <div>
@@ -78,67 +78,77 @@
                 @endif
 
 				<div class="row">
-					<div class="col-lg-12">
-						<div class="table-responsive rounded">
-							<table id="example5" class="table customer-table display mb-4 fs-14 card-table">
+                    <div class="col-lg-12">
+                        <div class="table-responsive rounded">
+                            <table id="ordersTable" class="table customer-table display mb-4 fs-14 card-table">
                                 <thead>
                                     <tr>
-                                        <th>
+                                        {{-- <th>
                                             <div class="form-check checkbox-secondary">
-                                                <input class="form-check-input" type="checkbox" value="" id="checkAll">
+                                                <input class="form-check-input" type="checkbox" id="checkAll">
                                                 <label class="form-check-label" for="checkAll"></label>
                                             </div>
-                                        </th>
-                                        <th>Name</th>
-                                        <th>Price Per Case</th>
-                                        <th>Stock Status</th>
-                                        <th>Availability</th>
-                                        <th>Category</th>
+                                        </th> --}}
+                                        {{-- <th>Order ID</th> --}}
+                                        <th>Franchise Name</th>
+                                        <th>Item</th>
+                                        <th>Unit Cost</th>
+                                        <th>Unit Number</th>
+                                        <th>Date</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @php
-                                        use Carbon\Carbon;
-                                        $currentMonth = Carbon::now()->format('n'); // Get current month as a number (1-12)
-                                    @endphp
-                                
-                                    @foreach ($pops as $pop)
-                                        <tr>
-                                            <td>
+                                    @foreach ($orders as $order)
+                                        <tr style="text-wrap: no-wrap;">
+                                            {{-- <td>
                                                 <div class="form-check checkbox-secondary">
-                                                    <input class="form-check-input" type="checkbox" value="{{ $pop->fgp_item_id }}" id="flexCheckDefault{{ $pop->fgp_item_id }}">
-                                                    <label class="form-check-label" for="flexCheckDefault{{ $pop->fgp_item_id }}"></label>
+                                                    <input class="form-check-input" type="checkbox" value="{{ $order->fgp_ordersID }}" id="orderCheck{{ $order->fgp_ordersID }}">
+                                                    <label class="form-check-label" for="orderCheck{{ $order->fgp_ordersID }}"></label>
                                                 </div>
-                                            </td>
-                                            <td>{{ $pop->name }}</td>
-                                            <td>${{ number_format($pop->case_cost, 2) }}</td>
+                                            </td> --}}
+                                            {{-- <td>{{ $order->fgp_ordersID }}</td> --}}
+                                            <td>{{ $order->user->name ?? 'N/A' }}</td>
+                                            <td>{{ $order->item->name ?? 'N/A' }}</td>
+                                            <td>${{ number_format($order->unit_cost, 2) }}</td>
+                                            <td>{{ $order->unit_number }}</td>
+                                            <td>{{ \Carbon\Carbon::parse($order->date_transaction)->format('M d, Y h:i A') }}</td>
                                             <td>
-                                                <span class="badge bg-success">In Stock</span>
+                                                <select class="form-select status-select" data-id="{{ $order->fgp_ordersID }}">
+                                                    <option value="Pending" {{ $order->status == 'Pending' ? 'selected' : '' }}>Pending</option>
+                                                    <option value="Delivered" {{ $order->status == 'Delivered' ? 'selected' : '' }}>Delivered</option>
+                                                </select>
                                             </td>
                                             <td>
-                                                <span class="badge bg-success">Available</span>
-                                            </td>
-                                            <td>
-                                                @if($pop->categories->isNotEmpty())
-                                                    @php
-                                                        $chunks = $pop->categories->pluck('name')->chunk(5);
-                                                    @endphp
-                                                    @foreach($chunks as $chunk)
-                                                        {{ $chunk->join(', ') }} <br>
-                                                    @endforeach
-                                                @else
-                                                    No Category
-                                                @endif
+                                                <div class="d-flex">
+                                                    {{-- <a href="{{ route('corporate_admin.owner.edit', $order->fgp_ordersID) }}" class="edit-user">
+                                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M17 3C17.2626 2.73735 17.5744 2.52901 17.9176 2.38687C18.2608 2.24473 18.6286 2.17157 19 2.17157C19.3714 2.17157 19.7392 2.24473 20.0824 2.38687C20.4256 2.52901 20.7374 2.73735 21 3C21.2626 3.26264 21.471 3.57444 21.6131 3.9176C21.7553 4.26077 21.8284 4.62856 21.8284 5C21.8284 5.37143 21.7553 5.73923 21.6131 6.08239C21.471 6.42555 21.2626 6.73735 21 7L7.5 20.5L2 22L3.5 16.5L17 3Z" stroke="#FF7B31" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                        </svg>
+                                                    </a>
+                                                     --}}
+                                                    <form action="{{ route('corporate_admin.vieworders.destroy', $order->fgp_ordersID) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this user?')">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="ms-4 delete-user">
+                                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"> 
+                                                                <path d="M3 6H5H21" stroke="#FF3131" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                                <path d="M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6M19 6V20C19 20.5304 18.7893 21.0391 18.4142 21.4142C18.0391 21.7893 17.5304 22 17 22H7C6.46957 22 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20V6H19Z" stroke="#FF3131" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                            </svg>
+                                                        </button>
+                                                    </form>
+                                                    
+                                                </div>
                                             </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
-                                
-                            </table>
-                            
-						</div>
-					</div>
-				</div>
+                            </table>  
+                        </div>
+                    </div>
+                </div>
+                
             </div>
 			
         </div>
@@ -167,35 +177,40 @@
         ***********************************-->
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script>
-            $(document).ready(function() {
-                $('.orderable-dropdown').change(function() {
-                    let itemId = $(this).data('id');  
-                    let orderableValue = $(this).val();
+            document.addEventListener("DOMContentLoaded", function() {
+                document.querySelectorAll('.status-select').forEach(select => {
+                    select.addEventListener('change', function() {
+                        let orderId = this.getAttribute('data-id');
+                        let newStatus = this.value;
+                        
+                        fetch(`/corporate-admin/vieworders/${orderId}/update-status`, {
+                            method: "POST",
+                            headers: {
+                                "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify({ status: newStatus })
+                        })
+                        .then(response => response.json())
+                        .then(data => alert(data.message))
+                        .catch(error => console.error('Error:', error));
+                    });
+                });
         
-                    $.ajax({
-                        url: "{{ route('corporate_admin.fpgitem.updateOrderable') }}", 
-                        type: "POST",
-                        data: {
-                            _token: "{{ csrf_token() }}",
-                            id: itemId,
-                            orderable: orderableValue
-                        },
-                        success: function(response) {
-                            console.log(response); // Debugging: Check response in console
-                            if (response.success) {
-                                // location.reload(); 
-                            } else {
-                                alert("Error: " + response.message);
-                            }
-                        },
-                        error: function(xhr, status, error) {
-                            console.error(xhr.responseText);
-                            alert("AJAX Error: " + xhr.responseText);
+                document.querySelectorAll('.delete-order').forEach(button => {
+                    button.addEventListener('click', function() {
+                        let orderId = this.getAttribute('data-id');
+                        if (confirm("Are you sure you want to delete this order?")) {
+                            fetch(`/corporate-admin/vieworders/${orderId}`, {
+                                method: "DELETE",
+                                headers: { "X-CSRF-TOKEN": "{{ csrf_token() }}" }
+                            })
+                            .then(() => location.reload())
+                            .catch(error => console.error('Error:', error));
                         }
                     });
                 });
             });
         </script>
-        
 
 @endsection

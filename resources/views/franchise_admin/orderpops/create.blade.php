@@ -320,26 +320,25 @@ console.log(cartItems);
             })->values()
         ) !!};
 
-
         const inventory = {!! json_encode(
-            collect($categorizedItems)->flatMap(function ($items, $category) {
-                return collect($items)->flatMap(function ($subItems, $subCategory) {
-                    return collect($subItems)->map(function ($item) use ($subCategory) {
-                        return [
-                            'fgp_item_id' => $item['fgp_item_id'], 
-                            'type' => $item['name'],
-                            'flavor' => strtoupper($subCategory),
-                            'availability' => strtoupper($subCategory),
-                            'allergen' => strtoupper($subCategory),
-                            'price' => $item['case_cost'] ?? 0,
-                            'image' => $item['image1']
-                                ? asset('storage/' . $item['image1'])
-                                : "https://friospops.wpenginepowered.com/wp-content/uploads/2019/11/Chocolate-Frios-Pop.jpg"
-                        ];
-                    });
-                });
-            })->toArray()
-        ) !!}
+    collect($categorizedItems)->flatMap(function ($items, $category) {
+        return collect($items)->flatMap(function ($subItems, $subCategory) {
+            return collect($subItems)->map(function ($item) use ($subCategory) {
+                return [
+                    'fgp_item_id' => $item['fgp_item_id'], 
+                    'type' => strtolower(trim($item['name'])), // Normalize caseType
+                    'flavor' => strtoupper($subCategory),
+                    'availability' => strtoupper($subCategory),
+                    'allergen' => strtoupper($subCategory),
+                    'price' => $item['case_cost'] ?? 0,
+                    'image' => $item['image1']
+                        ? asset('storage/' . $item['image1'])
+                        : "https://friospops.wpenginepowered.com/wp-content/uploads/2019/11/Chocolate-Frios-Pop.jpg"
+                ];
+            });
+        });
+    })->toArray()
+) !!};
 
         // Inventory Array with updated data (sample items shown, images can come from Image1 in DB)
         //     const inventory = [
@@ -420,57 +419,52 @@ console.log(cartItems);
 
         // Create a draggable case element that shows the image,
         // uses the flavor name as a tooltip, and overlays the price.
-        function createCase(type, price, imageUrl, slot) {
-            const caseDiv = document.createElement("div");
-            caseDiv.classList.add("case");
-            // Tooltip for flavor name
-            caseDiv.title = type.trim();
-            caseDiv.setAttribute("data-type", type.trim());
-            caseDiv.setAttribute("data-price", price);
-            caseDiv.setAttribute("data-image", imageUrl);
-            caseDiv.draggable = true;
-            caseDiv.ondragstart = drag;
+        function createCase(type, price, imageUrl, slot) { 
+    const caseDiv = document.createElement("div");
+    caseDiv.classList.add("case");
+    caseDiv.title = type.trim();
+    caseDiv.setAttribute("data-type", type.trim().toLowerCase()); // Normalize type
+    caseDiv.setAttribute("data-price", price);
+    caseDiv.setAttribute("data-image", imageUrl);
+    caseDiv.draggable = true;
+    caseDiv.ondragstart = drag;
 
-            // Create the image element for the inventory display
-            const img = document.createElement("img");
-            img.src = imageUrl;
-            img.alt = type.trim();
+    const img = document.createElement("img");
+    img.src = imageUrl;
+    img.alt = type.trim();
 
-            // Create the overlay element for price (for inventory display only)
-            const overlay = document.createElement("div");
-            overlay.classList.add("price-overlay");
-            overlay.textContent = `$${price}`;
+    const overlay = document.createElement("div");
+    overlay.classList.add("price-overlay");
+    overlay.textContent = `$${price}`;
 
-            // Append image and overlay to the case container
-            caseDiv.appendChild(img);
-            caseDiv.appendChild(overlay);
-            slot.appendChild(caseDiv);
-        }
+    caseDiv.appendChild(img);
+    caseDiv.appendChild(overlay);
+    slot.appendChild(caseDiv);
+}
 
-        // Drag function: use event.currentTarget to reliably access attributes.
-        function drag(event) {
-            const source = event.currentTarget;
-            event.dataTransfer.setData("caseType", source.getAttribute("data-type"));
-            event.dataTransfer.setData("price", source.getAttribute("data-price"));
-            event.dataTransfer.setData("image", source.getAttribute("data-image"));
-        }
+function drag(event) {
+    const source = event.currentTarget;
+    event.dataTransfer.setData("caseType", source.getAttribute("data-type"));
+    event.dataTransfer.setData("price", source.getAttribute("data-price"));
+    event.dataTransfer.setData("image", source.getAttribute("data-image"));
+}
 
-        // Drop function: handles dropping an item into the cart.
-        function drop(event) {
+function drop(event) {
     event.preventDefault();
-    const caseType = event.dataTransfer.getData("caseType");
+    
+    const caseType = event.dataTransfer.getData("caseType").toLowerCase().trim(); // Normalize caseType
     const price = parseInt(event.dataTransfer.getData("price"), 10);
     const image = event.dataTransfer.getData("image");
 
-    // Find the item in the inventory to get its ID
-    const item = inventory.find(i => i.type === caseType);
+    // Find item in inventory
+    const item = inventory.find(i => i.type.toLowerCase().trim() === caseType);
 
     if (!item) {
         alert("This item is not available in the inventory.");
         return;
     }
 
-    const itemId = item.fgp_item_id;  // Retrieve item ID
+    const itemId = item.fgp_item_id;
 
     if (cart.has(caseType)) {
         const existing = cart.get(caseType);

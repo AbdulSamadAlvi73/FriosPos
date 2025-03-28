@@ -37,6 +37,7 @@
 					<li><a href="{{ route('corporate_admin.fpgitem.index') }}">Flavor List</a></li>
 					<li><a href="{{ route('corporate_admin.fpgitem.availability') }}">Availability</a></li>
 					<li><a href="{{ route('corporate_admin.fpgcategory.index') }}">Edit Flavor Categories</a></li>
+					<li><a href="{{ route('corporate_admin.additionalcharges.index') }}">Additional Charges</a></li>
 				</ul>
 			</li>
 			<li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
@@ -44,7 +45,7 @@
 					<span class="nav-text">Orders From Franchisees</span>
 				</a>
 				<ul aria-expanded="false">
-					<li><a href="view_orders.html">View Orders</a></li>
+					<li><a href="{{ route('corporate_admin.vieworders.index') }}">View Orders</a></li>
 					<li><a href="edit_orders.html">Edit/Delete Orders</a></li>
 				</ul>
 			</li>

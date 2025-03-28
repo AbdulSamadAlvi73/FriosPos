@@ -11,7 +11,7 @@
 				<div class="form-head mb-4 d-flex flex-wrap align-items-center">
 					<div class="me-auto">
 						<h2 class="font-w600 mb-0">Dashboard \</h2>
-						<p>Flover Pops List</p>
+						<p>Additional Charges List</p>
 					</div>	
 					<div class="input-group search-area2 d-xl-inline-flex mb-2 me-lg-4 me-md-2">
 						<button class="input-group-text"><i class="flaticon-381-search-2 text-primary"></i></button>
@@ -37,7 +37,7 @@
 				</div>
                 <div class="row mb-4 align-items-center">
                     <div class="col-xl-3 col-lg-4 mb-4 mb-lg-0">
-                        <a href="{{ route('franchise_admin.orderpops.create') }}" class="btn btn-secondary btn-lg btn-block rounded text-white">+ New Order</a>
+                        <a href="{{ route('corporate_admin.additionalcharges.create') }}" class="btn btn-secondary btn-lg btn-block rounded text-white">+ New Charges</a>
                     </div>
                     <div class="col-xl-9 col-lg-8">
                         <div class="card m-0">
@@ -55,8 +55,8 @@
                                             </defs>
                                         </svg>
                                         <div class="media-body">
-                                            <p class="mb-1 fs-12">Total Flavor Pops</p>
-                                            <h3 class="mb-0 font-w600 fs-22">{{ $totalPops }} Flavor Pops</h3>
+                                            <p class="mb-1 fs-12">Total Charges</p>
+                                            <h3 class="mb-0 font-w600 fs-22">{{ $totalCharges }} categories</h3>
                                         </div>
                                     </div>
                                     <div>
@@ -89,68 +89,43 @@
                                                 <label class="form-check-label" for="checkAll"></label>
                                             </div>
                                         </th>
-                                        <th>Name</th>
-                                        <th>Price Per Case</th>
-                                        <th>Stock Status</th>
-                                        <th>Availability</th>
-                                        <th>Category</th>
+                                        <th>Charges ID</th>
+                                        <th>Charges Name</th>
+                                        <th>Charges Amount</th>
+                                        <th>Charges Type</th>
+                                        <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @php
-                                        use Carbon\Carbon;
-                                        $currentMonth = Carbon::now()->format('n'); // Get current month as a number (1-12)
-                                    @endphp
-                                
-                                    @foreach ($pops as $pop)
+                                    @foreach ($additionalCharges as $additionalCharge)
                                         <tr>
                                             <td>
                                                 <div class="form-check checkbox-secondary">
-                                                    <input class="form-check-input" type="checkbox" value="{{ $pop->fgp_item_id }}" id="flexCheckDefault{{ $pop->fgp_item_id }}">
-                                                    <label class="form-check-label" for="flexCheckDefault{{ $pop->fgp_item_id }}"></label>
+                                                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault{{ $additionalCharge->additionalcharges_id }}">
+                                                    <label class="form-check-label" for="flexCheckDefault{{ $additionalCharge->additionalcharges_id }}"></label>
                                                 </div>
                                             </td>
-                                            <td>{{ $pop->name }}</td>
-                                            <td>${{ number_format($pop->case_cost, 2) }}</td>
+                                            <td>#{{ str_pad($additionalCharge->additionalcharges_id, 7, '0', STR_PAD_LEFT) }}</td>
+                                            <td>{{ $additionalCharge->charge_name }}</td>
+                                            <td>${{ number_format($additionalCharge->charge_price, 2) }}</td>
                                             <td>
-                                                <span class="badge bg-success">In Stock</span>
-                                            </td>
-                                            <td>
-                                                <span class="badge bg-success">Available</span>
-                                            </td>
-                                            <td>
-                                                @if($pop->categories->isNotEmpty())
-                                                    @php
-                                                        $chunks = $pop->categories->pluck('name')->chunk(5);
-                                                    @endphp
-                                                    @foreach($chunks as $chunk)
-                                                        {{ $chunk->join(', ') }} <br>
-                                                    @endforeach
+                                                @if($additionalCharge->charge_optional === 'required')
+                                                    <span class="">Required</span>
                                                 @else
-                                                    No Category
+                                                    <span class="">Optional</span>
                                                 @endif
                                             </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                                
-                            </table>
-                            
-						</div>
-					</div>
-				</div>
-            </div>
-			
-        </div>
-
-         {{-- <td>
+                                            <td>
                                                 <div class="d-flex">
-                                                    <a href="{{ route('franchise_admin.orderpops.edit', $pop->id) }}" class="edit-user">
+                                                    <!-- Edit Button -->
+                                                    <a href="{{ route('corporate_admin.additionalcharges.edit', $additionalCharge->additionalcharges_id) }}" class="edit-user">
                                                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                             <path d="M17 3C17.2626 2.73735 17.5744 2.52901 17.9176 2.38687C18.2608 2.24473 18.6286 2.17157 19 2.17157C19.3714 2.17157 19.7392 2.24473 20.0824 2.38687C20.4256 2.52901 20.7374 2.73735 21 3C21.2626 3.26264 21.471 3.57444 21.6131 3.9176C21.7553 4.26077 21.8284 4.62856 21.8284 5C21.8284 5.37143 21.7553 5.73923 21.6131 6.08239C21.471 6.42555 21.2626 6.73735 21 7L7.5 20.5L2 22L3.5 16.5L17 3Z" stroke="#FF7B31" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                                         </svg>
                                                     </a>
-                                                    <form action="{{ route('franchise_admin.orderpops.destroy', $pop->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this item?')">
+                            
+                                                    <!-- Delete Form -->
+                                                    <form action="{{ route('corporate_admin.additionalcharges.destroy', $additionalCharge->additionalcharges_id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this charge?')">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit" class="ms-4 delete-user">
@@ -161,41 +136,31 @@
                                                         </button>
                                                     </form>
                                                 </div>
-                                            </td> --}}
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                            
+						</div>
+					</div>
+				</div>
+            </div>
+			
+        </div>
         <!--**********************************
             Content body end
         ***********************************-->
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script>
-            $(document).ready(function() {
-                $('.orderable-dropdown').change(function() {
-                    let itemId = $(this).data('id');  
-                    let orderableValue = $(this).val();
-        
-                    $.ajax({
-                        url: "{{ route('corporate_admin.fpgitem.updateOrderable') }}", 
-                        type: "POST",
-                        data: {
-                            _token: "{{ csrf_token() }}",
-                            id: itemId,
-                            orderable: orderableValue
-                        },
-                        success: function(response) {
-                            console.log(response); // Debugging: Check response in console
-                            if (response.success) {
-                                // location.reload(); 
-                            } else {
-                                alert("Error: " + response.message);
-                            }
-                        },
-                        error: function(xhr, status, error) {
-                            console.error(xhr.responseText);
-                            alert("AJAX Error: " + xhr.responseText);
-                        }
-                    });
-                });
-            });
-        </script>
-        
+		
+		<script>
+            document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".edit-franchisee").forEach(button => {
+        button.addEventListener("click", function () {
+            let franchiseeId = this.getAttribute("data-id");
+            window.location.href = `/franchisee/${franchiseeId}/edit`;
+        });
+    });
+});
 
+        </script>
 @endsection

@@ -6,19 +6,21 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\GoogleController;
 // Corporate Admin Controllers
 use App\Http\Controllers\CorporateAdminControllers\OwnerController;
+use App\Http\Controllers\FranchiseAdminControllers\StaffController;
 use App\Http\Controllers\CorporateAdminControllers\FpgItemsController;
 use App\Http\Controllers\CorporateAdminControllers\FranchiseController;
-use App\Http\Controllers\CorporateAdminControllers\FpgCategoryController;
-use App\Http\Controllers\CorporateAdminControllers\CorporateAdminController;
-// Franchise Admin Controller
-use App\Http\Controllers\FranchiseAdminControllers\StaffController;
 use App\Http\Controllers\FranchiseAdminControllers\OrderPopsController;
+// Franchise Admin Controller
+use App\Http\Controllers\CorporateAdminControllers\ViewOrdersController;
+use App\Http\Controllers\CorporateAdminControllers\FpgCategoryController;
 use App\Http\Controllers\FranchiseAdminControllers\AdminProfileController;
-use App\Http\Controllers\FranchiseAdminControllers\FranchiseAdminController;
-// Franchise Manager Controllers
-use App\Http\Controllers\FranchiseManagerControllers\FranchiseManagerController;
-// Franchise Staff Controllers
 use App\Http\Controllers\FranchiseStaffController\FranchiseStaffController;
+// Franchise Manager Controllers
+use App\Http\Controllers\CorporateAdminControllers\CorporateAdminController;
+// Franchise Staff Controllers
+use App\Http\Controllers\FranchiseAdminControllers\FranchiseAdminController;
+use App\Http\Controllers\CorporateAdminControllers\AdditionalChargesController;
+use App\Http\Controllers\FranchiseManagerControllers\FranchiseManagerController;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -84,11 +86,27 @@ Route::middleware(['auth', 'role:corporate_admin'])->prefix('corporate_admin')->
     Route::put('/fpgitem/{fpgitem}', [FpgItemsController::class, 'update'])->name('fpgitem.update');
     Route::delete('/fpgitem/{fpgitem}', [FpgItemsController::class, 'destroy'])->name('fpgitem.destroy');
     Route::post('/fpgitem/update-orderable', [FpgItemsController::class, 'updateOrderable'])->name('fpgitem.updateOrderable');
-
     Route::get('/fpgitemavailability', [FpgItemsController::class, 'availability'])->name('fpgitem.availability');
-
     Route::post('/fpgitem/update-status/{id}', [FpgItemsController::class, 'updateStatus'])->name('fpgitem.updateStatus');
     Route::post('/fpgitem/update-month/{id}', [FpgItemsController::class, 'updateMonth']);
+
+    // Additional charges routes
+    Route::get('/additionalcharges', [AdditionalChargesController::class, 'index'])->name('additionalcharges.index');
+    Route::get('/additionalcharges/create', [AdditionalChargesController::class, 'create'])->name('additionalcharges.create');
+    Route::post('/additionalcharges', [AdditionalChargesController::class, 'store'])->name('additionalcharges.store');
+    Route::get('/additionalcharges/{additionalcharges}/edit', [AdditionalChargesController::class, 'edit'])->name('additionalcharges.edit');
+    Route::put('/additionalcharges/{additionalcharges}', [AdditionalChargesController::class, 'update'])->name('additionalcharges.update');
+    Route::delete('/additionalcharges/{additionalcharges}', [AdditionalChargesController::class, 'destroy'])->name('additionalcharges.destroy');
+    
+    // View Orders routes
+    // Route::get('/vieworders', [ViewOrdersController::class, 'index'])->name('vieworders.index');
+    Route::get('/vieworders/create', [ViewOrdersController::class, 'create'])->name('vieworders.create');
+    Route::post('/vieworders', [ViewOrdersController::class, 'store'])->name('vieworders.store');
+    Route::get('/vieworders/{vieworders}/edit', [ViewOrdersController::class, 'edit'])->name('vieworders.edit');
+    Route::put('/vieworders/{vieworders}', [ViewOrdersController::class, 'update'])->name('vieworders.update');
+    Route::delete('/vieworders/{vieworders}', [ViewOrdersController::class, 'destroy'])->name('vieworders.destroy');
+    Route::get('/vieworders', [ViewOrdersController::class, 'index'])->name('vieworders.index');
+    Route::post('/vieworders/{id}/update-status', [ViewOrdersController::class, 'updateStatus'])->name('vieworders.updateStatus');
 
      
 });

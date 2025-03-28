@@ -11,14 +11,15 @@ class FpgOrder extends Model
 
     protected $table = 'fpg_orders';
     protected $primaryKey = 'fgp_ordersID';
+    protected $fillable = ['user_ID', 'fgp_item_id', 'unit_cost', 'unit_number', 'date_transaction', 'ACH_data', 'status'];
 
-    protected $fillable = [
-        'user_ID',
-        'fgp_item_id',
-        'unit_cost',
-        'unit_number',
-        'date_transaction',
-        'ACH_data',
-        'status',
-    ];
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_ID', 'user_id');
+    }
+
+    public function item()
+    {
+        return $this->belongsTo(FpgItem::class, 'fgp_item_id', 'fgp_item_id');
+    }
 }
