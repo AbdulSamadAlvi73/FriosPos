@@ -189,7 +189,7 @@
                                                         {{-- {{dd($categorizedItems)}} --}}
                                                         <!-- Cart Section -->
                                                         
-                                                            <form action="{{ route('franchise_admin.orderpops.confirm') }}" method="get">
+                                                            <form action="{{ route('franchise.orderpops.confirm') }}" method="get">
                                                                 @csrf
                                                                 <input type="hidden" name="ordered_items" id="orderedItemsInput">
                                                                 
@@ -224,7 +224,7 @@ function submitCart() {
     // Create a form and submit via POST
     let form = document.createElement('form');
     form.method = 'get';
-    form.action = "{{ route('franchise_admin.orderpops.confirm') }}";
+    form.action = "{{ route('franchise.orderpops.confirm') }}";
 
     let csrfToken = document.createElement('input');
     csrfToken.type = 'hidden';

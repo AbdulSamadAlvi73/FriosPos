@@ -49,14 +49,6 @@
                                                 @csrf
                                             
                                                 <div class="row">
-                                                    <div class="mb-3 col-md-6">
-                                                        <label class="form-label">Category Name <span class="text-danger">*</span></label>
-                                                        <input type="text" class="form-control @error('name') is-invalid @enderror"
-                                                            name="name" value="{{ old('name') }}" placeholder="Owner Name">
-                                                        @error('name')
-                                                            <div class="text-danger">{{ $message }}</div>
-                                                        @enderror
-                                                    </div>
                                             
                                                     <div class="mb-3 col-md-6">
                                                         <label class="form-label">Category Type <span class="text-danger">*</span></label>
@@ -80,7 +72,14 @@
                                                         });
                                                     </script>
                                                                                                                                                             
-                                            
+                                                    <div class="mb-3 col-md-6">
+                                                        <label class="form-label">Category Name <span class="text-danger">*</span></label>
+                                                        <input type="text" class="form-control @error('name') is-invalid @enderror"
+                                                            name="name" value="{{ old('name') }}" placeholder="Subcategory">
+                                                        @error('name')
+                                                            <div class="text-danger">{{ $message }}</div>
+                                                        @enderror
+                                                    </div>
                                                 </div>
                                                 <button type="submit" class="btn btn-primary bg-primary">Add Category</button>
                                             </form>

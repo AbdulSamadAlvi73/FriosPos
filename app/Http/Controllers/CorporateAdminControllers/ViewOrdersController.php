@@ -20,10 +20,15 @@ class ViewOrdersController extends Controller
 
     public function updateStatus(Request $request, $id)
     {
+        $request->validate([
+            'status' => 'required|in:Pending,Paid,Shipped,Delivered',
+        ]);
+    
         $order = FpgOrder::findOrFail($id);
         $order->status = $request->status;
         $order->save();
-
+    
         return response()->json(['message' => 'Order status updated successfully!']);
     }
+    
 }

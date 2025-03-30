@@ -36,9 +36,12 @@
 					</div>
 				</div>
                 <div class="row mb-4 align-items-center">
+                    {{-- <div class="col-xl-3 col-lg-4 mb-4 mb-lg-0">
+                        <a href="{{ route('franchise.orderpops.create') }}" class="btn btn-secondary btn-lg btn-block rounded text-white">+ New Order</a>
+                    </div> --}}
                     <div class="col-xl-3 col-lg-4 mb-4 mb-lg-0">
-                        <a href="{{ route('franchise_admin.orderpops.create') }}" class="btn btn-secondary btn-lg btn-block rounded text-white">+ New Order</a>
-                    </div>
+                        <button id="orderButton" class="btn btn-secondary btn-lg btn-block rounded text-white">Place Order</button>
+                    </div>                    
                     <div class="col-xl-9 col-lg-8">
                         <div class="card m-0">
                             <div class="card-body py-3 py-md-2">
@@ -80,61 +83,129 @@
 				<div class="row">
 					<div class="col-lg-12">
 						<div class="table-responsive rounded">
-							<table id="example5" class="table customer-table display mb-4 fs-14 card-table">
-                                <thead>
-                                    <tr>
-                                        <th>
-                                            <div class="form-check checkbox-secondary">
-                                                <input class="form-check-input" type="checkbox" value="" id="checkAll">
-                                                <label class="form-check-label" for="checkAll"></label>
-                                            </div>
-                                        </th>
-                                        <th>Name</th>
-                                        <th>Price Per Case</th>
-                                        <th>Stock Status</th>
-                                        <th>Availability</th>
-                                        <th>Category</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @php
-                                        use Carbon\Carbon;
-                                        $currentMonth = Carbon::now()->format('n'); // Get current month as a number (1-12)
-                                    @endphp
-                                
-                                    @foreach ($pops as $pop)
-                                        <tr>
-                                            <td>
-                                                <div class="form-check checkbox-secondary">
-                                                    <input class="form-check-input" type="checkbox" value="{{ $pop->fgp_item_id }}" id="flexCheckDefault{{ $pop->fgp_item_id }}">
-                                                    <label class="form-check-label" for="flexCheckDefault{{ $pop->fgp_item_id }}"></label>
-                                                </div>
-                                            </td>
-                                            <td>{{ $pop->name }}</td>
-                                            <td>${{ number_format($pop->case_cost, 2) }}</td>
-                                            <td>
-                                                <span class="badge bg-success">In Stock</span>
-                                            </td>
-                                            <td>
-                                                <span class="badge bg-success">Available</span>
-                                            </td>
-                                            <td>
-                                                @if($pop->categories->isNotEmpty())
-                                                    @php
-                                                        $chunks = $pop->categories->pluck('name')->chunk(5);
-                                                    @endphp
-                                                    @foreach($chunks as $chunk)
-                                                        {{ $chunk->join(', ') }} <br>
-                                                    @endforeach
-                                                @else
-                                                    No Category
-                                                @endif
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                                
-                            </table>
+							<!-- New Order Button -->
+
+<!-- Pops Table -->
+<table id="example5" class="table customer-table display mb-4 fs-14 card-table">
+    <thead>
+        <tr>
+            <th>
+                <div class="form-check checkbox-secondary">
+                    <input class="form-check-input" type="checkbox" value="" id="checkAll">
+                    <label class="form-check-label" for="checkAll"></label>
+                </div>
+            </th>
+            <th>Name</th>
+            <th>Image</th>
+            <th>Price Per Case</th>
+            <th>Category</th>
+            <th>Stock Status</th>
+            <th>Availability</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach ($pops as $pop)
+        <tr>
+            <td>
+                <div class="form-check checkbox-secondary">
+                    <input class="form-check-input pop-checkbox" type="checkbox" value="{{ $pop->fgp_item_id }}" id="flexCheckDefault{{ $pop->fgp_item_id }}">
+                    <label class="form-check-label" for="flexCheckDefault{{ $pop->fgp_item_id }}"></label>
+                </div>
+            </td>
+            <td class="item-name">{{ $pop->name }}</td>
+            <td class="item-image">
+                @if ($pop->image1)
+                    <img src="{{ asset('storage/' . $pop->image1) }}" alt="Image" style="width: 50px; height: 50px; object-fit: contain;">
+                @else
+                    <span>No Image</span>
+                @endif
+            </td>
+            <td class="item-price">${{ number_format($pop->case_cost, 2) }}</td>
+            <td class="item-category">
+                @if($pop->categories->isNotEmpty())
+                @php
+                        $chunks = $pop->categories->pluck('name')->chunk(5);
+                        @endphp
+                    @foreach($chunks as $chunk)
+                    {{ $chunk->join(', ') }} <br>
+                    @endforeach
+                    @else
+                    No Category
+                @endif
+            </td>
+            <td><span class="badge bg-success">In Stock</span></td>
+            <td><span class="badge bg-success">Available</span></td>
+        </tr>
+        @endforeach
+    </tbody>
+    
+</table>
+
+
+<script>
+document.getElementById('orderButton').addEventListener('click', function () {
+    console.log("Confirm Order button clicked");
+
+    let checkedItems = [];
+
+    document.querySelectorAll('.pop-checkbox:checked').forEach((checkbox) => {
+        const row = checkbox.closest('tr'); 
+
+        const itemDetails = {
+            id: checkbox.value,
+            name: row.querySelector('.item-name').innerText.trim(),
+            image: row.querySelector('.item-image img') ? row.querySelector('.item-image img').src : 'No Image',
+            price: row.querySelector('.item-price').innerText.trim(),
+            category: row.querySelector('.item-category').innerText.trim(),
+            quantity: 1
+        };
+
+        console.log("Collected item details:", itemDetails);
+        checkedItems.push(itemDetails);
+    });
+
+    console.log("Checked Items:", checkedItems);
+
+    if (checkedItems.length === 0) {
+        alert("Please select at least one item to order.");
+        console.log("No items selected, alert displayed.");
+        return;
+    }
+
+    console.log("Sending request to server with checked items...");
+
+    const url = "{{ route('franchise.orderpops.confirm') }}";
+
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}' // Make sure to include CSRF token for Laravel
+        },
+        body: JSON.stringify({ ordered_items: checkedItems })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log("Parsed Response Data:", data);
+
+        if (data.redirect) {
+            console.log("Redirecting to:", data.redirect);
+            window.location.href = data.redirect;
+        } else {
+            console.error('Invalid response format:', data);
+        }
+    })
+    .catch(error => console.error('Error occurred:', error));
+});
+ 
+</script>
+
+
                             
 						</div>
 					</div>
@@ -145,12 +216,12 @@
 
          {{-- <td>
                                                 <div class="d-flex">
-                                                    <a href="{{ route('franchise_admin.orderpops.edit', $pop->id) }}" class="edit-user">
+                                                    <a href="{{ route('franchise.orderpops.edit', $pop->id) }}" class="edit-user">
                                                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                             <path d="M17 3C17.2626 2.73735 17.5744 2.52901 17.9176 2.38687C18.2608 2.24473 18.6286 2.17157 19 2.17157C19.3714 2.17157 19.7392 2.24473 20.0824 2.38687C20.4256 2.52901 20.7374 2.73735 21 3C21.2626 3.26264 21.471 3.57444 21.6131 3.9176C21.7553 4.26077 21.8284 4.62856 21.8284 5C21.8284 5.37143 21.7553 5.73923 21.6131 6.08239C21.471 6.42555 21.2626 6.73735 21 7L7.5 20.5L2 22L3.5 16.5L17 3Z" stroke="#FF7B31" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                                         </svg>
                                                     </a>
-                                                    <form action="{{ route('franchise_admin.orderpops.destroy', $pop->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this item?')">
+                                                    <form action="{{ route('franchise.orderpops.destroy', $pop->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this item?')">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit" class="ms-4 delete-user">

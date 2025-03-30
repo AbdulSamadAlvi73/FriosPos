@@ -60,7 +60,7 @@ class StaffController extends Controller
      
          // Role-based redirection
          if (auth()->user()->hasRole('franchise_admin')) {
-             return redirect()->route('franchise_admin.staff.index')->with('success', 'Staff created successfully.');
+             return redirect()->route('franchise.staff.index')->with('success', 'Staff created successfully.');
          } elseif (auth()->user()->hasRole('franchise_manager')) {
              return redirect()->route('franchise_manager.staff.index')->with('success', 'Staff created successfully.');
          }
@@ -104,7 +104,7 @@ class StaffController extends Controller
         // dd($request);
         // Role-based redirection
         if (auth()->user()->hasRole('franchise_admin')) {
-            return redirect()->route('franchise_admin.staff.index')->with('success', 'Staff updated successfully.');
+            return redirect()->route('franchise.staff.index')->with('success', 'Staff updated successfully.');
         } elseif (auth()->user()->hasRole('franchise_manager')) {
             return redirect()->route('franchise_manager.staff.index')->with('success', 'Staff updated successfully.');
         }
@@ -119,7 +119,7 @@ class StaffController extends Controller
             $user->delete();
 
             if (auth()->user()->hasRole('franchise_admin')) {
-                return redirect()->route('franchise_admin.staff.index')->with('success', 'Staff updated successfully.');
+                return redirect()->route('franchise.staff.index')->with('success', 'Staff updated successfully.');
             } elseif (auth()->user()->hasRole('franchise_manager')) {
                 return redirect()->route('franchise_manager.staff.index')->with('success', 'Staff updated successfully.');
             }
@@ -128,7 +128,7 @@ class StaffController extends Controller
             return redirect()->back()->with('success', 'User deleted successfully.');
         } catch (\Exception $e) {
             if (auth()->user()->hasRole('franchise_admin')) {
-                return redirect()->route('franchise_admin.staff.index')->with('success', 'Staff updated successfully.');
+                return redirect()->route('franchise.staff.index')->with('success', 'Staff updated successfully.');
             } elseif (auth()->user()->hasRole('franchise_manager')) {
                 return redirect()->route('franchise_manager.staff.index')->with('success', 'Staff updated successfully.');
             }

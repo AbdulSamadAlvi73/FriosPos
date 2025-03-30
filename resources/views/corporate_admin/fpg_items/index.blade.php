@@ -91,6 +91,7 @@
                                         </th>
                                         <th>Item ID</th>
                                         <th>Name</th>
+                                        <th>Image</th>
                                         <th>Description</th>
                                         <th>Category</th>
                                         {{-- <th>Orderable</th> --}}
@@ -108,6 +109,13 @@
                                             </td>
                                             <td>#{{ str_pad($item->fgp_item_id, 7, '0', STR_PAD_LEFT) }}</td>
                                             <td>{{ $item->name }}</td>
+                                            <td class="item-image">
+                                                @if ($item->image1)
+                                                    <img src="{{ asset('storage/' . $item->image1) }}" alt="Image" style="width: 50px; height: 50px; object-fit: contain;">
+                                                @else
+                                                    <span>No Image</span>
+                                                @endif
+                                            </td>
                                             <td>{{ $item->description }}</td>
                                             <td>
                                                 @if($item->categories->isNotEmpty())

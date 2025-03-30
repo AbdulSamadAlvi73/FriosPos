@@ -37,7 +37,7 @@
 				</div>
                 <div class="row mb-4 align-items-center">
                     <div class="col-xl-3 col-lg-4 mb-4 mb-lg-0">
-                        <a href="{{ route('franchise_admin.orderpops.create') }}" class="btn btn-secondary btn-lg btn-block rounded text-white">+ New Order</a>
+                        <a href="{{ route('franchise.orderpops.create') }}" class="btn btn-secondary btn-lg btn-block rounded text-white">+ New Order</a>
                     </div>
                     <div class="col-xl-9 col-lg-8">
                         <div class="card m-0">
@@ -80,7 +80,7 @@
 				<div class="row">
                     <div class="col-lg-12">
                         <div class="table-responsive rounded">
-                            <table id="ordersTable" class="table customer-table display mb-4 fs-14 card-table">
+                            <table id="example5" class="table customer-table display mb-4 fs-14 card-table">
                                 <thead>
                                     <tr>
                                         {{-- <th>
@@ -89,7 +89,7 @@
                                                 <label class="form-check-label" for="checkAll"></label>
                                             </div>
                                         </th> --}}
-                                        {{-- <th>Order ID</th> --}}
+                                        <th>Order ID</th>
                                         <th>Franchise Name</th>
                                         <th>Item</th>
                                         <th>Unit Cost</th>
@@ -109,17 +109,21 @@
                                                 </div>
                                             </td> --}}
                                             {{-- <td>{{ $order->fgp_ordersID }}</td> --}}
+                                            <td>#{{ str_pad($order->fgp_ordersID, 7, '0', STR_PAD_LEFT) }}</td>
                                             <td>{{ $order->user->name ?? 'N/A' }}</td>
                                             <td>{{ $order->item->name ?? 'N/A' }}</td>
                                             <td>${{ number_format($order->unit_cost, 2) }}</td>
                                             <td>{{ $order->unit_number }}</td>
                                             <td>{{ \Carbon\Carbon::parse($order->date_transaction)->format('M d, Y h:i A') }}</td>
                                             <td>
-                                                <select class="form-select status-select" data-id="{{ $order->fgp_ordersID }}">
+                                                <select class="status-select" data-id="{{ $order->fgp_ordersID }}">
                                                     <option value="Pending" {{ $order->status == 'Pending' ? 'selected' : '' }}>Pending</option>
+                                                    <option value="Paid" {{ $order->status == 'Paid' ? 'selected' : '' }}>Paid</option>
+                                                    <option value="Shipped" {{ $order->status == 'Shipped' ? 'selected' : '' }}>Shipped</option>
                                                     <option value="Delivered" {{ $order->status == 'Delivered' ? 'selected' : '' }}>Delivered</option>
                                                 </select>
-                                            </td>
+                                            </td>  
+                                                                                       
                                             <td>
                                                 <div class="d-flex">
                                                     {{-- <a href="{{ route('corporate_admin.owner.edit', $order->fgp_ordersID) }}" class="edit-user">
@@ -155,12 +159,12 @@
 
          {{-- <td>
                                                 <div class="d-flex">
-                                                    <a href="{{ route('franchise_admin.orderpops.edit', $pop->id) }}" class="edit-user">
+                                                    <a href="{{ route('franchise.orderpops.edit', $pop->id) }}" class="edit-user">
                                                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                             <path d="M17 3C17.2626 2.73735 17.5744 2.52901 17.9176 2.38687C18.2608 2.24473 18.6286 2.17157 19 2.17157C19.3714 2.17157 19.7392 2.24473 20.0824 2.38687C20.4256 2.52901 20.7374 2.73735 21 3C21.2626 3.26264 21.471 3.57444 21.6131 3.9176C21.7553 4.26077 21.8284 4.62856 21.8284 5C21.8284 5.37143 21.7553 5.73923 21.6131 6.08239C21.471 6.42555 21.2626 6.73735 21 7L7.5 20.5L2 22L3.5 16.5L17 3Z" stroke="#FF7B31" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                                         </svg>
                                                     </a>
-                                                    <form action="{{ route('franchise_admin.orderpops.destroy', $pop->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this item?')">
+                                                    <form action="{{ route('franchise.orderpops.destroy', $pop->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this item?')">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit" class="ms-4 delete-user">
@@ -175,42 +179,28 @@
         <!--**********************************
             Content body end
         ***********************************-->
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script>
-            document.addEventListener("DOMContentLoaded", function() {
-                document.querySelectorAll('.status-select').forEach(select => {
-                    select.addEventListener('change', function() {
-                        let orderId = this.getAttribute('data-id');
-                        let newStatus = this.value;
-                        
-                        fetch(`/corporate-admin/vieworders/${orderId}/update-status`, {
-                            method: "POST",
-                            headers: {
-                                "X-CSRF-TOKEN": "{{ csrf_token() }}",
-                                "Content-Type": "application/json"
-                            },
-                            body: JSON.stringify({ status: newStatus })
-                        })
-                        .then(response => response.json())
-                        .then(data => alert(data.message))
-                        .catch(error => console.error('Error:', error));
-                    });
-                });
-        
-                document.querySelectorAll('.delete-order').forEach(button => {
-                    button.addEventListener('click', function() {
-                        let orderId = this.getAttribute('data-id');
-                        if (confirm("Are you sure you want to delete this order?")) {
-                            fetch(`/corporate-admin/vieworders/${orderId}`, {
-                                method: "DELETE",
-                                headers: { "X-CSRF-TOKEN": "{{ csrf_token() }}" }
-                            })
-                            .then(() => location.reload())
-                            .catch(error => console.error('Error:', error));
-                        }
-                    });
-                });
-            });
+document.addEventListener("DOMContentLoaded", function() {
+    document.querySelectorAll('.status-select').forEach(select => {
+        select.addEventListener('change', function() {
+            let orderId = this.getAttribute('data-id');
+            let newStatus = this.value;
+
+            fetch(`/corporate_admin/vieworders/${orderId}/update-status`, { 
+                method: "POST",
+                headers: {
+                    "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ status: newStatus })
+            })
+            .then(response => response.json())
+            .then(data => alert(data.message))
+            .catch(error => console.error('Error:', error));
+        });
+    });
+});
+
         </script>
 
 @endsection

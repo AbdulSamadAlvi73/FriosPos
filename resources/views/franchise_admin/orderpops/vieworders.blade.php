@@ -11,7 +11,7 @@
 				<div class="form-head mb-4 d-flex flex-wrap align-items-center">
 					<div class="me-auto">
 						<h2 class="font-w600 mb-0">Dashboard \</h2>
-						<p>Staff List</p>
+						<p>Pops Order List</p>
 					</div>	
 					<div class="input-group search-area2 d-xl-inline-flex mb-2 me-lg-4 me-md-2">
 						<button class="input-group-text"><i class="flaticon-381-search-2 text-primary"></i></button>
@@ -37,12 +37,7 @@
 				</div>
                 <div class="row mb-4 align-items-center">
                     <div class="col-xl-3 col-lg-4 mb-4 mb-lg-0">
-                        @role('franchise_admin')
-                        <a href="{{ route('franchise.staff.create') }}" class="btn btn-secondary btn-lg btn-block rounded text-white">+ New Staff</a>
-                        @endrole
-                        @role('franchise_manager')
-                        <a href="{{ route('franchise_manager.staff.create') }}" class="btn btn-secondary btn-lg btn-block rounded text-white">+ New Staff</a>
-                        @endrole
+                        <a href="" class="btn btn-secondary btn-lg btn-block rounded text-white">+ New Order</a>
                     </div>
                     <div class="col-xl-9 col-lg-8">
                         <div class="card m-0">
@@ -60,8 +55,8 @@
                                             </defs>
                                         </svg>
                                         <div class="media-body">
-                                            <p class="mb-1 fs-12">Total Staff</p>
-                                            <h3 class="mb-0 font-w600 fs-22">{{ $totalUsers }} Staff</h3>
+                                            <p class="mb-1 fs-12">Total Orders Pops</p>
+                                            <h3 class="mb-0 font-w600 fs-22">{{ $totalOrders }} Flavor Pops</h3>
                                         </div>
                                     </div>
                                     <div>
@@ -83,124 +78,119 @@
                 @endif
 
 				<div class="row">
-					<div class="col-lg-12">
-						<div class="table-responsive rounded">
-							<table id="example5" class="table customer-table display mb-4 fs-14 card-table">
-								<thead>
+                    <div class="col-lg-12">
+                        <div class="table-responsive rounded">
+                            <table id="example5" class="table customer-table display mb-4 fs-14 card-table">
+                                <thead>
                                     <tr>
-                                        <th>
+                                        {{-- <th>
                                             <div class="form-check checkbox-secondary">
-                                                <input class="form-check-input" type="checkbox" value="" id="checkAll">
+                                                <input class="form-check-input" type="checkbox" id="checkAll">
                                                 <label class="form-check-label" for="checkAll"></label>
                                             </div>
-                                        </th>
-                                        {{-- <th>Staff ID</th> --}}
-                                        <th>Staff Name</th>
-                                        <th>Staff Of</th>
-                                        <th>Email</th>
-                                        <th>Role</th>
-                                        <th>Phone no</th>
-                                        <th>Created Date</th>
-                                        <th>Actions</th>
+                                        </th> --}}
+                                        {{-- <th>Order ID</th> --}}
+                                        <th>Order ID</th>
+                                        <th>Item Name</th>
+                                        <th>Image</th>
+                                        <th>Unit Cost</th>
+                                        <th>Quantity</th>
+                                        <th>Status</th>
+                                        <th>Date</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($users as $user)
-                                        <tr>
-                                            <td>
+                                    @foreach ($orders as $order)
+                                        <tr style="text-wrap: no-wrap;">
+                                            {{-- <td>
                                                 <div class="form-check checkbox-secondary">
-                                                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault{{ $user->user_id }}">
-                                                    <label class="form-check-label" for="flexCheckDefault{{ $user->user_id }}"></label>
+                                                    <input class="form-check-input" type="checkbox" value="{{ $order->fgp_ordersID }}" id="orderCheck{{ $order->fgp_ordersID }}">
+                                                    <label class="form-check-label" for="orderCheck{{ $order->fgp_ordersID }}"></label>
                                                 </div>
-                                            </td>
-                                            {{-- <td>#{{ str_pad($user->user_id, 7, '0', STR_PAD_LEFT) }}</td> --}}
-                                            <td>{{ $user->name }}</td>
-                                            <td>
-                                                @if ($user->franchisee)
-                                                    {{ $user->franchisee->business_name }}
+                                            </td> --}}
+                                            <td>#{{ str_pad($order->fgp_ordersID, 7, '0', STR_PAD_LEFT) }}</td>
+                                            <td>{{ $order->item->name ?? 'N/A' }}</td>
+                                            <td class="item-image">
+                                                @if ($order->item->image1)
+                                                    <img src="{{ asset('storage/' . $order->item->image1) }}" alt="Image" style="width: 50px; height: 50px; object-fit: contain;">
                                                 @else
-                                                    No Franchise Assigned
+                                                    <span>No Image</span>
                                                 @endif
                                             </td>
-                                            <td>{{ $user->email }}</td>
-                                            <td>{{ ucwords(str_replace('_', ' ', $user->role)) }}</td>
-                                            <td>
-                                            @if ($user->phone_number)
-                                                    {{ $user->phone_number }}
-                                                @else
-                                                    No Phone number
-                                                @endif
-                                            </td>
-                                            <td>{{ $user->created_date ? \Carbon\Carbon::parse($user->created_date)->format('d/m/Y') : 'N/A' }}</td>
-                                            <td>
-                                                @role('franchise_admin')
-                                                <div class="d-flex">
-                                                    <a href="{{ route('franchise.staff.edit', $user->user_id) }}" class="edit-user">
-                                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                            <path d="M17 3C17.2626 2.73735 17.5744 2.52901 17.9176 2.38687C18.2608 2.24473 18.6286 2.17157 19 2.17157C19.3714 2.17157 19.7392 2.24473 20.0824 2.38687C20.4256 2.52901 20.7374 2.73735 21 3C21.2626 3.26264 21.471 3.57444 21.6131 3.9176C21.7553 4.26077 21.8284 4.62856 21.8284 5C21.8284 5.37143 21.7553 5.73923 21.6131 6.08239C21.471 6.42555 21.2626 6.73735 21 7L7.5 20.5L2 22L3.5 16.5L17 3Z" stroke="#FF7B31" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                                        </svg>
-                                                    </a>
-                                                    
-                                                    <form action="{{ route('franchise.staff.destroy', $user->user_id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this user?')">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="ms-4 delete-user">
-                                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"> 
-                                                                <path d="M3 6H5H21" stroke="#FF3131" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                                                <path d="M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6M19 6V20C19 20.5304 18.7893 21.0391 18.4142 21.4142C18.0391 21.7893 17.5304 22 17 22H7C6.46957 22 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20V6H19Z" stroke="#FF3131" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                                            </svg>
-                                                        </button>
-                                                    </form>
-                                                    
-                                                </div>
-                                                @endrole
-                                                @role('franchise_manager')
-                                                <div class="d-flex">
-                                                    <a href="{{ route('franchise_manager.staff.edit', $user->user_id) }}" class="edit-user">
-                                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                            <path d="M17 3C17.2626 2.73735 17.5744 2.52901 17.9176 2.38687C18.2608 2.24473 18.6286 2.17157 19 2.17157C19.3714 2.17157 19.7392 2.24473 20.0824 2.38687C20.4256 2.52901 20.7374 2.73735 21 3C21.2626 3.26264 21.471 3.57444 21.6131 3.9176C21.7553 4.26077 21.8284 4.62856 21.8284 5C21.8284 5.37143 21.7553 5.73923 21.6131 6.08239C21.471 6.42555 21.2626 6.73735 21 7L7.5 20.5L2 22L3.5 16.5L17 3Z" stroke="#FF7B31" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                                        </svg>
-                                                    </a>
-                                                    
-                                                    <form action="{{ route('franchise_manager.staff.destroy', $user->user_id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this user?')">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="ms-4 delete-user">
-                                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"> 
-                                                                <path d="M3 6H5H21" stroke="#FF3131" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                                                <path d="M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6M19 6V20C19 20.5304 18.7893 21.0391 18.4142 21.4142C18.0391 21.7893 17.5304 22 17 22H7C6.46957 22 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20V6H19Z" stroke="#FF3131" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                                            </svg>
-                                                        </button>
-                                                    </form>
-                                                    
-                                                </div>
-                                                @endrole
-                                            </td>
+                                            <td>{{ $order->unit_cost }}</td>
+                                            <td>{{ $order->unit_number }}</td>
+                                            <td>{{ $order->status }}</td>
+                                            <td>{{ \Carbon\Carbon::parse($order->date_transaction)->format('M d, Y h:i A') }}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>
-                                
-                                
-							</table>
-						</div>
-					</div>
-				</div>
+                            </table>  
+                        </div>
+                    </div>
+                </div>
+                
             </div>
 			
         </div>
+
+         {{-- <td>
+                                                <div class="d-flex">
+                                                    <a href="{{ route('franchise.orderpops.edit', $pop->id) }}" class="edit-user">
+                                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M17 3C17.2626 2.73735 17.5744 2.52901 17.9176 2.38687C18.2608 2.24473 18.6286 2.17157 19 2.17157C19.3714 2.17157 19.7392 2.24473 20.0824 2.38687C20.4256 2.52901 20.7374 2.73735 21 3C21.2626 3.26264 21.471 3.57444 21.6131 3.9176C21.7553 4.26077 21.8284 4.62856 21.8284 5C21.8284 5.37143 21.7553 5.73923 21.6131 6.08239C21.471 6.42555 21.2626 6.73735 21 7L7.5 20.5L2 22L3.5 16.5L17 3Z" stroke="#FF7B31" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                        </svg>
+                                                    </a>
+                                                    <form action="{{ route('franchise.orderpops.destroy', $pop->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this item?')">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="ms-4 delete-user">
+                                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"> 
+                                                                <path d="M3 6H5H21" stroke="#FF3131" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                                <path d="M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6M19 6V20C19 20.5304 18.7893 21.0391 18.4142 21.4142C18.0391 21.7893 17.5304 22 17 22H7C6.46957 22 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20V6H19Z" stroke="#FF3131" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                            </svg>
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </td> --}}
         <!--**********************************
             Content body end
         ***********************************-->
-		
-		<script>
-            document.addEventListener("DOMContentLoaded", function () {
-    document.querySelectorAll(".edit-franchisee").forEach(button => {
-        button.addEventListener("click", function () {
-            let franchiseeId = this.getAttribute("data-id");
-            window.location.href = `/franchisee/${franchiseeId}/edit`;
-        });
-    });
-});
-
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                document.querySelectorAll('.status-select').forEach(select => {
+                    select.addEventListener('change', function() {
+                        let orderId = this.getAttribute('data-id');
+                        let newStatus = this.value;
+                        
+                        fetch(`/corporate-admin/vieworders/${orderId}/update-status`, {
+                            method: "POST",
+                            headers: {
+                                "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify({ status: newStatus })
+                        })
+                        .then(response => response.json())
+                        .then(data => alert(data.message))
+                        .catch(error => console.error('Error:', error));
+                    });
+                });
+        
+                document.querySelectorAll('.delete-order').forEach(button => {
+                    button.addEventListener('click', function() {
+                        let orderId = this.getAttribute('data-id');
+                        if (confirm("Are you sure you want to delete this order?")) {
+                            fetch(`/corporate-admin/vieworders/${orderId}`, {
+                                method: "DELETE",
+                                headers: { "X-CSRF-TOKEN": "{{ csrf_token() }}" }
+                            })
+                            .then(() => location.reload())
+                            .catch(error => console.error('Error:', error));
+                        }
+                    });
+                });
+            });
         </script>
+
 @endsection

@@ -49,12 +49,7 @@
                                                 @method('PUT')
                                             
                                                 <div class="row">
-                                                    <div class="mb-3 col-md-6">
-                                                        <label class="form-label">Category Name <span class="text-danger">*</span></label>
-                                                        <input type="text" class="form-control @error('name') is-invalid @enderror" 
-                                                            name="name" value="{{ old('name', $fpgcategory->name) }}" required>
-                                                        @error('name') <div class="text-danger">{{ $message }}</div> @enderror
-                                                    </div>
+                                                   
                                             
                                                     <div class="mb-3 col-md-6">
                                                         <label class="form-label">Category Type <span class="text-danger">*</span></label>
@@ -68,6 +63,12 @@
                                                             <option value="Allergen" {{ in_array('Allergen', $selectedTypes) ? 'selected' : '' }}>Allergen</option>
                                                         </select>
                                                         @error('type') <div class="text-danger">{{ $message }}</div> @enderror
+                                                    </div>
+                                                    <div class="mb-3 col-md-6">
+                                                        <label class="form-label">Category Name <span class="text-danger">*</span></label>
+                                                        <input type="text" class="form-control @error('name') is-invalid @enderror" 
+                                                            name="name" value="{{ old('name', $fpgcategory->name) }}" required>
+                                                        @error('name') <div class="text-danger">{{ $message }}</div> @enderror
                                                     </div>
                                                 </div>
                                             

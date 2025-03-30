@@ -99,7 +99,7 @@ Route::middleware(['auth', 'role:corporate_admin'])->prefix('corporate_admin')->
     Route::delete('/additionalcharges/{additionalcharges}', [AdditionalChargesController::class, 'destroy'])->name('additionalcharges.destroy');
     
     // View Orders routes
-    // Route::get('/vieworders', [ViewOrdersController::class, 'index'])->name('vieworders.index');
+    Route::get('/vieworders', [ViewOrdersController::class, 'index'])->name('vieworders.index');
     Route::get('/vieworders/create', [ViewOrdersController::class, 'create'])->name('vieworders.create');
     Route::post('/vieworders', [ViewOrdersController::class, 'store'])->name('vieworders.store');
     Route::get('/vieworders/{vieworders}/edit', [ViewOrdersController::class, 'edit'])->name('vieworders.edit');
@@ -110,10 +110,8 @@ Route::middleware(['auth', 'role:corporate_admin'])->prefix('corporate_admin')->
 
      
 });
-
-
-Route::middleware(['auth', 'role:franchise_admin'])->prefix('franchise_admin')->name('franchise_admin.')->group(function () {
-    Route::get('/franchise/dashboard', [FranchiseAdminController::class, 'dashboard']);
+Route::middleware(['auth', 'role:franchise_admin|franchise_manager'])->prefix('franchise')->name('franchise.')->group(function () {
+    Route::get('/dashboard', [FranchiseAdminController::class, 'dashboard'])->name('dashboard');
 
     // Staff routes
     Route::get('/staff', [StaffController::class, 'index'])->name('staff.index');
@@ -126,27 +124,55 @@ Route::middleware(['auth', 'role:franchise_admin'])->prefix('franchise_admin')->
     // Order pops routes
     Route::get('/orderpops', [OrderPopsController::class, 'index'])->name('orderpops.index');
     Route::get('/orderpops/create', [OrderPopsController::class, 'create'])->name('orderpops.create');
-    // Route::post('/orderpops', [OrderPopsController::class, 'store'])->name('orderpops.store');
+    Route::post('/orderpops/store', [OrderPopsController::class, 'store'])->name('orderpops.store');
     Route::get('/orderpops/{orderpops}/edit', [OrderPopsController::class, 'edit'])->name('orderpops.edit');
     Route::put('/orderpops/{orderpops}', [OrderPopsController::class, 'update'])->name('orderpops.update');
     Route::delete('/orderpops/{orderpops}', [OrderPopsController::class, 'destroy'])->name('orderpops.destroy');
+
+    Route::post('/orderpops/confirm', [OrderPopsController::class, 'confirmOrder'])->name('orderpops.confirm');
+    Route::get('/orderpops/confirm/page', [OrderPopsController::class, 'showConfirmPage'])->name('orderpops.confirm.page');
+    Route::get('/orderpops/view', [OrderPopsController::class, 'viewOrders'])->name('orderpops.view');
+});
+
+
+// Route::middleware(['auth', 'role:franchise_admin'])->prefix('franchise_admin')->name('franchise.')->group(function () {
+//     Route::get('/franchise/dashboard', [FranchiseAdminController::class, 'dashboard']);
+
+//     // Staff routes
+//     Route::get('/staff', [StaffController::class, 'index'])->name('staff.index');
+//     Route::get('/staff/create', [StaffController::class, 'create'])->name('staff.create');
+//     Route::post('/staff', [StaffController::class, 'store'])->name('staff.store');
+//     Route::get('/staff/{staff}/edit', [StaffController::class, 'edit'])->name('staff.edit');
+//     Route::put('/staff/{staff}', [StaffController::class, 'update'])->name('staff.update');
+//     Route::delete('/staff/{staff}', [StaffController::class, 'destroy'])->name('staff.destroy');
+
+//     // Order pops routes
+//     Route::get('/orderpops', [OrderPopsController::class, 'index'])->name('orderpops.index');
+//     Route::get('/orderpops/create', [OrderPopsController::class, 'create'])->name('orderpops.create');
+//     Route::post('/orderpops/store', [OrderPopsController::class, 'store'])->name('orderpops.store');
+//     Route::get('/orderpops/{orderpops}/edit', [OrderPopsController::class, 'edit'])->name('orderpops.edit');
+//     Route::put('/orderpops/{orderpops}', [OrderPopsController::class, 'update'])->name('orderpops.update');
+//     Route::delete('/orderpops/{orderpops}', [OrderPopsController::class, 'destroy'])->name('orderpops.destroy');
         
-    Route::post('/orderpops/store', [OrderPopsController::class, 'store'])->name('orderpops.store');
-    Route::get('/orderpops/confirm', [OrderPopsController::class, 'confirmOrder'])->name('orderpops.confirm');
-    
-});
 
-Route::middleware(['auth', 'role:franchise_manager'])->prefix('franchise_manager')->name('franchise_manager.')->group(function () {
-    Route::get('/manager/dashboard', [FranchiseManagerController::class, 'dashboard']);
+//     Route::post('/orderpops/confirm', [OrderPopsController::class, 'confirmOrder'])->name('orderpops.confirm');
+//     Route::get('/orderpops/confirm/page', [OrderPopsController::class, 'showConfirmPage'])->name('orderpops.confirm.page');
+//     Route::get('/orderpops/view', [OrderPopsController::class, 'viewOrders'])->name('orderpops.view');
 
-    // Staff routes
-    Route::get('/staff', [StaffController::class, 'index'])->name('staff.index');
-    Route::get('/staff/create', [StaffController::class, 'create'])->name('staff.create');
-    Route::post('/staff', [StaffController::class, 'store'])->name('staff.store');
-    Route::get('/staff/{staff}/edit', [StaffController::class, 'edit'])->name('staff.edit');
-    Route::put('/staff/{staff}', [StaffController::class, 'update'])->name('staff.update');
-    Route::delete('/staff/{staff}', [StaffController::class, 'destroy'])->name('staff.destroy');
-});
+// });
+
+
+// Route::middleware(['auth', 'role:franchise_manager'])->prefix('franchise_manager')->name('franchise_manager.')->group(function () {
+//     Route::get('/manager/dashboard', [FranchiseManagerController::class, 'dashboard']);
+
+//     // Staff routes
+//     Route::get('/staff', [StaffController::class, 'index'])->name('staff.index');
+//     Route::get('/staff/create', [StaffController::class, 'create'])->name('staff.create');
+//     Route::post('/staff', [StaffController::class, 'store'])->name('staff.store');
+//     Route::get('/staff/{staff}/edit', [StaffController::class, 'edit'])->name('staff.edit');
+//     Route::put('/staff/{staff}', [StaffController::class, 'update'])->name('staff.update');
+//     Route::delete('/staff/{staff}', [StaffController::class, 'destroy'])->name('staff.destroy');
+// });
 
 Route::middleware(['auth', 'role:franchise_staff'])->group(function () {
     Route::get('/staff/dashboard', [FranchiseStaffController::class, 'dashboard']);

@@ -37,16 +37,16 @@
 					<li><a href="{{ route('corporate_admin.fpgitem.index') }}">Flavor List</a></li>
 					<li><a href="{{ route('corporate_admin.fpgitem.availability') }}">Availability</a></li>
 					<li><a href="{{ route('corporate_admin.fpgcategory.index') }}">Edit Flavor Categories</a></li>
-					<li><a href="{{ route('corporate_admin.additionalcharges.index') }}">Additional Charges</a></li>
 				</ul>
 			</li>
 			<li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
 					<i class="bi bi-cart-plus-fill"></i>
-					<span class="nav-text">Orders From Franchisees</span>
+					<span class="nav-text">Franchise Orders</span>
 				</a>
 				<ul aria-expanded="false">
 					<li><a href="{{ route('corporate_admin.vieworders.index') }}">View Orders</a></li>
 					<li><a href="edit_orders.html">Edit/Delete Orders</a></li>
+					<li><a href="{{ route('corporate_admin.additionalcharges.index') }}">Edit Charges</a></li>
 				</ul>
 			</li>
 			<li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
@@ -100,6 +100,15 @@
 				</ul>
 			</li>
 			<li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
+				<i class="bi bi-cart-plus-fill"></i>
+				<span class="nav-text">Orders</span>
+			</a>
+			<ul aria-expanded="false">
+				<li><a href="{{ route('franchise.orderpops.index') }}">Order Pops</a></li>
+				<li><a href="{{ route('franchise.orderpops.view') }}">View Orders</a></li>
+			</ul>
+		</li>
+			<li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
 					<i class="bi bi-cash-coin"></i>
 					<span class="nav-text">Get Paid</span>
 				</a>
@@ -126,17 +135,9 @@
 					<i class="bi bi-calendar-week-fill"></i>
 					<span class="nav-text">Events</span>
 				</a></li>
-			<li><a class="ai-icon" href="{{ route('franchise_admin.orderpops.index') }}" aria-expanded="false">
-					<i class="bi bi-cart-plus-fill"></i>
-					<span class="nav-text">Order Pops</span>
-				</a></li>
-			{{-- <li><a class="ai-icon" href="manage_users.html" aria-expanded="false">
-					<i class="bi bi-people-fill"></i>
-					<span class="nav-text">Manage Users</span>
-				</a></li> --}}
 			@endrole
 			@role('franchise_manager')
-			{{-- <li><a class="ai-icon" href="javascript:void()" aria-expanded="false">
+		{{-- <li><a class="ai-icon" href="javascript:void()" aria-expanded="false">
 					<i class="bi bi-house-door-fill"></i>
 					<span class="nav-text">Return to Main</span>
 				</a></li> --}}
@@ -149,6 +150,15 @@
 					<li><a href="edit_inventory_locations.html">Edit Inventory Locations</a></li>
 				</ul>
 			</li>
+			<li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
+				<i class="bi bi-cart-plus-fill"></i>
+				<span class="nav-text">Orders</span>
+			</a>
+			<ul aria-expanded="false">
+				<li><a href="{{ route('franchise.orderpops.index') }}">Order Pops</a></li>
+				<li><a href="{{ route('franchise.orderpops.view') }}">View Orders</a></li>
+			</ul>
+		</li>
 			{{-- <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
 					<i class="bi bi-cash-coin"></i>
 					<span class="nav-text">Get Paid</span>
@@ -176,14 +186,6 @@
 					<i class="bi bi-calendar-week-fill"></i>
 					<span class="nav-text">Events</span>
 				</a></li>
-			<li><a class="ai-icon" href="order_pops.html" aria-expanded="false">
-					<i class="bi bi-cart-plus-fill"></i>
-					<span class="nav-text">Order Pops</span>
-				</a></li>
-			{{-- <li><a class="ai-icon" href="manage_users.html" aria-expanded="false">
-					<i class="bi bi-people-fill"></i>
-					<span class="nav-text">Manage Users</span>
-				</a></li> --}}
 			@endrole
 			@role('franchise_staff')
 			<li><a class="ai-icon" href="pos.html" aria-expanded="false">

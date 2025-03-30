@@ -19,7 +19,7 @@ return new class extends Migration
             $table->integer('unit_number');
             $table->dateTime('date_transaction');
             $table->json('ACH_data')->nullable();
-            $table->enum('status', ['Pending', 'Delivered']);
+            $table->enum('status', ['Pending', 'Paid','Shipped','Delivered']);
             $table->timestamps();
         
             // Foreign Keys

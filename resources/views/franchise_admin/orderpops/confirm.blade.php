@@ -55,7 +55,7 @@
                                             <div class="col-lg-12">
                                                 <div class="table-responsive rounded">
                                                     @if (!empty($items))
-                                                    <form action="{{ route('franchise_admin.orderpops.store') }}" method="POST">
+                                                    <form action="{{ route('franchise.orderpops.store') }}" method="POST">
                                                         @csrf
                                                         <table class="table customer-table display mb-4 fs-14 card-table">
                                                             <thead>
@@ -69,25 +69,25 @@
                                                             </thead>
                                                             <tbody>
                                                                 @foreach ($items as $index => $item)
-                                                                    <tr>
-                                                                        <td>
-                                                                            <input type="hidden" name="items[{{ $index }}][fgp_item_id]" value="{{ $item['itemId'] }}">
-                                                                            {{ $item['name'] }}
-                                                                        </td>
-                                                                        <td>
-                                                                            <input type="hidden" name="items[{{ $index }}][user_ID]" value="{{ auth()->user()->user_id }}">
-                                                                            {{ auth()->user()->name }}
-                                                                        </td>
-                                                                        <td>
-                                                                            <input type="number" name="items[{{ $index }}][unit_number]" class="form-control qty" min="1" value="{{ $item['quantity'] }}" data-index="{{ $index }}">
-                                                                        </td>
-                                                                        <td>
-                                                                            <input type="number" name="items[{{ $index }}][unit_cost]" class="form-control cost" step="0.01" value="{{ $item['price'] }}" data-index="{{ $index }}">
-                                                                        </td>
-                                                                        <td>
-                                                                            <input type="text" class="form-control total" readonly value="{{ number_format($item['price'] * $item['quantity'], 2) }}" data-index="{{ $index }}">
-                                                                        </td>
-                                                                    </tr>
+                                                                <tr>
+                                                                    <td>
+                                                                        <input type="hidden" name="items[{{ $index }}][fgp_item_id]" value="{{ $item['id'] }}">
+                                                                        {{ $item['name'] }}
+                                                                    </td>
+                                                                    <td>
+                                                                        <input type="hidden" name="items[{{ $index }}][user_ID]" value="{{ auth()->user()->user_id }}">
+                                                                        {{ auth()->user()->name }}
+                                                                    </td>
+                                                                    <td>
+                                                                        <input type="number" name="items[{{ $index }}][unit_number]" class="form-control qty" min="1" value="{{ $item['quantity'] }}" data-index="{{ $index }}">
+                                                                    </td>
+                                                                    <td>
+                                                                        <input type="number" name="items[{{ $index }}][unit_cost]" class="form-control cost" step="0.01" value="{{ $item['price'] }}" data-index="{{ $index }}">
+                                                                    </td>
+                                                                    <td>
+                                                                        <input type="text" class="form-control total" readonly value="{{ number_format($item['price'] * $item['quantity'], 2) }}" data-index="{{ $index }}">
+                                                                    </td>
+                                                                </tr>
                                                                 @endforeach
                                                                
                                                                 <!-- Required Charges -->

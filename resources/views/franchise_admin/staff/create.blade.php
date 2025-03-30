@@ -56,7 +56,7 @@
                                                 </div>
                                             @endif
                                             @role('franchise_admin')
-                                            <form action="{{ route('franchise_admin.staff.store') }}" method="POST">
+                                            <form action="{{ route('franchise.staff.store') }}" method="POST">
                                             @endrole
                                             @role('franchise_manager')
                                             <form action="{{ route('franchise_manager.staff.store') }}" method="POST">
