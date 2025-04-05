@@ -83,48 +83,26 @@
                             <table id="example5" class="table customer-table display mb-4 fs-14 card-table">
                                 <thead>
                                     <tr>
-                                        {{-- <th>
-                                            <div class="form-check checkbox-secondary">
-                                                <input class="form-check-input" type="checkbox" id="checkAll">
-                                                <label class="form-check-label" for="checkAll"></label>
-                                            </div>
-                                        </th> --}}
-                                        {{-- <th>Order ID</th> --}}
-                                        <th>Order ID</th>
-                                        <th>Item Name</th>
-                                        <th>Image</th>
-                                        <th>Unit Cost</th>
-                                        <th>Quantity</th>
+                                        <th>User Name</th>
+                                        <th>Items Ordered</th>
                                         <th>Status</th>
-                                        <th>Date</th>
+                                        <th>Total Price</th>
+                                        <th>Order Date/Time</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($orders as $order)
+                                    @foreach ($orders as $index => $order)
                                         <tr style="text-wrap: no-wrap;">
-                                            {{-- <td>
-                                                <div class="form-check checkbox-secondary">
-                                                    <input class="form-check-input" type="checkbox" value="{{ $order->fgp_ordersID }}" id="orderCheck{{ $order->fgp_ordersID }}">
-                                                    <label class="form-check-label" for="orderCheck{{ $order->fgp_ordersID }}"></label>
-                                                </div>
-                                            </td> --}}
-                                            <td>#{{ str_pad($order->fgp_ordersID, 7, '0', STR_PAD_LEFT) }}</td>
-                                            <td>{{ $order->item->name ?? 'N/A' }}</td>
-                                            <td class="item-image">
-                                                @if ($order->item->image1)
-                                                    <img src="{{ asset('storage/' . $order->item->image1) }}" alt="Image" style="width: 50px; height: 50px; object-fit: contain;">
-                                                @else
-                                                    <span>No Image</span>
-                                                @endif
-                                            </td>
-                                            <td>{{ $order->unit_cost }}</td>
-                                            <td>{{ $order->unit_number }}</td>
+                                            <td>{{ $order->user->name ?? 'N/A' }}</td>
+                                            <td>{{ $order->total_quantity }} items</td>
                                             <td>{{ $order->status }}</td>
-                                            <td>{{ \Carbon\Carbon::parse($order->date_transaction)->format('M d, Y h:i A') }}</td>
+                                            <td>${{ number_format($order->total_amount, 2) }}</td>
+                                            <td>{{ $order->date_transaction->format('M d, Y h:i A') }}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>
-                            </table>  
+                            </table>
+                             
                         </div>
                     </div>
                 </div>

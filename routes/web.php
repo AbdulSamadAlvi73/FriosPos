@@ -106,7 +106,7 @@ Route::middleware(['auth', 'role:corporate_admin'])->prefix('corporate_admin')->
     Route::put('/vieworders/{vieworders}', [ViewOrdersController::class, 'update'])->name('vieworders.update');
     Route::delete('/vieworders/{vieworders}', [ViewOrdersController::class, 'destroy'])->name('vieworders.destroy');
     Route::get('/vieworders', [ViewOrdersController::class, 'index'])->name('vieworders.index');
-    Route::post('/vieworders/{id}/update-status', [ViewOrdersController::class, 'updateStatus'])->name('vieworders.updateStatus');
+    Route::post('/vieworders/update-status', [ViewOrdersController::class, 'updateStatus'])->name('vieworders.updateStatus');
 
      
 });

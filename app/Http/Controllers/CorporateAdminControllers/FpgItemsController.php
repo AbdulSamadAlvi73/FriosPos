@@ -19,30 +19,17 @@ class FpgItemsController extends Controller
 
     public function create()
     {
-        $categories = FpgCategory::all();
-    
-        // Initialize empty categorized arrays
         $categorizedCategories = [
-            'Availability' => [],
-            'Flavor' => [],
-            'Allergen' => []
+            'Availability' => FpgCategory::whereJsonContains('type', 'Availability')->get(),
+            'Flavor' => FpgCategory::whereJsonContains('type', 'Flavor')->get(),
+            'Allergen' => FpgCategory::whereJsonContains('type', 'Allergen')->get()
         ];
-    
-        // Loop through each category and categorize based on type
-        foreach ($categories as $category) {
-            $types = json_decode($category->type, true); // Decode JSON type field
-    
-            if (is_array($types)) {
-                foreach ($types as $type) {
-                    if (isset($categorizedCategories[$type])) {
-                        $categorizedCategories[$type][] = $category;
-                    }
-                }
-            }
-        }
     
         return view('corporate_admin.fpg_items.create', compact('categorizedCategories'));
     }
+    
+    
+    
     
     public function store(Request $request)
     {
@@ -90,36 +77,20 @@ class FpgItemsController extends Controller
     
 
     
-    
     public function edit(FpgItem $fpgitem)
-    {
-        $categories = FpgCategory::all();
-        
-        // Categorize categories as in the create method
-        $categorizedCategories = [
-            'Availability' => [],
-            'Flavor' => [],
-            'Allergen' => []
-        ];
-    
-        foreach ($categories as $category) {
-            $types = json_decode($category->type, true); // Decode JSON type field
-    
-            if (is_array($types)) {
-                foreach ($types as $type) {
-                    if (isset($categorizedCategories[$type])) {
-                        $categorizedCategories[$type][] = $category;
-                    }
-                }
-            }
-        }
-    
-        // Fetch selected categories for the item
-        $selectedCategories = $fpgitem->categories->pluck('category_ID')->toArray();
-    
-        return view('corporate_admin.fpg_items.edit', compact('fpgitem', 'categorizedCategories', 'selectedCategories'));
-    }
-    
+{
+    $categorizedCategories = [
+        'Availability' => FpgCategory::whereJsonContains('type', 'Availability')->get(),
+        'Flavor' => FpgCategory::whereJsonContains('type', 'Flavor')->get(),
+        'Allergen' => FpgCategory::whereJsonContains('type', 'Allergen')->get()
+    ];
+
+    // Fetch selected categories for the item
+    $selectedCategories = $fpgitem->categories->pluck('category_ID')->toArray();
+
+    return view('corporate_admin.fpg_items.edit', compact('fpgitem', 'categorizedCategories', 'selectedCategories'));
+}
+
     public function update(Request $request, FpgItem $fpgitem)
     {
         $validated = $request->validate([

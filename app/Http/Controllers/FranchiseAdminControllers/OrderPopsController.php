@@ -120,49 +120,73 @@ public function showConfirmPage()
 }
 
     
-  public function store(Request $request)
-  {
-      // Validate request
-      $request->validate([
-          'items' => 'required|array',
-          'items.*.fgp_item_id' => 'required|exists:fpg_items,fgp_item_id',
-          'items.*.user_ID' => 'required|exists:users,user_id',
-          'items.*.unit_cost' => 'required|numeric|min:0',
-          'items.*.unit_number' => 'required|integer|min:3',
-      ],[
-        'items.*.unit_number.min' => 'Min quantity at least 3',
+public function store(Request $request)
+{
+    $minCases = 12; // Can be made configurable via settings
+    $factorCase = 3; // Can be made configurable via settings
+
+    // Validate request
+    $validated = $request->validate([
+        'items' => 'required|array',
+        'items.*.fgp_item_id' => 'required|exists:fpg_items,fgp_item_id',
+        'items.*.user_ID' => 'required|exists:users,user_id',
+        'items.*.unit_cost' => 'required|numeric|min:0',
+        'items.*.unit_number' => 'required|integer|min:1', // Allow any positive integer
     ]);
+
+    // Calculate total case quantity
+    $totalCaseQty = collect($validated['items'])->sum('unit_number');
+
+    // Check if the total order quantity meets the minimum required cases
+    if ($totalCaseQty < $minCases) {
+        return redirect()->back()->withErrors(['Order must have at least ' . $minCases . ' cases.']);
+    }
+
+    // Check if the total order quantity is a valid multiple of the factor case
+    if ($totalCaseQty % $factorCase !== 0) {
+        return redirect()->back()->withErrors(['Order quantity must be a multiple of ' . $factorCase . '.']);
+    }
+
+    foreach ($validated['items'] as $item) {
+        FpgOrder::create([
+            'user_ID' => $item['user_ID'],
+            'fgp_item_id' => $item['fgp_item_id'],
+            'unit_cost' => $item['unit_cost'],
+            'unit_number' => $item['unit_number'],
+            'date_transaction' => now(),
+            'ACH_data' => null,
+            'status' => 'Pending',
+        ]);
+    }
+
+    return redirect()->route('franchise.orderpops.index')->with('success', 'Order placed successfully!');
+}
+
   
-      foreach ($request->items as $item) {
-          FpgOrder::create([
-              'user_ID' => $item['user_ID'],
-              'fgp_item_id' => $item['fgp_item_id'],
-              'unit_cost' => $item['unit_cost'],
-              'unit_number' => $item['unit_number'],
-              'date_transaction' => now(),
-              'ACH_data' => null,
-              'status' => 'Pending',
-          ]);
-      }
-  
-      return redirect()->route('franchise.orderpops.index')->with('success', 'Order placed successfully!');
-  }
-  
-  public function viewOrders()
-  {
-      // Fetch orders for the logged-in franchise user
-      $orders = FpgOrder::where('user_ID', Auth::id())
-      ->with('item')
-      ->orderBy('created_at', 'desc')
-      ->get()
-      ->map(function ($order) {
-          $order->date_transaction = Carbon::parse($order->date_transaction); // Convert to Carbon instance
-          return $order;
-      });
+public function viewOrders()
+{
+    $orders = FpgOrder::where('user_ID', Auth::id())
+        ->select(
+            'user_ID',
+            'date_transaction',
+            \DB::raw('SUM(unit_number) as total_quantity'),
+            \DB::raw('SUM(unit_number * unit_cost) as total_amount'),
+            'status'
+        )
+        ->groupBy('date_transaction', 'user_ID', 'status')
+        ->orderBy('date_transaction', 'desc')
+        ->with('user') // Eager load user information
+        ->get()
+        ->map(function ($order) {
+            $order->date_transaction = Carbon::parse($order->date_transaction);
+            return $order;
+        });
+
     $totalOrders = $orders->count();
 
-      return view('franchise_admin.orderpops.vieworders', compact('orders','totalOrders'));
-  }
+    return view('franchise_admin.orderpops.vieworders', compact('orders', 'totalOrders'));
+}
+
     
 }
 

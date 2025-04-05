@@ -69,10 +69,10 @@
                                                         </div>
                                             
                                                        <!-- Category Selection -->
-                                                        <div class="mb-3">
-                                                            <label class="form-label">Category <span class="text-danger">*</span></label>
-                                                            <div class="form-control" style="height: auto; padding: 10px;">
-                                                                @foreach ($categorizedCategories as $categoryGroup => $categories)
+                                                       <div class="mb-3">
+                                                        <label class="form-label">Category <span class="text-danger">*</span></label>
+                                                        <div class="form-control" style="height: auto; padding: 10px;">
+                                                            @foreach ($categorizedCategories as $categoryGroup => $categories)
                                                                 <h6 class="fw-bold p-2">{{ $categoryGroup }}</h6>
                                                                 @foreach ($categories as $category)
                                                                     <div class="form-check">
@@ -86,12 +86,12 @@
                                                                 @endforeach
                                                                 <hr>
                                                             @endforeach
-                                                            
-                                                            </div>
-                                                            @error('category_ID')
-                                                                <div class="text-danger">{{ $message }}</div>
-                                                            @enderror
                                                         </div>
+                                                        @error('category_ID')
+                                                            <div class="text-danger">{{ $message }}</div>
+                                                        @enderror
+                                                    </div>
+                                                    
 
                                                     </div>
                                             

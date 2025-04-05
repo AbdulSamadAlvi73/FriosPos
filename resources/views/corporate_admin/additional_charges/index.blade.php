@@ -107,12 +107,18 @@
                                             </td>
                                             <td>#{{ str_pad($additionalCharge->additionalcharges_id, 7, '0', STR_PAD_LEFT) }}</td>
                                             <td>{{ $additionalCharge->charge_name }}</td>
-                                            <td>${{ number_format($additionalCharge->charge_price, 2) }}</td>
                                             <td>
-                                                @if($additionalCharge->charge_optional === 'required')
-                                                    <span class="">Required</span>
+                                                @if($additionalCharge->charge_type === 'percentage')
+                                                    {{ $additionalCharge->charge_price }}%
                                                 @else
-                                                    <span class="">Optional</span>
+                                                    ${{ number_format($additionalCharge->charge_price, 2) }}
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if($additionalCharge->charge_type === 'percentage')
+                                                    <span class="">Percentage</span>
+                                                @else
+                                                    <span class="">Fixed</span>
                                                 @endif
                                             </td>
                                             <td>
@@ -141,6 +147,7 @@
                                     @endforeach
                                 </tbody>
                             </table>
+                            
                             
 						</div>
 					</div>

@@ -46,7 +46,7 @@
                                             @endif
                                             <form action="{{ route('corporate_admin.additionalcharges.store') }}" method="POST">
                                                 @csrf
-                                                
+                                            
                                                 <div class="row">
                                                     <!-- Charges Name -->
                                                     <div class="mb-3 col-md-6">
@@ -60,7 +60,7 @@
                                                             <div class="text-danger">{{ $message }}</div>
                                                         @enderror
                                                     </div>
-                                        
+                                            
                                                     <!-- Charges Amount -->
                                                     <div class="mb-3 col-md-6">
                                                         <label class="form-label">Charges Amount <span class="text-danger">*</span></label>
@@ -73,7 +73,22 @@
                                                             <div class="text-danger">{{ $message }}</div>
                                                         @enderror
                                                     </div>
-                                        
+                                            
+                                                    <!-- Charges Type (Fixed or Percentage) -->
+                                                    <div class="mb-3 col-md-6">
+                                                        <label class="form-label">Charges Type <span class="text-danger">*</span></label> <br>
+                                                        <div class="form-check form-check-inline">
+                                                            <input type="radio" class="form-check-input" id="chargeTypeFixed" name="charge_type" value="fixed" 
+                                                                {{ old('charge_type', 'fixed') == 'fixed' ? 'checked' : '' }}>
+                                                            <label class="form-check-label" for="chargeTypeFixed">Fixed</label>
+                                                        </div>
+                                                        <div class="form-check form-check-inline">
+                                                            <input type="radio" class="form-check-input" id="chargeTypePercentage" name="charge_type" value="percentage"
+                                                                {{ old('charge_type') == 'percentage' ? 'checked' : '' }}>
+                                                            <label class="form-check-label" for="chargeTypePercentage">Percentage</label>
+                                                        </div>
+                                                    </div>
+                                            
                                                     <!-- Charges Type (Checkbox: if checked, then "required", otherwise defaults to "optional") -->
                                                     <div class="mb-3 col-md-6">
                                                         <label class="form-label">Charges Type <span class="text-danger">*</span></label>
@@ -94,9 +109,10 @@
                                                         @enderror
                                                     </div>
                                                 </div>
-                                        
+                                            
                                                 <button type="submit" class="btn btn-primary bg-primary">Add Charges</button>
                                             </form>
+                                            
                                             
                                         </div>
                                     </div>

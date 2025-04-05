@@ -166,11 +166,12 @@ document.getElementById('orderButton').addEventListener('click', function () {
 
     console.log("Checked Items:", checkedItems);
 
-    if (checkedItems.length === 0) {
-        alert("Please select at least one item to order.");
-        console.log("No items selected, alert displayed.");
-        return;
-    }
+    if (checkedItems.length < 3) {
+    alert("Please select at least three items to order.");
+    console.log("Less than three items selected, alert displayed.");
+    return;
+}
+
 
     console.log("Sending request to server with checked items...");
 

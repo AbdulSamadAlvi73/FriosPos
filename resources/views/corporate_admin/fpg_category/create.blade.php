@@ -52,25 +52,28 @@
                                             
                                                     <div class="mb-3 col-md-6">
                                                         <label class="form-label">Category Type <span class="text-danger">*</span></label>
-                                                        <select class="form-control @error('type') is-invalid @enderror" name="type[]" multiple>
-                                                            <option value="Availability" {{ (collect(old('type'))->contains('Availability')) ? 'selected' : '' }}>Availability</option>
-                                                            <option value="Flavor" {{ (collect(old('type'))->contains('Flavor')) ? 'selected' : '' }}>Flavor</option>
-                                                            <option value="Allergen" {{ (collect(old('type'))->contains('Allergen')) ? 'selected' : '' }}>Allergen</option>
+                                                        <select class="form-control @error('type') is-invalid @enderror" name="type">
+                                                            <option value="" selected disabled>Select Category Type</option>
+                                                            <option value="Availability" {{ old('type') == 'Availability' ? 'selected' : '' }}>Availability</option>
+                                                            <option value="Flavor" {{ old('type') == 'Flavor' ? 'selected' : '' }}>Flavor</option>
+                                                            <option value="Allergen" {{ old('type') == 'Allergen' ? 'selected' : '' }}>Allergen</option>
                                                         </select>
                                                         @error('type')
                                                             <div class="text-danger">{{ $message }}</div>
                                                         @enderror                                                        
                                                     </div>
+                                                    
                                                     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/css/select2.min.css" rel="stylesheet">
                                                     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/js/select2.min.js"></script>
                                                     <script>
                                                         $(document).ready(function() {
-                                                            $('select[name="type[]"]').select2({
+                                                            $('select[name="type"]').select2({
                                                                 placeholder: "Select Category Type",
                                                                 allowClear: true
                                                             });
                                                         });
                                                     </script>
+                                                    
                                                                                                                                                             
                                                     <div class="mb-3 col-md-6">
                                                         <label class="form-label">Category Name <span class="text-danger">*</span></label>

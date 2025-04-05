@@ -15,6 +15,7 @@ class AdditionalCharge extends Model
         'charge_name',
         'charge_price',
         'charge_optional',
+        'charge_type'
     ];
 
     protected $casts = [

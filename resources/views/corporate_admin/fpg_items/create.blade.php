@@ -71,28 +71,29 @@
                                                             @enderror
                                                         </div>
                                             
-                                                       <!-- Category Selection -->
-                                                        <div class="mb-3">
-                                                            <label class="form-label">Category <span class="text-danger">*</span></label>
-                                                            <div class="form-control" style="height: auto; padding: 10px;">
-                                                                @foreach ($categorizedCategories as $categoryGroup => $categories)
-                                                                    <h6 class="fw-bold p-2">{{ $categoryGroup }}</h6>
-                                                                    @foreach ($categories as $category)
-                                                                        <div class="form-check">
-                                                                            <input class="form-check-input" type="checkbox" name="category_ID[]" 
-                                                                                value="{{ $category->category_ID }}" id="category_{{ $category->category_ID }}">
-                                                                            <label class="form-check-label" for="category_{{ $category->category_ID }}">
-                                                                                {{ $category->name }}
-                                                                            </label>
-                                                                        </div>
-                                                                    @endforeach
-                                                                    <hr>
+                                                      <!-- Category Selection -->
+                                                      <div class="mb-3">
+                                                        <label class="form-label">Category <span class="text-danger">*</span></label>
+                                                        <div class="form-control" style="height: auto; padding: 10px;">
+                                                            @foreach ($categorizedCategories as $categoryGroup => $categories)
+                                                                <h6 class="fw-bold p-2">{{ $categoryGroup }}</h6>
+                                                                @foreach ($categories as $category)
+                                                                    <div class="form-check">
+                                                                        <input class="form-check-input" type="checkbox" name="category_ID[]" 
+                                                                            value="{{ $category->category_ID }}" id="category_{{ $category->category_ID }}">
+                                                                        <label class="form-check-label" for="category_{{ $category->category_ID }}">
+                                                                            {{ $category->name }}
+                                                                        </label>
+                                                                    </div>
                                                                 @endforeach
-                                                            </div>
-                                                            @error('category_ID')
-                                                                <div class="text-danger">{{ $message }}</div>
-                                                            @enderror
+                                                                <hr>
+                                                            @endforeach
                                                         </div>
+                                                        @error('category_ID')
+                                                            <div class="text-danger">{{ $message }}</div>
+                                                        @enderror
+                                                    </div>
+                                                    
 
                                                     </div>
                                             
