@@ -113,8 +113,8 @@ public function showConfirmPage()
         return redirect()->route('franchise.orderpops.index')->withErrors('No items selected.');
     }
 
-    $requiredCharges = AdditionalCharge::where('charge_optional', 'required')->get();
-    $optionalCharges = AdditionalCharge::where('charge_optional', 'optional')->get();
+    $requiredCharges = AdditionalCharge::where('charge_optional', 'required')->where('status', 1)->get();
+    $optionalCharges = AdditionalCharge::where('charge_optional', 'optional')->where('status', 1)->get();
 
     return view('franchise_admin.orderpops.confirm', compact('items', 'requiredCharges', 'optionalCharges'));
 }

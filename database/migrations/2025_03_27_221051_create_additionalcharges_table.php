@@ -13,6 +13,7 @@ return new class extends Migration {
             $table->decimal('charge_price', 10, 2);
             $table->enum('charge_optional', ['optional', 'required'])->default('optional');
             $table->enum('charge_type', ['fixed', 'percentage'])->default('fixed');
+            $table->boolean('status')->default(true);
             $table->timestamps();
         });
     }

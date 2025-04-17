@@ -85,5 +85,22 @@ class AdditionalChargesController extends Controller
         return redirect()->route('corporate_admin.additionalcharges.index')
             ->with('success', 'Additional charge deleted successfully.');
     }
+
+    public function changeStatus(Request $request) {
+        try {
+            AdditionalCharge::findOrFail($request->chargesId)->update([
+                'status' => $request->status == 'true' ? 1 : 0
+            ]);
+            return response()->json([
+                'error' => false,
+                'message' => "Status updated successfully"
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'error' => true,
+                'message' => $th->getMessage()
+            ]);
+        }
+    }
 }
 

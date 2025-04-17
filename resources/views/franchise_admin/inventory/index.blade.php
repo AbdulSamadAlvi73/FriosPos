@@ -1,0 +1,244 @@
+@extends('layouts.app')
+@section('content')
+    <!--**********************************
+                Content body start
+            ***********************************-->
+    <div class="content-body default-height">
+        <!-- row -->
+        <div class="container-fluid">
+
+            <div class="form-head mb-4 d-flex flex-wrap align-items-center">
+                <div class="me-auto">
+                    <h2 class="font-w600 mb-0">Dashboard \ Inventory</h2>
+                    <p>Delivered orders</p>
+                </div>
+                <div class="input-group search-area2 d-xl-inline-flex mb-2 me-lg-4 me-md-2">
+                    <button class="input-group-text"><i class="flaticon-381-search-2 text-primary"></i></button>
+                    <input type="text" class="form-control" placeholder="Search here...">
+                </div>
+                {{-- <div class="dropdown custom-dropdown mb-2 period-btn">
+                    <div class="btn btn-sm  d-flex align-items-center" data-bs-toggle="dropdown" aria-expanded="false"
+                        role="button">
+                        <svg class="primary-icon" width="28" height="28" viewBox="0 0 28 28" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M22.167 5.83362H21.0003V3.50028C21.0003 3.19087 20.8774 2.89412 20.6586 2.67533C20.4398 2.45653 20.143 2.33362 19.8336 2.33362C19.5242 2.33362 19.2275 2.45653 19.0087 2.67533C18.7899 2.89412 18.667 3.19087 18.667 3.50028V5.83362H9.33362V3.50028C9.33362 3.19087 9.2107 2.89412 8.99191 2.67533C8.77312 2.45653 8.47637 2.33362 8.16695 2.33362C7.85753 2.33362 7.56079 2.45653 7.34199 2.67533C7.1232 2.89412 7.00028 3.19087 7.00028 3.50028V5.83362H5.83362C4.90536 5.83362 4.01512 6.20237 3.35874 6.85874C2.70237 7.51512 2.33362 8.40536 2.33362 9.33362V10.5003H25.667V9.33362C25.667 8.40536 25.2982 7.51512 24.6418 6.85874C23.9854 6.20237 23.0952 5.83362 22.167 5.83362Z"
+                                fill="#0E8A74" />
+                            <path
+                                d="M2.33362 22.1669C2.33362 23.0952 2.70237 23.9854 3.35874 24.6418C4.01512 25.2982 4.90536 25.6669 5.83362 25.6669H22.167C23.0952 25.6669 23.9854 25.2982 24.6418 24.6418C25.2982 23.9854 25.667 23.0952 25.667 22.1669V12.8336H2.33362V22.1669Z"
+                                fill="#0E8A74" />
+                        </svg>
+                        <div class="text-start ms-3 flex-1">
+                            <span class="d-block text-black">Change Periode</span>
+                            <small class="d-block text-muted">August 28th - October 28th, 2021</small>
+                        </div>
+                        <i class="fa fa-caret-down text-light scale5 ms-3"></i>
+                    </div>
+                    <div class="dropdown-menu dropdown-menu-end">
+                        <a class="dropdown-item" href="javascript:void(0);">October 29th - November 29th, 2021</a>
+                        <a class="dropdown-item" href="javascript:void(0);">July 27th - Auguts 27th, 2021</a>
+                    </div>
+                </div> --}}
+            </div>
+            
+            @if (session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
+            @endif
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="table-responsive rounded">
+                        <!-- New Order Button -->
+
+                        <!-- Pops Table -->
+                        <table id="example5" class="table customer-table display mb-4 fs-14 card-table">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <div class="form-check checkbox-secondary">
+                                            <input class="form-check-input" type="checkbox" value="" id="checkAll">
+                                            <label class="form-check-label" for="checkAll"></label>
+                                        </div>
+                                    </th>
+                                    <th>Name</th>
+                                    <th>Image</th>
+                                    <th>Price Per Case</th>
+                                    <th>Category</th>
+                                    {{-- <th>Stock Status</th>
+                                    <th>Availability</th> --}}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($orders as $order)
+                                    <tr>
+                                        <td>
+                                            <div class="form-check checkbox-secondary">
+                                                <input class="form-check-input pop-checkbox" type="checkbox"
+                                                    value="{{ $order->fgp_item_id }}"
+                                                    id="flexCheckDefault{{ $order->fgp_item_id }}">
+                                                <label class="form-check-label"
+                                                    for="flexCheckDefault{{ $order->fgp_item_id }}"></label>
+                                            </div>
+                                        </td>
+                                        <td class="item-name">{{ $order->item->name }}</td>
+                                        <td class="item-image">
+                                            @if ($order->item->image1)
+                                                <img src="{{ asset('storage/' . $order->item->image1) }}" alt="Image"
+                                                    style="width: 50px; height: 50px; object-fit: contain;">
+                                            @else
+                                                <span>No Image</span>
+                                            @endif
+                                        </td>
+                                        <td class="item-price">${{ number_format($order->item->case_cost, 2) }}</td>
+                                        <td class="item-category">
+                                            @if ($order->item->categories && $order->item->categories->isNotEmpty())
+                                                @php
+                                                    $chunks = $order->item->categories->pluck('name')->chunk(5);
+                                                @endphp
+                                                @foreach ($chunks as $chunk)
+                                                    {{ $chunk->join(', ') }} <br>
+                                                @endforeach
+                                            @else
+                                                No Category
+                                            @endif
+                                        </td>
+                                        {{-- <td><span class="badge bg-success">In Stock</span></td>
+                                        <td><span class="badge bg-success">Available</span></td> --}}
+                                    </tr>
+                                @endforeach
+                            </tbody>
+
+                        </table>
+
+
+                        <script>
+                            document.getElementById('orderButton').addEventListener('click', function() {
+                                console.log("Confirm Order button clicked");
+
+                                let checkedItems = [];
+
+                                document.querySelectorAll('.pop-checkbox:checked').forEach((checkbox) => {
+                                    const row = checkbox.closest('tr');
+
+                                    const itemDetails = {
+                                        id: checkbox.value,
+                                        name: row.querySelector('.item-name').innerText.trim(),
+                                        image: row.querySelector('.item-image img') ? row.querySelector('.item-image img')
+                                            .src : 'No Image',
+                                        price: row.querySelector('.item-price').innerText.trim(),
+                                        category: row.querySelector('.item-category').innerText.trim(),
+                                        quantity: 1
+                                    };
+
+                                    console.log("Collected item details:", itemDetails);
+                                    checkedItems.push(itemDetails);
+                                });
+
+                                console.log("Checked Items:", checkedItems);
+
+                                if (checkedItems.length < 3) {
+                                    alert("Please select at least three items to order.");
+                                    console.log("Less than three items selected, alert displayed.");
+                                    return;
+                                }
+
+
+                                console.log("Sending request to server with checked items...");
+
+                                const url = "{{ route('franchise.orderpops.confirm') }}";
+
+                                fetch(url, {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                            'X-CSRF-TOKEN': '{{ csrf_token() }}' // Make sure to include CSRF token for Laravel
+                                        },
+                                        body: JSON.stringify({
+                                            ordered_items: checkedItems
+                                        })
+                                    })
+                                    .then(response => {
+                                        if (!response.ok) {
+                                            throw new Error(`HTTP error! Status: ${response.status}`);
+                                        }
+                                        return response.json();
+                                    })
+                                    .then(data => {
+                                        console.log("Parsed Response Data:", data);
+
+                                        if (data.redirect) {
+                                            console.log("Redirecting to:", data.redirect);
+                                            window.location.href = data.redirect;
+                                        } else {
+                                            console.error('Invalid response format:', data);
+                                        }
+                                    })
+                                    .catch(error => console.error('Error occurred:', error));
+                            });
+                        </script>
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    {{-- <td>
+                                                <div class="d-flex">
+                                                    <a href="{{ route('franchise.orderpops.edit', $order->id) }}" class="edit-user">
+                                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M17 3C17.2626 2.73735 17.5744 2.52901 17.9176 2.38687C18.2608 2.24473 18.6286 2.17157 19 2.17157C19.3714 2.17157 19.7392 2.24473 20.0824 2.38687C20.4256 2.52901 20.7374 2.73735 21 3C21.2626 3.26264 21.471 3.57444 21.6131 3.9176C21.7553 4.26077 21.8284 4.62856 21.8284 5C21.8284 5.37143 21.7553 5.73923 21.6131 6.08239C21.471 6.42555 21.2626 6.73735 21 7L7.5 20.5L2 22L3.5 16.5L17 3Z" stroke="#FF7B31" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                        </svg>
+                                                    </a>
+                                                    <form action="{{ route('franchise.orderpops.destroy', $order->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this item?')">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="ms-4 delete-user">
+                                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"> 
+                                                                <path d="M3 6H5H21" stroke="#FF3131" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                                <path d="M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6M19 6V20C19 20.5304 18.7893 21.0391 18.4142 21.4142C18.0391 21.7893 17.5304 22 17 22H7C6.46957 22 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20V6H19Z" stroke="#FF3131" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                            </svg>
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </td> --}}
+    <!--**********************************
+                Content body end
+            ***********************************-->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('.orderable-dropdown').change(function() {
+                let itemId = $(this).data('id');
+                let orderableValue = $(this).val();
+
+                $.ajax({
+                    url: "{{ route('corporate_admin.fpgitem.updateOrderable') }}",
+                    type: "POST",
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        id: itemId,
+                        orderable: orderableValue
+                    },
+                    success: function(response) {
+                        console.log(response); // Debugging: Check response in console
+                        if (response.success) {
+                            // location.reload(); 
+                        } else {
+                            alert("Error: " + response.message);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(xhr.responseText);
+                        alert("AJAX Error: " + xhr.responseText);
+                    }
+                });
+            });
+        });
+    </script>
+@endsection

@@ -20,6 +20,7 @@ use App\Http\Controllers\CorporateAdminControllers\CorporateAdminController;
 // Franchise Staff Controllers
 use App\Http\Controllers\FranchiseAdminControllers\FranchiseAdminController;
 use App\Http\Controllers\CorporateAdminControllers\AdditionalChargesController;
+use App\Http\Controllers\Franchise\InventoryController;
 use App\Http\Controllers\FranchiseManagerControllers\FranchiseManagerController;
 
 Route::get('/', function () {
@@ -91,6 +92,8 @@ Route::middleware(['auth', 'role:corporate_admin'])->prefix('corporate_admin')->
     Route::post('/fpgitem/update-month/{id}', [FpgItemsController::class, 'updateMonth']);
 
     // Additional charges routes
+    Route::put('/additional-charges/status', [AdditionalChargesController::class, 'changeStatus']);
+
     Route::get('/additionalcharges', [AdditionalChargesController::class, 'index'])->name('additionalcharges.index');
     Route::get('/additionalcharges/create', [AdditionalChargesController::class, 'create'])->name('additionalcharges.create');
     Route::post('/additionalcharges', [AdditionalChargesController::class, 'store'])->name('additionalcharges.store');
@@ -102,7 +105,7 @@ Route::middleware(['auth', 'role:corporate_admin'])->prefix('corporate_admin')->
     Route::get('/vieworders', [ViewOrdersController::class, 'index'])->name('vieworders.index');
     Route::get('/vieworders/create', [ViewOrdersController::class, 'create'])->name('vieworders.create');
     Route::post('/vieworders', [ViewOrdersController::class, 'store'])->name('vieworders.store');
-    Route::get('/vieworders/{vieworders}/edit', [ViewOrdersController::class, 'edit'])->name('vieworders.edit');
+    Route::get('/vieworders/{orderId}/edit', [ViewOrdersController::class, 'edit'])->name('vieworders.edit');
     Route::put('/vieworders/{vieworders}', [ViewOrdersController::class, 'update'])->name('vieworders.update');
     Route::delete('/vieworders/{vieworders}', [ViewOrdersController::class, 'destroy'])->name('vieworders.destroy');
     Route::get('/vieworders', [ViewOrdersController::class, 'index'])->name('vieworders.index');
@@ -132,6 +135,12 @@ Route::middleware(['auth', 'role:franchise_admin|franchise_manager'])->prefix('f
     Route::post('/orderpops/confirm', [OrderPopsController::class, 'confirmOrder'])->name('orderpops.confirm');
     Route::get('/orderpops/confirm/page', [OrderPopsController::class, 'showConfirmPage'])->name('orderpops.confirm.page');
     Route::get('/orderpops/view', [OrderPopsController::class, 'viewOrders'])->name('orderpops.view');
+
+    Route::get('/inventory', [InventoryController::class, 'index'])->name('inventory.index');
+    Route::get('/inventory-locations', [InventoryController::class, 'inventoryLocations'])->name('inventory.locations');
+    Route::post('/allocate-inventory', [InventoryController::class, 'allocateInventory'])->name('allocate-inventory');
+
+
 });
 
 
