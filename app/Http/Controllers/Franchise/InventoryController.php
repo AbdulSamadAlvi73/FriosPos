@@ -12,8 +12,11 @@ class InventoryController extends Controller
 {
     public function index()
     {
-        $orders = FpgOrder::where('status', 'delivered')->get();
-        return view('franchise_admin.inventory.index', compact('orders'));
+        $deliveredOrders = FpgOrder::where('status', 'delivered')->get();
+        $shippedOrders = FpgOrder::where('status', 'shipped')->count();
+        $paidOrders = FpgOrder::where('status', 'paid')->count();
+        $pendingOrders = FpgOrder::where('status', 'pending')->count();
+        return view('franchise_admin.inventory.index', compact('deliveredOrders', 'shippedOrders', 'pendingOrders','paidOrders'));
     }
     public function inventoryLocations()
     {
