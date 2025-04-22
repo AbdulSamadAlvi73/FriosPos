@@ -66,13 +66,21 @@ class InventoryController extends Controller
                 $fpg_item_id = FpgItem::where('name', $item['flavor'])->first()->fgp_item_id ?? null;
                 if (!$fpg_item_id) {
                     continue;
-                }
-                // return $fpg_item_id;
-                InventoryAllocation::create([
-                    'fpg_item_id' => $fpg_item_id,
+                } 
+                $exists = InventoryAllocation::where('fpg_item_id', $fpg_item_id)->where('location', $item['location'])->first();
+                if($exists){
+                    $exists->update([
                     'quantity' => $item['cases'],
-                    'location' => $item['location']
-                ]);
+                    ]);
+                }else{
+                    // return $fpg_item_id;
+                    InventoryAllocation::create([
+                        'fpg_item_id' => $fpg_item_id,
+                        'quantity' => $item['cases'],
+                        'location' => $item['location']
+                    ]);
+
+                }
             }
             return response()->json([
                 'error' => false,

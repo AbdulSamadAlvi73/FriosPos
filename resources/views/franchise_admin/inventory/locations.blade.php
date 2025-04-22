@@ -265,7 +265,8 @@
                     (a) => a.flavor === flavor.name && a.location === location
                 );
                 if (existingAllocation) {
-                    existingAllocation.cases += 1;
+                    let a = parseInt(existingAllocation.cases);
+                    existingAllocation.cases = a + 1;
                 } else {
                     allocatedInventory.push({
                         flavor: flavor.name,
