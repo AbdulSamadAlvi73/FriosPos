@@ -53,7 +53,11 @@ class InventoryController extends Controller
                 'available' => $flavor->availableQuantity(),
             ];
         }
-        return view('franchise_admin.inventory.locations', compact('flavors', 'initialPopFlavors'));
+        $allocatedInventory = InventoryAllocation::join('fpg_items','fpg_items.fgp_item_id','=','inventory_allocations.fpg_item_id')
+        ->select('fpg_items.name as flavor', 'inventory_allocations.location as location', 'inventory_allocations.quantity as cases')->get();
+        // 'allocatedInventory' => $allocatedInventory, // This must be an array like [{flavor: "Mango", location: "Van 1", cases: 3}]
+
+        return view('franchise_admin.inventory.locations', compact('flavors', 'initialPopFlavors', 'allocatedInventory'));
     }
     public function allocateInventory(Request $request)
     {
