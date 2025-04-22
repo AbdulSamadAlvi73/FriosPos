@@ -1,8 +1,8 @@
 @extends('layouts.app')
 @section('content')
     <!--**********************************
-                Content body start
-            ***********************************-->
+                    Content body start
+                ***********************************-->
     <div class="content-body default-height">
         <!-- row -->
         <div class="container-fluid">
@@ -12,9 +12,12 @@
                     <div class="card chart-bx">
                         <div class="card-header border-0 pb-0">
                             <div class="d-flex align-items-center">
-                                <h2 class="chart-num font-w600 mb-0">{{count($deliveredOrders)}}</h2>
-                                <svg class="ms-2 primary-icon" width="19" height="12" viewBox="0 0 19 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M2.00401 11.1924C0.222201 11.1924 -0.670134 9.0381 0.589795 7.77817L7.78218 0.585786C8.56323 -0.195262 9.82956 -0.195262 10.6106 0.585786L17.803 7.77817C19.0629 9.0381 18.1706 11.1924 16.3888 11.1924H2.00401Z" fill="#0E8A74"/>
+                                <h2 class="chart-num font-w600 mb-0">{{ count($deliveredOrders) }}</h2>
+                                <svg class="ms-2 primary-icon" width="19" height="12" viewBox="0 0 19 12"
+                                    fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M2.00401 11.1924C0.222201 11.1924 -0.670134 9.0381 0.589795 7.77817L7.78218 0.585786C8.56323 -0.195262 9.82956 -0.195262 10.6106 0.585786L17.803 7.77817C19.0629 9.0381 18.1706 11.1924 16.3888 11.1924H2.00401Z"
+                                        fill="#0E8A74" />
                                 </svg>
                             </div>
                             <div>
@@ -30,9 +33,12 @@
                     <div class="card chart-bx">
                         <div class="card-header border-0 pb-0">
                             <div class="d-flex align-items-center">
-                                <h2 class="chart-num font-w600 mb-0">{{$shippedOrders}}</h2>
-                                <svg class="ms-2" width="19" height="12" viewBox="0 0 19 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M2.00401 -4.76837e-06C0.222201 -4.76837e-06 -0.670134 2.15428 0.589795 3.41421L7.78218 10.6066C8.56323 11.3876 9.82956 11.3876 10.6106 10.6066L17.803 3.41421C19.0629 2.15428 18.1706 -4.76837e-06 16.3888 -4.76837e-06H2.00401Z" fill="#FF3131"/>
+                                <h2 class="chart-num font-w600 mb-0">{{ $shippedOrders }}</h2>
+                                <svg class="ms-2" width="19" height="12" viewBox="0 0 19 12" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M2.00401 -4.76837e-06C0.222201 -4.76837e-06 -0.670134 2.15428 0.589795 3.41421L7.78218 10.6066C8.56323 11.3876 9.82956 11.3876 10.6106 10.6066L17.803 3.41421C19.0629 2.15428 18.1706 -4.76837e-06 16.3888 -4.76837e-06H2.00401Z"
+                                        fill="#FF3131" />
                                 </svg>
                             </div>
                             <div>
@@ -49,9 +55,12 @@
                     <div class="card chart-bx">
                         <div class="card-header border-0 pb-0">
                             <div class="d-flex align-items-center">
-                                <h2 class="chart-num font-w600 mb-0">{{$paidOrders}}</h2>
-                                <svg class="ms-2 primary-icon" width="19" height="12" viewBox="0 0 19 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M2.00401 11.1924C0.222201 11.1924 -0.670134 9.0381 0.589795 7.77817L7.78218 0.585786C8.56323 -0.195262 9.82956 -0.195262 10.6106 0.585786L17.803 7.77817C19.0629 9.0381 18.1706 11.1924 16.3888 11.1924H2.00401Z" fill="#0E8A74"/>
+                                <h2 class="chart-num font-w600 mb-0">{{ $paidOrders }}</h2>
+                                <svg class="ms-2 primary-icon" width="19" height="12" viewBox="0 0 19 12"
+                                    fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M2.00401 11.1924C0.222201 11.1924 -0.670134 9.0381 0.589795 7.77817L7.78218 0.585786C8.56323 -0.195262 9.82956 -0.195262 10.6106 0.585786L17.803 7.77817C19.0629 9.0381 18.1706 11.1924 16.3888 11.1924H2.00401Z"
+                                        fill="#0E8A74" />
                                 </svg>
                             </div>
                             <div>
@@ -68,9 +77,12 @@
                         <div class="card-body pt-sm-4 pt-3 d-flex align-items-center justify-content-between">
                             <div class="me-3">
                                 <div class="d-flex align-items-center">
-                                    <h2 class="chart-num font-w600 mb-0">{{$pendingOrders}}</h2>
-                                    <svg class="ms-2 primary-icon" width="19" height="12" viewBox="0 0 19 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M2.00401 11.1924C0.222201 11.1924 -0.670134 9.0381 0.589795 7.77817L7.78218 0.585786C8.56323 -0.195262 9.82956 -0.195262 10.6106 0.585786L17.803 7.77817C19.0629 9.0381 18.1706 11.1924 16.3888 11.1924H2.00401Z" fill="#0E8A74"/>
+                                    <h2 class="chart-num font-w600 mb-0">{{ $pendingOrders }}</h2>
+                                    <svg class="ms-2 primary-icon" width="19" height="12" viewBox="0 0 19 12"
+                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M2.00401 11.1924C0.222201 11.1924 -0.670134 9.0381 0.589795 7.77817L7.78218 0.585786C8.56323 -0.195262 9.82956 -0.195262 10.6106 0.585786L17.803 7.77817C19.0629 9.0381 18.1706 11.1924 16.3888 11.1924H2.00401Z"
+                                            fill="#0E8A74" />
                                     </svg>
                                 </div>
                                 <div>
@@ -79,10 +91,11 @@
                             </div>
                             <div>
                                 <div class="d-inline-block position-relative donut-chart-sale">
-                                    <span class="donut1" data-peity='{ "fill": ["var(--primary)", "rgba(240, 240, 240)"],   "innerRadius": 35, "radius": 10}'>5/8</span>
+                                    <span class="donut1"
+                                        data-peity='{ "fill": ["var(--primary)", "rgba(240, 240, 240)"],   "innerRadius": 35, "radius": 10}'>5/8</span>
                                     <small class="text-black">66%</small>
                                 </div>
-                            </div>	
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -92,10 +105,10 @@
                     <h2 class="font-w600 mb-0">Dashboard \ Inventory</h2>
                     <p>Delivered orders</p>
                 </div>
-                <div class="input-group search-area2 d-xl-inline-flex mb-2 me-lg-4 me-md-2">
+                {{-- <div class="input-group search-area2 d-xl-inline-flex mb-2 me-lg-4 me-md-2">
                     <button class="input-group-text"><i class="flaticon-381-search-2 text-primary"></i></button>
                     <input type="text" class="form-control" placeholder="Search here...">
-                </div>
+                </div> --}}
                 {{-- <div class="dropdown custom-dropdown mb-2 period-btn">
                     <div class="btn btn-sm  d-flex align-items-center" data-bs-toggle="dropdown" aria-expanded="false"
                         role="button">
@@ -120,7 +133,7 @@
                     </div>
                 </div> --}}
             </div>
-            
+
             @if (session('success'))
                 <div class="alert alert-success">
                     {{ session('success') }}
@@ -130,9 +143,43 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="table-responsive rounded">
-                        <!-- New Order Button -->
+                        <table id="example5" class="table customer-table display mb-4 fs-14 card-table">
+                            <thead>
+                                <tr>
+                                    <th>User Name</th>
+                                    <th>Items Ordered</th>
+                                    <th>Status</th>
+                                    <th>Total Price</th>
+                                    <th>Order Date/Time</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($orders as $index => $order)
+                                    <tr style="text-wrap: no-wrap;">
+                                        <td>{{ $order->user->name ?? 'N/A' }}</td>
+                                        <td>
+                                            <span class="cursor-pointer text-primary" data-bs-toggle="modal"
+                                                data-bs-target="#orderModal{{ $order->id }}">
+                                                {{ $order->total_quantity }} items
+                                            </span>
+                                        </td>
+                                        <td>{{ $order->status }}</td>
+                                        <td>${{ number_format($order->total_amount, 2) }}</td>
+                                        <td>{{ $order->date_transaction->format('M d, Y h:i A') }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
 
-                        <!-- Pops Table -->
+                    </div>
+                </div>
+            </div>
+
+
+            {{-- <div class="row">
+                <div class="col-lg-12">
+                    <div class="table-responsive rounded">
+
                         <table id="example5" class="table customer-table display mb-4 fs-14 card-table">
                             <thead>
                                 <tr>
@@ -146,8 +193,7 @@
                                     <th>Image</th>
                                     <th>Price Per Case</th>
                                     <th>Category</th>
-                                    {{-- <th>Stock Status</th>
-                                    <th>Availability</th> --}}
+                                    
                                 </tr>
                             </thead>
                             <tbody>
@@ -184,8 +230,6 @@
                                                 No Category
                                             @endif
                                         </td>
-                                        {{-- <td><span class="badge bg-success">In Stock</span></td>
-                                        <td><span class="badge bg-success">Available</span></td> --}}
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -263,7 +307,7 @@
 
                     </div>
                 </div>
-            </div>
+            </div> --}}
         </div>
 
     </div>
@@ -288,8 +332,8 @@
                                                 </div>
                                             </td> --}}
     <!--**********************************
-                Content body end
-            ***********************************-->
+                    Content body end
+                ***********************************-->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function() {
@@ -321,4 +365,31 @@
             });
         });
     </script>
+
+
+
+
+
+    <div class="modal fade" id="orderModal{{ $order->id }}" tabindex="-1"
+        aria-labelledby="orderModalLabel{{ $order->id }}" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-md">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="orderModalLabel{{ $order->id }}">Order Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>Customer:</strong> {{ $order->user->name ?? 'N/A' }}</p>
+                    <p><strong>Total Items:</strong> {{ $order->total_quantity }}</p>
+                    <p><strong>Total Amount:</strong> ${{ number_format($order->total_amount, 2) }}</p>
+                    <p><strong>Status:</strong> {{ $order->status }}</p>
+                    <p><strong>Date:</strong> {{ $order->date_transaction->format('M d, Y h:i A') }}</p>
+                    <!-- Add more order details as needed -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection

@@ -32,6 +32,8 @@ class ViewOrdersController extends Controller
                 return $order;
             });
 
+            $orders = FpgOrder::paginate(10); // 10 items per page
+
         $totalOrders = $orders->count();
 
         return view('corporate_admin.view_orders.index', compact('orders', 'totalOrders'));
@@ -41,21 +43,52 @@ class ViewOrdersController extends Controller
     public function updateStatus(Request $request)
     {
         try {
-            $request->validate([
-                'status' => 'required|in:Pending,Paid,Shipped,Delivered',
-                'date_transaction' => 'required'
+            // Log the raw request data for debugging
+            \Log::info('Update status request data:', $request->all());
+            
+            $validated = $request->validate([
+                'status' => 'required|string|in:Pending,Paid,Shipped,Delivered',
+                'date_transaction' => 'required|string',
+                'id' => 'required'
             ]);
-            $formattedDate = Carbon::parse($request->date_transaction)->format('Y-m-d H:i:s');
-
-            FpgOrder::where('date_transaction', $formattedDate)
-                ->update(['status' => $request->status]);
-
-                
-            FpgOrder::find($request->id)->update(['status' => $request->status]);
-
-            return response()->json(['message' => 'Order status updated successfully!']);
-        } catch (\Throwable $th) {
-            return response()->json(['message' => $th->getMessage()]);
+            
+            // Log that validation passed
+            \Log::info('Validation passed, proceeding with update');
+            
+            // Use a single method to update - by ID is more reliable
+            $order = FpgOrder::find($request->id);
+            
+            if (!$order) {
+                \Log::warning('Order not found with ID: ' . $request->id);
+                return response()->json([
+                    'message' => 'Order not found'
+                ], 404);
+            }
+            
+            $order->status = $request->status;
+            $order->save();
+            
+            \Log::info('Order updated successfully, ID: ' . $request->id);
+            
+            return response()->json([
+                'message' => 'Order status updated successfully!'
+            ]);
+            
+        } catch (ValidationException $e) {
+            // Log validation errors
+            \Log::error('Validation failed:', $e->errors());
+            
+            return response()->json([
+                'message' => 'Validation failed',
+                'errors' => $e->errors()
+            ], 422);
+        } catch (\Exception $e) {
+            // Log other errors
+            \Log::error('Exception in updateStatus: ' . $e->getMessage());
+            
+            return response()->json([
+                'message' => $e->getMessage()
+            ], 500);
         }
     }
 

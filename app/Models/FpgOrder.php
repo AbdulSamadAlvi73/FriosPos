@@ -20,6 +20,6 @@ class FpgOrder extends Model
 
     public function item()
     {
-        return $this->belongsTo(FpgItem::class, 'fgp_item_id', 'fgp_item_id');
+        return $this->belongsTo(FpgItem::class, 'fgp_item_id', 'name');
     }
 }

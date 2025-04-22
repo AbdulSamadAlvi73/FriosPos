@@ -1,8 +1,8 @@
 @extends('layouts.app')
 @section('content')
     <!--**********************************
-                Content body start
-            ***********************************-->
+                                                    Content body start
+                                                ***********************************-->
     <div class="content-body default-height">
         <!-- row -->
         <div class="container-fluid">
@@ -108,11 +108,12 @@
                                         <td>${{ number_format($order->total_price, 2) }}</td>
                                         <td>{{ $order->date_transaction }}</td>
                                         <td>
-                                            <select class="status-select" data-date="{{ $order->date_transaction }}" data-id="{{$order->fgp_ordersID}}">
+                                            <select class="status-select" data-date="{{ $order->date_transaction }}"
+                                                data-id="{{ $order->fgp_ordersID }}">
                                                 <option value="Pending" {{ $order->status == 'Pending' ? 'selected' : '' }}>
                                                     Pending</option>
-                                                <option value="Paid" {{ $order->status == 'Paid' ? 'selected' : '' }}>Paid
-                                                </option>
+                                                <option value="Paid" {{ $order->status == 'Paid' ? 'selected' : '' }}>
+                                                    Paid</option>
                                                 <option value="Shipped"
                                                     {{ $order->status == 'Shipped' ? 'selected' : '' }}>Shipped</option>
                                                 <option value="Delivered"
@@ -142,9 +143,10 @@
                                                     </button>
                                                 </form>
 
-                                                <button type="button" class="ms-4"  data-bs-toggle="modal" data-bs-target="#modalId">
-                                                    <svg width="30" height="30" viewBox="0 0 30 30" fill="none"
-                                                        xmlns="http://www.w3.org/2000/svg">
+                                                <button type="button" class="ms-4" data-bs-toggle="modal"
+                                                    data-bs-target="#modalId">
+                                                    <svg width="30" height="30" viewBox="0 0 30 30"
+                                                        fill="none" xmlns="http://www.w3.org/2000/svg">
                                                         <circle cx="12" cy="12" r="2.5" stroke="#00abc7" />
                                                         <path
                                                             d="M18.2265 11.3805C18.3552 11.634 18.4195 11.7607 18.4195 12C18.4195 12.2393 18.3552 12.366 18.2265 12.6195C17.6001 13.8533 15.812 16.5 12 16.5C8.18799 16.5 6.39992 13.8533 5.77348 12.6195C5.64481 12.366 5.58048 12.2393 5.58048 12C5.58048 11.7607 5.64481 11.634 5.77348 11.3805C6.39992 10.1467 8.18799 7.5 12 7.5C15.812 7.5 17.6001 10.1467 18.2265 11.3805Z"
@@ -164,10 +166,18 @@
                                                     </svg>
                                                 </button>
 
-                                                <a href="{{route('corporate_admin.vieworders.edit', ['orderId' => $order->fgp_ordersID])}}">
-                                                    <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <path d="M21.2799 6.40005L11.7399 15.94C10.7899 16.89 7.96987 17.33 7.33987 16.7C6.70987 16.07 7.13987 13.25 8.08987 12.3L17.6399 2.75002C17.8754 2.49308 18.1605 2.28654 18.4781 2.14284C18.7956 1.99914 19.139 1.92124 19.4875 1.9139C19.8359 1.90657 20.1823 1.96991 20.5056 2.10012C20.8289 2.23033 21.1225 2.42473 21.3686 2.67153C21.6147 2.91833 21.8083 3.21243 21.9376 3.53609C22.0669 3.85976 22.1294 4.20626 22.1211 4.55471C22.1128 4.90316 22.0339 5.24635 21.8894 5.5635C21.7448 5.88065 21.5375 6.16524 21.2799 6.40005V6.40005Z" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                                        <path d="M11 4H6C4.93913 4 3.92178 4.42142 3.17163 5.17157C2.42149 5.92172 2 6.93913 2 8V18C2 19.0609 2.42149 20.0783 3.17163 20.8284C3.92178 21.5786 4.93913 22 6 22H17C19.21 22 20 20.2 20 18V13" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                                <a
+                                                    href="{{ route('corporate_admin.vieworders.edit', ['orderId' => $order->fgp_ordersID]) }}">
+                                                    <svg width="30" height="30" viewBox="0 0 24 24"
+                                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M21.2799 6.40005L11.7399 15.94C10.7899 16.89 7.96987 17.33 7.33987 16.7C6.70987 16.07 7.13987 13.25 8.08987 12.3L17.6399 2.75002C17.8754 2.49308 18.1605 2.28654 18.4781 2.14284C18.7956 1.99914 19.139 1.92124 19.4875 1.9139C19.8359 1.90657 20.1823 1.96991 20.5056 2.10012C20.8289 2.23033 21.1225 2.42473 21.3686 2.67153C21.6147 2.91833 21.8083 3.21243 21.9376 3.53609C22.0669 3.85976 22.1294 4.20626 22.1211 4.55471C22.1128 4.90316 22.0339 5.24635 21.8894 5.5635C21.7448 5.88065 21.5375 6.16524 21.2799 6.40005V6.40005Z"
+                                                            stroke="#000000" stroke-width="1.5" stroke-linecap="round"
+                                                            stroke-linejoin="round" />
+                                                        <path
+                                                            d="M11 4H6C4.93913 4 3.92178 4.42142 3.17163 5.17157C2.42149 5.92172 2 6.93913 2 8V18C2 19.0609 2.42149 20.0783 3.17163 20.8284C3.92178 21.5786 4.93913 22 6 22H17C19.21 22 20 20.2 20 18V13"
+                                                            stroke="#000000" stroke-width="1.5" stroke-linecap="round"
+                                                            stroke-linejoin="round" />
                                                     </svg>
                                                 </a>
                                             </div>
@@ -176,6 +186,43 @@
                                 @endforeach
                             </tbody>
                         </table>
+
+
+                        @if ($paginator->hasPages())
+                        <nav>
+                            <ul class="pagination justify-content-center">
+                                {{-- Previous Page Link --}}
+                                <li class="page-item {{ $paginator->onFirstPage() ? 'disabled' : '' }}">
+                                    <a class="page-link custom-arrow" href="{{ $paginator->previousPageUrl() }}" rel="prev">
+                                        &laquo;
+                                    </a>
+                                </li>
+                    
+                                {{-- Pagination Elements --}}
+                                @foreach ($elements as $element)
+                                    @if (is_string($element))
+                                        <li class="page-item disabled"><span class="page-link">{{ $element }}</span></li>
+                                    @endif
+                    
+                                    @if (is_array($element))
+                                        @foreach ($element as $page => $url)
+                                            <li class="page-item {{ $page == $paginator->currentPage() ? 'active' : '' }}">
+                                                <a class="page-link custom-page" href="{{ $url }}">{{ $page }}</a>
+                                            </li>
+                                        @endforeach
+                                    @endif
+                                @endforeach
+                    
+                                {{-- Next Page Link --}}
+                                <li class="page-item {{ !$paginator->hasMorePages() ? 'disabled' : '' }}">
+                                    <a class="page-link custom-arrow" href="{{ $paginator->nextPageUrl() }}" rel="next">
+                                        &raquo;
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    @endif
+                    
 
                     </div>
                 </div>
@@ -218,35 +265,126 @@
 
 
     <!--**********************************
-                Content body end
-            ***********************************-->
+                                                    Content body end
+                                                ***********************************-->
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            document.querySelectorAll('.status-select').forEach(select => {
-                select.addEventListener('change', function() {
-                    let dateTransaction = this.getAttribute(
-                    'data-date'); // Get the date_transaction value
-                    let newStatus = this.value; // Get the selected status value
-
-                    let id = this.getAttribute('data-id');
-                    fetch(`/corporate_admin/vieworders/update-status`, {
-                            method: "POST",
-                            headers: {
-                                "X-CSRF-TOKEN": "{{ csrf_token() }}",
-                                "Content-Type": "application/json"
-                            },
-                            body: JSON.stringify({
-                                date_transaction: dateTransaction,
-                                status: newStatus,
-                                id: id
-                            })
-                        })
-                        .then(response => response.json())
-                        .then(data => alert(data
-                        .message)) // Show a message when the update is successful
-                        .catch(error => console.error('Error:', error)); // Log any errors
+        $(document).ready(function() {
+            if (!$.fn.DataTable.isDataTable('#example5')) {
+                let table = $('#example5').DataTable({
+                    stateSave: true,
+                    stateDuration: -1,
+                    pageLength: 10,
+                    paging: true,
+                    searching: true,
+                    ordering: true,
+                    info: true,
+                    initComplete: function() {
+                        // Get page number from URL (e.g., ?page=2)
+                        let urlParams = new URLSearchParams(window.location.search);
+                        let page = parseInt(urlParams.get('page')) || 1;
+                        table.page(page - 1).draw('page');
+                    }
                 });
+
+                // Update URL when page changes
+                table.on('page', function() {
+                    let currentPage = table.page.info().page + 1;
+                    let newUrl = new URL(window.location);
+                    newUrl.searchParams.set('page', currentPage);
+                    window.history.replaceState({}, '', newUrl);
+                });
+            }
+
+            $(document).on('change', '.status-select', function() {
+                let select = $(this);
+                let dateTransaction = select.data('date');
+                let newStatus = select.val();
+                let id = select.data('id');
+
+                // Debug what data we have before sending
+                console.log('Data to be sent:', {
+                    date_transaction: dateTransaction,
+                    status: newStatus,
+                    id: id
+                });
+
+                // Create the data object
+                const data = {
+                    date_transaction: dateTransaction,
+                    status: newStatus,
+                    id: id
+                };
+
+                // Check if any key is undefined or empty
+                for (const [key, value] of Object.entries(data)) {
+                    if (!value && value !== 0) {
+                        console.error(`Field '${key}' is missing or empty!`);
+                    }
+                }
+
+                fetch(`/corporate_admin/vieworders/update-status`, {
+                        method: "POST",
+                        headers: {
+                            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content'),
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(data)
+                    })
+                    .then(response => {
+                        // Log the raw response for debugging
+                        console.log('Response status:', response.status);
+                        return response.json().then(data => {
+                            if (!response.ok) {
+                                console.error('Error response:', data);
+                                throw new Error(data.message || 'Update failed');
+                            }
+                            return data;
+                        });
+                    })
+                    .then(data => {
+                        console.log('Success:', data);
+                        alert(data.message);
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Error: ' + error.message);
+                    });
             });
         });
     </script>
+
+
+<style>
+.pagination .page-item {
+    margin: 0 5px;
+}
+
+.pagination .page-link {
+    border: none;
+    background-color: transparent;
+    color: #00abc9;
+    font-weight: bold;
+    padding: 8px 12px;
+    font-size: 1rem;
+}
+
+.pagination .custom-page {
+    background-color: #00abc9;
+    color: white !important;
+    border-radius: 8px;
+    min-width: 40px;
+    text-align: center;
+}
+
+.pagination .custom-arrow {
+    font-size: 1.2rem;
+}
+
+.pagination .page-item.disabled .page-link {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+
+</style>
 @endsection

@@ -39472,6 +39472,13 @@ table {
   margin-bottom: 0;
 }
 
+.cursor-pointer {
+  cursor: pointer;
+  
+}
+
+
+
 .accordion-no-gutter .accordion-item .accordion-button.collapsed {
   border-bottom: none;
 }
@@ -50622,5 +50629,7 @@ i.ti-plus {
 [data-theme-version="dark"] .footer .copyright a {
   color: #fff;
 }
+
+
 
 /*# sourceMappingURL=style.css.map */
