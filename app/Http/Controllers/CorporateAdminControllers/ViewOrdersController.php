@@ -23,7 +23,7 @@ class ViewOrdersController extends Controller
             'fgp_ordersID'
         )
             ->with('user') // Load user data
-            ->groupBy('date_transaction', 'user_ID', 'status','fgp_ordersID')
+            ->groupBy('date_transaction', 'user_ID', 'status', 'fgp_ordersID')
             ->orderBy('date_transaction', 'desc')
             ->get()
             ->map(function ($order) {
@@ -32,7 +32,7 @@ class ViewOrdersController extends Controller
                 return $order;
             });
 
-            $orders = FpgOrder::paginate(10); // 10 items per page
+        $orders = FpgOrder::paginate(10); // 10 items per page
 
         $totalOrders = $orders->count();
 
@@ -45,39 +45,38 @@ class ViewOrdersController extends Controller
         try {
             // Log the raw request data for debugging
             \Log::info('Update status request data:', $request->all());
-            
+
             $validated = $request->validate([
                 'status' => 'required|string|in:Pending,Paid,Shipped,Delivered',
                 'date_transaction' => 'required|string',
                 'id' => 'required'
             ]);
-            
+
             // Log that validation passed
             \Log::info('Validation passed, proceeding with update');
-            
+
             // Use a single method to update - by ID is more reliable
             $order = FpgOrder::find($request->id);
-            
+
             if (!$order) {
                 \Log::warning('Order not found with ID: ' . $request->id);
                 return response()->json([
                     'message' => 'Order not found'
                 ], 404);
             }
-            
+
             $order->status = $request->status;
             $order->save();
-            
+
             \Log::info('Order updated successfully, ID: ' . $request->id);
-            
+
             return response()->json([
                 'message' => 'Order status updated successfully!'
             ]);
-            
         } catch (ValidationException $e) {
             // Log validation errors
             \Log::error('Validation failed:', $e->errors());
-            
+
             return response()->json([
                 'message' => 'Validation failed',
                 'errors' => $e->errors()
@@ -85,17 +84,18 @@ class ViewOrdersController extends Controller
         } catch (\Exception $e) {
             // Log other errors
             \Log::error('Exception in updateStatus: ' . $e->getMessage());
-            
+
             return response()->json([
                 'message' => $e->getMessage()
             ], 500);
         }
     }
 
-    public function edit($orderId) {
+    public function edit($orderId)
+    {
         $order = FpgOrder::find($orderId);
         $currentMonth = strval(Carbon::now()->format('n'));
-    
+
         // Fetch only orderable, in-stock, and currently available items
         $pops = FpgItem::where('orderable', 1)
             ->where('internal_inventory', '>', 0) // Ensure item is in stock
@@ -104,17 +104,17 @@ class ViewOrdersController extends Controller
                 $availableMonths = json_decode($pop->dates_available, true);
                 return in_array($currentMonth, $availableMonths ?? []);
             });
-    
+
         $categorizedItems = [];
         foreach ($pops as $pop) {
             foreach ($pop->categories as $category) {
                 $types = json_decode($category->type, true); // Decode JSON types
-    
+
                 foreach ($types as $type) {
                     $categorizedItems[$type][$category->name][] = $pop;
                 }
             }
         }
-        return view('corporate_admin.view_orders.edit', compact('order','categorizedItems'));
+        return view('corporate_admin.view_orders.edit', compact('order', 'categorizedItems'));
     }
 }
