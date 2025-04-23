@@ -20,6 +20,7 @@ use App\Http\Controllers\CorporateAdminControllers\CorporateAdminController;
 // Franchise Staff Controllers
 use App\Http\Controllers\FranchiseAdminControllers\FranchiseAdminController;
 use App\Http\Controllers\CorporateAdminControllers\AdditionalChargesController;
+use App\Http\Controllers\Franchise\EventController;
 use App\Http\Controllers\Franchise\InventoryController;
 use App\Http\Controllers\FranchiseManagerControllers\FranchiseManagerController;
 
@@ -140,6 +141,10 @@ Route::middleware(['auth', 'role:franchise_admin|franchise_manager'])->prefix('f
     Route::get('/inventory-locations', [InventoryController::class, 'inventoryLocations'])->name('inventory.locations');
     Route::post('/allocate-inventory', [InventoryController::class, 'allocateInventory'])->name('allocate-inventory');
 
+    Route::get('/events', [EventController::class, 'index'])->name('events.index');
+    Route::get('/events/create', [EventController::class, 'create'])->name('events.create');
+    Route::post('/events', [EventController::class, 'store'])->name('events.store');
+    Route::get('/events/{event}/compare', [EventController::class, 'compare'])->name('events.compare');
 
 });
 
