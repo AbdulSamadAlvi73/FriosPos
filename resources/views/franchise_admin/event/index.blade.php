@@ -37,7 +37,7 @@
                                 {{ date('d M Y', strtotime($event->end_date)) }}
                             </td>
                             <td class="d-flex justify-content-around">
-                                <a href="{{ route('franchise.events.compare', ['event' => $event]) }}" class="text-success">
+                                <a title="compare" href="{{ route('franchise.events.compare', ['event' => $event]) }}" class="text-success">
                                     <i class="fas fa-exchange-alt"></i>
                                 </a>
                                 {{-- <button class="text-info">

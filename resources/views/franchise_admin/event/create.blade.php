@@ -2,9 +2,15 @@
 @section('content')
     <div class="content-body default-height p-5 mt-5">
         <div class="container-fluid rounded border p-5 bg-white">
-            {{-- <h1>
-            Create Event
-        </h1> --}}
+            <div class="d-flex justify-content-between">
+                <h1 style="font-size: 28px; font-weight: bold">
+                    Create Event
+                </h1>
+
+                <a href="{{ route('franchise.events.index') }}" class="btn btn-primary">
+                    Events
+                </a>
+            </div>
             <form action="{{ route('franchise.events.store') }}" method="post">
                 @csrf
                 <div class="form-group">
