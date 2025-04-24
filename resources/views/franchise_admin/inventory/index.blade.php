@@ -350,7 +350,7 @@
                         orderable: orderableValue
                     },
                     success: function(response) {
-                        console.log(response); // Debugging: Check response in console
+                        console.log(response); 
                         if (response.success) {
                             // location.reload(); 
                         } else {
