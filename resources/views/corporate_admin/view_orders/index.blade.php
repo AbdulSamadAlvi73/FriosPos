@@ -1,12 +1,11 @@
 @extends('layouts.app')
 @section('content')
     <!--**********************************
-                                                                    Content body start
-                                                                ***********************************-->
+        Content body start
+    ***********************************-->
     <div class="content-body default-height">
         <!-- row -->
         <div class="container-fluid">
-
             <div class="form-head mb-4 d-flex flex-wrap align-items-center">
                 <div class="me-auto">
                     <h2 class="font-w600 mb-0">Dashboard \</h2>
@@ -17,16 +16,10 @@
                     <input type="text" class="form-control" placeholder="Search here...">
                 </div>
                 <div class="dropdown custom-dropdown mb-2 period-btn">
-                    <div class="btn btn-sm  d-flex align-items-center" data-bs-toggle="dropdown" aria-expanded="false"
-                        role="button">
-                        <svg class="primary-icon" width="28" height="28" viewBox="0 0 28 28" fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path
-                                d="M22.167 5.83362H21.0003V3.50028C21.0003 3.19087 20.8774 2.89412 20.6586 2.67533C20.4398 2.45653 20.143 2.33362 19.8336 2.33362C19.5242 2.33362 19.2275 2.45653 19.0087 2.67533C18.7899 2.89412 18.667 3.19087 18.667 3.50028V5.83362H9.33362V3.50028C9.33362 3.19087 9.2107 2.89412 8.99191 2.67533C8.77312 2.45653 8.47637 2.33362 8.16695 2.33362C7.85753 2.33362 7.56079 2.45653 7.34199 2.67533C7.1232 2.89412 7.00028 3.19087 7.00028 3.50028V5.83362H5.83362C4.90536 5.83362 4.01512 6.20237 3.35874 6.85874C2.70237 7.51512 2.33362 8.40536 2.33362 9.33362V10.5003H25.667V9.33362C25.667 8.40536 25.2982 7.51512 24.6418 6.85874C23.9854 6.20237 23.0952 5.83362 22.167 5.83362Z"
-                                fill="#0E8A74" />
-                            <path
-                                d="M2.33362 22.1669C2.33362 23.0952 2.70237 23.9854 3.35874 24.6418C4.01512 25.2982 4.90536 25.6669 5.83362 25.6669H22.167C23.0952 25.6669 23.9854 25.2982 24.6418 24.6418C25.2982 23.9854 25.667 23.0952 25.667 22.1669V12.8336H2.33362V22.1669Z"
-                                fill="#0E8A74" />
+                    <div class="btn btn-sm d-flex align-items-center" data-bs-toggle="dropdown" aria-expanded="false" role="button">
+                        <svg class="primary-icon" width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M22.167 5.83362H21.0003V3.50028C21.0003 3.19087 20.8774 2.89412 20.6586 2.67533C20.4398 2.45653 20.143 2.33362 19.8336 2.33362C19.5242 2.33362 19.2275 2.45653 19.0087 2.67533C18.7899 2.89412 18.667 3.19087 18.667 3.50028V5.83362H9.33362V3.50028C9.33362 3.19087 9.2107 2.89412 8.99191 2.67533C8.77312 2.45653 8.47637 2.33362 8.16695 2.33362C7.85753 2.33362 7.56079 2.45653 7.34199 2.67533C7.1232 2.89412 7.00028 3.19087 7.00028 3.50028V5.83362H5.83362C4.90536 5.83362 4.01512 6.20237 3.35874 6.85874C2.70237 7.51512 2.33362 8.40536 2.33362 9.33362V10.5003H25.667V9.33362C25.667 8.40536 25.2982 7.51512 24.6418 6.85874C23.9854 6.20237 23.0952 5.83362 22.167 5.83362Z" fill="#0E8A74" />
+                            <path d="M2.33362 22.1669C2.33362 23.0952 2.70237 23.9854 3.35874 24.6418C4.01512 25.2982 4.90536 25.6669 5.83362 25.6669H22.167C23.0952 25.6669 23.9854 25.2982 24.6418 24.6418C25.2982 23.9854 25.667 23.0952 25.667 22.1669V12.8336H2.33362V22.1669Z" fill="#0E8A74" />
                         </svg>
                         <div class="text-start ms-3 flex-1">
                             <span class="d-block text-black">Change Periode</span>
@@ -42,20 +35,16 @@
             </div>
             <div class="row mb-4 align-items-center">
                 <div class="col-xl-3 col-lg-4 mb-4 mb-lg-0">
-                    <a href="{{ route('franchise.orderpops.create') }}"
-                        class="btn btn-secondary btn-lg btn-block rounded text-white">+ New Order</a>
+                    <a href="{{ route('franchise.orderpops.create') }}" class="btn btn-secondary btn-lg btn-block rounded text-white">+ New Order</a>
                 </div>
                 <div class="col-xl-9 col-lg-8">
                     <div class="card m-0">
                         <div class="card-body py-3 py-md-2">
                             <div class="d-sm-flex d-block align-items-center">
                                 <div class="d-flex mb-sm-0 mb-3 me-auto align-items-center">
-                                    <svg class="me-2 user-ico mb-1" width="24" height="24" viewBox="0 0 24 24"
-                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <svg class="me-2 user-ico mb-1" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <g clip-path="url(#clip0)">
-                                            <path
-                                                d="M21 24H3C2.73478 24 2.48043 23.8946 2.29289 23.7071C2.10536 23.5196 2 23.2652 2 23V22.008C2.00287 20.4622 2.52021 18.9613 3.47044 17.742C4.42066 16.5227 5.74971 15.6544 7.248 15.274C7.46045 15.2219 7.64959 15.1008 7.78571 14.9296C7.92182 14.7583 7.9972 14.5467 8 14.328V13.322L6.883 12.206C6.6032 11.9313 6.38099 11.6036 6.22937 11.2419C6.07776 10.8803 5.99978 10.4921 6 10.1V5.96201C6.01833 4.41693 6.62821 2.93765 7.70414 1.82861C8.78007 0.719572 10.2402 0.0651427 11.784 5.16174e-06C12.5992 -0.00104609 13.4067 0.158488 14.1603 0.469498C14.9139 0.780509 15.5989 1.2369 16.1761 1.81263C16.7533 2.38835 17.2114 3.07213 17.5244 3.82491C17.8373 4.5777 17.999 5.38476 18 6.20001V10.1C17.9997 10.4949 17.9204 10.8857 17.7666 11.2495C17.6129 11.6132 17.388 11.9426 17.105 12.218L16 13.322V14.328C16.0029 14.5469 16.0784 14.7586 16.2147 14.9298C16.351 15.1011 16.5404 15.2221 16.753 15.274C18.251 15.6548 19.5797 16.5232 20.5298 17.7424C21.4798 18.9617 21.997 20.4624 22 22.008V23C22 23.2652 21.8946 23.5196 21.7071 23.7071C21.5196 23.8946 21.2652 24 21 24ZM4 22H20C19.9954 20.8996 19.6249 19.8319 18.9469 18.9651C18.2689 18.0983 17.3219 17.4816 16.255 17.212C15.6125 17.0494 15.0423 16.6779 14.6341 16.1558C14.2259 15.6337 14.0028 14.9907 14 14.328V12.908C14.0001 12.6428 14.1055 12.3885 14.293 12.201L15.703 10.792C15.7965 10.7026 15.8711 10.5952 15.9221 10.4763C15.9731 10.3574 15.9996 10.2294 16 10.1V6.20001C16.0017 5.09492 15.5671 4.03383 14.7907 3.24737C14.0144 2.46092 12.959 2.01265 11.854 2.00001C10.8264 2.04117 9.85379 2.47507 9.1367 3.21225C8.41962 3.94943 8.01275 4.93367 8 5.96201V10.1C7.99979 10.2266 8.0249 10.352 8.07384 10.4688C8.12278 10.5856 8.19458 10.6914 8.285 10.78L9.707 12.2C9.89455 12.3875 9.99994 12.6418 10 12.907V14.327C9.99724 14.9896 9.77432 15.6325 9.3663 16.1545C8.95827 16.6766 8.3883 17.0482 7.746 17.211C6.67872 17.4804 5.73137 18.0972 5.05318 18.9642C4.37498 19.8313 4.00447 20.8993 4 22Z"
-                                                fill="#000" />
+                                            <path d="M21 24H3C2.73478 24 2.48043 23.8946 2.29289 23.7071C2.10536 23.5196 2 23.2652 2 23V22.008C2.00287 20.4622 2.52021 18.9613 3.47044 17.742C4.42066 16.5227 5.74971 15.6544 7.248 15.274C7.46045 15.2219 7.64959 15.1008 7.78571 14.9296C7.92182 14.7583 7.9972 14.5467 8 14.328V13.322L6.883 12.206C6.6032 11.9313 6.38099 11.6036 6.22937 11.2419C6.07776 10.8803 5.99978 10.4921 6 10.1V5.96201C6.01833 4.41693 6.62821 2.93765 7.70414 1.82861C8.78007 0.719572 10.2402 0.0651427 11.784 5.16174e-06C12.5992 -0.00104609 13.4067 0.158488 14.1603 0.469498C14.9139 0.780509 15.5989 1.2369 16.1761 1.81263C16.7533 2.38835 17.2114 3.07213 17.5244 3.82491C17.8373 4.5777 17.999 5.38476 18 6.20001V10.1C17.9997 10.4949 17.9204 10.8857 17.7666 11.2495C17.6129 11.6132 17.388 11.9426 17.105 12.218L16 13.322V14.328C16.0029 14.5469 16.0784 14.7586 16.2147 14.9298C16.351 15.1011 16.5404 15.2221 16.753 15.274C18.251 15.6548 19.5797 16.5232 20.5298 17.7424C21.4798 18.9617 21.997 20.4624 22 22.008V23C22 23.2652 21.8946 23.5196 21.7071 23.7071C21.5196 23.8946 21.2652 24 21 24ZM4 22H20C19.9954 20.8996 19.6249 19.8319 18.9469 18.9651C18.2689 18.0983 17.3219 17.4816 16.255 17.212C15.6125 17.0494 15.0423 16.6779 14.6341 16.1558C14.2259 15.6337 14.0028 14.9907 14 14.328V12.908C14.0001 12.6428 14.1055 12.3885 14.293 12.201L15.703 10.792C15.7965 10.7026 15.8711 10.5952 15.9221 10.4763C15.9731 10.3574 15.9996 10.2294 16 10.1V6.20001C16.0017 5.09492 15.5671 4.03383 14.7907 3.24737C14.0144 2.46092 12.959 2.01265 11.854 2.00001C10.8264 2.04117 9.85379 2.47507 9.1367 3.21225C8.41962 3.94943 8.01275 4.93367 8 5.96201V10.1C7.99979 10.2266 8.0249 10.352 8.07384 10.4688C8.12278 10.5856 8.19458 10.6914 8.285 10.78L9.707 12.2C9.89455 12.3875 9.99994 12.6418 10 12.907V14.327C9.99724 14.9896 9.77432 15.6325 9.3663 16.1545C8.95827 16.6766 8.3883 17.0482 7.746 17.211C6.67872 17.4804 5.73137 18.0972 5.05318 18.9642C4.37498 19.8313 4.00447 20.8993 4 22Z" fill="#000" />
                                         </g>
                                         <defs>
                                             <clipPath id="clip0">
@@ -89,239 +78,127 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="table-responsive rounded">
-                        <table id="example5" class="table customer-table display mb-4 fs-14 card-table">
+                        <table class="table customer-table display mb-4 fs-14 card-table">
                             <thead>
                                 <tr>
-                                    <th>Franchise Name</th>
+                                    <th>User Name</th>
                                     <th>Items Ordered</th>
+                                    <th>Status</th>
                                     <th>Total Price</th>
                                     <th>Order Date/Time</th>
-                                    <th>Status</th>
-                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($orders as $order)
-                                    <tr>
+                                    <tr style="text-wrap: nowrap;">
                                         <td>{{ $order->user->name ?? 'N/A' }}</td>
-                                        <td>{{ $order->total_quantity }} items</td>
-                                        <td>${{ number_format($order->total_price, 2) }}</td>
-                                        <td>{{ $order->date_transaction }}</td>
                                         <td>
-                                            <select class="status-select" data-date="{{ $order->date_transaction }}"
-                                                data-id="{{ $order->fgp_ordersID }}">
-                                                <option value="Pending" {{ $order->status == 'Pending' ? 'selected' : '' }}>
-                                                    Pending</option>
-                                                <option value="Paid" {{ $order->status == 'Paid' ? 'selected' : '' }}>
-                                                    Paid</option>
-                                                <option value="Shipped"
-                                                    {{ $order->status == 'Shipped' ? 'selected' : '' }}>Shipped</option>
-                                                <option value="Delivered"
-                                                    {{ $order->status == 'Delivered' ? 'selected' : '' }}>Delivered
-                                                </option>
-                                            </select>
+                                            <span class="cursor-pointer text-primary" data-bs-toggle="modal"
+                                                data-bs-target="#orderModal{{ $order->id }}">
+                                                {{ $order->total_quantity }} items
+                                            </span>
                                         </td>
-
-                                        <td>
-                                            <div class="d-flex">
-                                                <form
-                                                    action="{{ route('corporate_admin.vieworders.destroy', $order->date_transaction) }}"
-                                                    method="POST"
-                                                    onsubmit="return confirm('Are you sure you want to delete this order?')">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="ms-4 delete-user">
-                                                        <svg width="24" height="24" viewBox="0 0 24 24"
-                                                            fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                            <path d="M3 6H5H21" stroke="#FF3131" stroke-width="2"
-                                                                stroke-linecap="round" stroke-linejoin="round" />
-                                                            <path
-                                                                d="M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6M19 6V20C19 20.5304 18.7893 21.0391 18.4142 21.4142C18.0391 21.7893 17.5304 22 17 22H7C6.46957 22 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20V6H19Z"
-                                                                stroke="#FF3131" stroke-width="2" stroke-linecap="round"
-                                                                stroke-linejoin="round" />
-                                                        </svg>
-                                                    </button>
-                                                </form>
-
-                                                <button type="button" class="ms-4" data-bs-toggle="modal"
-                                                    data-bs-target="#modalId">
-                                                    <svg width="30" height="30" viewBox="0 0 30 30"
-                                                        fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <circle cx="12" cy="12" r="2.5" stroke="#00abc7" />
-                                                        <path
-                                                            d="M18.2265 11.3805C18.3552 11.634 18.4195 11.7607 18.4195 12C18.4195 12.2393 18.3552 12.366 18.2265 12.6195C17.6001 13.8533 15.812 16.5 12 16.5C8.18799 16.5 6.39992 13.8533 5.77348 12.6195C5.64481 12.366 5.58048 12.2393 5.58048 12C5.58048 11.7607 5.64481 11.634 5.77348 11.3805C6.39992 10.1467 8.18799 7.5 12 7.5C15.812 7.5 17.6001 10.1467 18.2265 11.3805Z"
-                                                            stroke="#222222" />
-                                                        <path
-                                                            d="M17.5 3.5H17.7C19.4913 3.5 20.387 3.5 20.9435 4.0565C21.5 4.61299 21.5 5.50866 21.5 7.3V7.5"
-                                                            stroke="#00abc7" stroke-linecap="round" />
-                                                        <path
-                                                            d="M17.5 20.5H17.7C19.4913 20.5 20.387 20.5 20.9435 19.9435C21.5 19.387 21.5 18.4913 21.5 16.7V16.5"
-                                                            stroke="#00abc7" stroke-linecap="round" />
-                                                        <path
-                                                            d="M6.5 3.5H6.3C4.50866 3.5 3.61299 3.5 3.0565 4.0565C2.5 4.61299 2.5 5.50866 2.5 7.3V7.5"
-                                                            stroke="#00abc7" stroke-linecap="round" />
-                                                        <path
-                                                            d="M6.5 20.5H6.3C4.50866 20.5 3.61299 20.5 3.0565 19.9435C2.5 19.387 2.5 18.4913 2.5 16.7V16.5"
-                                                            stroke="#00abc7" stroke-linecap="round" />
-                                                    </svg>
-                                                </button>
-
-                                                <a
-                                                    href="{{ route('corporate_admin.vieworders.edit', ['orderId' => $order->fgp_ordersID]) }}">
-                                                    <svg width="30" height="30" viewBox="0 0 24 24"
-                                                        fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <path
-                                                            d="M21.2799 6.40005L11.7399 15.94C10.7899 16.89 7.96987 17.33 7.33987 16.7C6.70987 16.07 7.13987 13.25 8.08987 12.3L17.6399 2.75002C17.8754 2.49308 18.1605 2.28654 18.4781 2.14284C18.7956 1.99914 19.139 1.92124 19.4875 1.9139C19.8359 1.90657 20.1823 1.96991 20.5056 2.10012C20.8289 2.23033 21.1225 2.42473 21.3686 2.67153C21.6147 2.91833 21.8083 3.21243 21.9376 3.53609C22.0669 3.85976 22.1294 4.20626 22.1211 4.55471C22.1128 4.90316 22.0339 5.24635 21.8894 5.5635C21.7448 5.88065 21.5375 6.16524 21.2799 6.40005V6.40005Z"
-                                                            stroke="#000000" stroke-width="1.5" stroke-linecap="round"
-                                                            stroke-linejoin="round" />
-                                                        <path
-                                                            d="M11 4H6C4.93913 4 3.92178 4.42142 3.17163 5.17157C2.42149 5.92172 2 6.93913 2 8V18C2 19.0609 2.42149 20.0783 3.17163 20.8284C3.92178 21.5786 4.93913 22 6 22H17C19.21 22 20 20.2 20 18V13"
-                                                            stroke="#000000" stroke-width="1.5" stroke-linecap="round"
-                                                            stroke-linejoin="round" />
-                                                    </svg>
-                                                </a>
-                                            </div>
-                                        </td>
+                                        <td>{{ $order->status }}</td>
+                                        <td>${{ number_format($order->total_amount, 2) }}</td>
+                                        <td>{{ $order->date_transaction->format('M d, Y h:i A') }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>
                         </table>
 
-
-                        @if ($orders->hasPages())
-                            <nav>
-                                <ul class="pagination justify-content-center">
-                                    {{-- Previous Page Link --}}
-                                    <li class="page-item {{ $orders->onFirstPage() ? 'disabled' : '' }}">
-                                        <a class="page-link custom-arrow" href="{{ $orders->previousPageUrl() }}"
-                                            rel="prev">
-                                            &laquo;
-                                        </a>
-                                    </li>
-
-                                    {{-- Pagination Elements --}}
-                                    @php
-                                        $elements = $orders->toArray()['links'];
-                                    @endphp
-
-                                    @foreach ($elements as $element)
-                                        @if (isset($element['url']))
-                                            <li class="page-item {{ $element['active'] ? 'active' : '' }}">
-                                                <a class="page-link custom-page"
-                                                    href="{{ $element['url'] }}">{{ $element['label'] }}</a>
+                        <!-- Custom Pagination -->
+                        <div class="d-flex justify-content-center mt-4">
+                            @if ($orders->hasPages())
+                                <nav>
+                                    <ul class="pagination">
+                                        <!-- Previous Page Link -->
+                                        @if ($orders->onFirstPage())
+                                            <li class="page-item disabled" aria-disabled="true" aria-label="@lang('pagination.previous')">
+                                                <span class="page-link custom-arrow" aria-hidden="true">‹</span>
                                             </li>
                                         @else
-                                            <li class="page-item disabled">
-                                                <span class="page-link">{{ $element['label'] }}</span>
+                                            <li class="page-item">
+                                                <a class="page-link custom-arrow" href="{{ $orders->previousPageUrl() }}" rel="prev" aria-label="@lang('pagination.previous')">‹</a>
                                             </li>
                                         @endif
-                                    @endforeach
 
-                                    {{-- Next Page Link --}}
-                                    <li class="page-item {{ !$orders->hasMorePages() ? 'disabled' : '' }}">
-                                        <a class="page-link custom-arrow" href="{{ $orders->nextPageUrl() }}"
-                                            rel="next">
-                                            &raquo;
-                                        </a>
-                                    </li>
-                                </ul>
-                            </nav>
-                        @endif
+                                        <!-- Pagination Elements -->
+                                        @foreach ($orders->links()->elements as $element)
+                                            <!-- "Three Dots" Separator -->
+                                            @if (is_string($element))
+                                                <li class="page-item disabled" aria-disabled="true"><span class="page-link">{{ $element }}</span></li>
+                                            @endif
 
+                                            <!-- Array Of Links -->
+                                            @if (is_array($element))
+                                                @foreach ($element as $page => $url)
+                                                    @if ($page == $orders->currentPage())
+                                                        <li class="page-item active" aria-current="page"><span class="page-link custom-page">{{ $page }}</span></li>
+                                                    @else
+                                                        <li class="page-item"><a class="page-link" href="{{ $url }}">{{ $page }}</a></li>
+                                                    @endif
+                                                @endforeach
+                                            @endif
+                                        @endforeach
 
-
+                                        <!-- Next Page Link -->
+                                        @if ($orders->hasMorePages())
+                                            <li class="page-item">
+                                                <a class="page-link custom-arrow" href="{{ $orders->nextPageUrl() }}" rel="next" aria-label="@lang('pagination.next')">›</a>
+                                            </li>
+                                        @else
+                                            <li class="page-item disabled" aria-disabled="true" aria-label="@lang('pagination.next')">
+                                                <span class="page-link custom-arrow" aria-hidden="true">›</span>
+                                            </li>
+                                        @endif
+                                    </ul>
+                                </nav>
+                            @endif
+                        </div>
                     </div>
                 </div>
             </div>
-
         </div>
-
     </div>
 
-    <div class="modal fade" id="modalId" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
-        role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+    <div class="modal fade" id="modalId" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modalTitleId">
-                        Modal title
-                    </h5>
+                    <h5 class="modal-title" id="modalTitleId">Modal title</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">Body</div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                        Close
-                    </button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-primary">Save</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Optional: Place to the bottom of scripts -->
+    <!-- Scripts -->
     <script>
-        const myModal = new bootstrap.Modal(
-            document.getElementById("modalId"),
-            options,
-        );
-    </script>
-
-
-
-
-    <!--**********************************
-                                                                    Content body end
-                                                                ***********************************-->
-    <script>
-        $(document).ready(function() {
-            if (!$.fn.DataTable.isDataTable('#example5')) {
-                let table = $('#example5').DataTable({
-                    stateSave: true,
-                    stateDuration: -1,
-                    pageLength: 10,
-                    paging: true,
-                    searching: true,
-                    ordering: true,
-                    info: true,
-                    initComplete: function() {
-                        // Get page number from URL (e.g., ?page=2)
-                        let urlParams = new URLSearchParams(window.location.search);
-                        let page = parseInt(urlParams.get('page')) || 1;
-                        table.page(page - 1).draw('page');
-                    }
-                });
-
-                // Update URL when page changes
-                table.on('page', function() {
-                    let currentPage = table.page.info().page + 1;
-                    let newUrl = new URL(window.location);
-                    newUrl.searchParams.set('page', currentPage);
-                    window.history.replaceState({}, '', newUrl);
-                });
-            }
-
-            $(document).on('change', '.status-select', function() {
+        $(document).ready(function () {
+            // Handle status select change
+            $(document).on('change', '.status-select', function () {
                 let select = $(this);
                 let dateTransaction = select.data('date');
                 let newStatus = select.val();
                 let id = select.data('id');
 
-                // Debug what data we have before sending
                 console.log('Data to be sent:', {
                     date_transaction: dateTransaction,
                     status: newStatus,
                     id: id
                 });
 
-                // Create the data object
                 const data = {
                     date_transaction: dateTransaction,
                     status: newStatus,
                     id: id
                 };
 
-                // Check if any key is undefined or empty
                 for (const [key, value] of Object.entries(data)) {
                     if (!value && value !== 0) {
                         console.error(`Field '${key}' is missing or empty!`);
@@ -329,15 +206,14 @@
                 }
 
                 fetch(`/corporate_admin/vieworders/update-status`, {
-                        method: "POST",
-                        headers: {
-                            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content'),
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify(data)
-                    })
+                    method: "POST",
+                    headers: {
+                        "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content'),
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(data)
+                })
                     .then(response => {
-                        // Log the raw response for debugging
                         console.log('Response status:', response.status);
                         return response.json().then(data => {
                             if (!response.ok) {
@@ -359,7 +235,7 @@
         });
     </script>
 
-
+    <!-- Custom Styles for Pagination -->
     <style>
         .pagination .page-item {
             margin: 0 5px;
@@ -374,7 +250,7 @@
             font-size: 1rem;
         }
 
-        .pagination .custom-page {
+        .pagination .page-item.active .page-link {
             background-color: #00abc9;
             color: white !important;
             border-radius: 8px;
@@ -382,13 +258,18 @@
             text-align: center;
         }
 
-        .pagination .custom-arrow {
-            font-size: 1.2rem;
+        .pagination .page-link:hover {
+            background-color: #e0f7fa;
+            border-radius: 8px;
         }
 
         .pagination .page-item.disabled .page-link {
             opacity: 0.5;
             pointer-events: none;
+        }
+
+        .pagination .custom-arrow {
+            font-size: 1.2rem;
         }
     </style>
 @endsection

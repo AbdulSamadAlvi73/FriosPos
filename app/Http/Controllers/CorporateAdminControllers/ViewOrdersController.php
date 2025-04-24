@@ -7,39 +7,38 @@ use Illuminate\Http\Request;
 use App\Models\FpgOrder;
 use App\Models\User;
 use App\Models\FpgItem;
+use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
 class ViewOrdersController extends Controller
 {
     public function index()
-    {
-        // Fetch orders grouped by date_transaction
-        $orders = FpgOrder::select(
-            'date_transaction',
-            \DB::raw('SUM(unit_cost * unit_number) as total_price'),
-            \DB::raw('SUM(unit_number) as total_quantity'),
-            'status',
+{
+    $deliveredOrders = FpgOrder::where('status', 'delivered')->get();
+    $shippedOrders = FpgOrder::where('status', 'shipped')->count();
+    $paidOrders = FpgOrder::where('status', 'paid')->count();
+    $pendingOrders = FpgOrder::where('status', 'pending')->count();
+
+    $orders = FpgOrder::select(
             'user_ID',
-            'fgp_ordersID'
+            'date_transaction',
+            \DB::raw('SUM(unit_number) as total_quantity'),
+            \DB::raw('SUM(unit_number * unit_cost) as total_amount'),
+            'status'
         )
-            ->with('user') // Load user data
-            ->groupBy('date_transaction', 'user_ID', 'status', 'fgp_ordersID')
-            ->orderBy('date_transaction', 'desc')
-            ->get()
-            ->map(function ($order) {
-                // Format the date
-                $order->date_transaction = \Carbon\Carbon::parse($order->date_transaction)->format('M d, Y h:i A');
-                return $order;
-            });
+        ->groupBy('date_transaction', 'user_ID', 'status')
+        ->orderBy('date_transaction', 'desc')
+        ->with('user')
+        ->paginate(10)
+        ->through(function ($order) {
+            $order->date_transaction = Carbon::parse($order->date_transaction);
+            return $order;
+        });
 
-        $orders = FpgOrder::paginate(10); // 10 items per page
+    $totalOrders = $orders->total();
 
-        $totalOrders = $orders->count();
-
-        return view('corporate_admin.view_orders.index', compact('orders', 'totalOrders'));
-    }
-
-
+    return view('corporate_admin.view_orders.index', compact('deliveredOrders', 'shippedOrders', 'pendingOrders', 'paidOrders', 'orders', 'totalOrders'));
+}
     public function updateStatus(Request $request)
     {
         try {
