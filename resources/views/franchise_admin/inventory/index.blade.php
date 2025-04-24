@@ -163,6 +163,7 @@
                                                 {{ $order->total_quantity }} items
                                             </span>
                                         </td>
+                                        
                                         <td>{{ $order->status }}</td>
                                         <td>${{ number_format($order->total_amount, 2) }}</td>
                                         <td>{{ $order->date_transaction->format('M d, Y h:i A') }}</td>

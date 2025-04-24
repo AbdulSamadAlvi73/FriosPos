@@ -39,56 +39,49 @@ class ViewOrdersController extends Controller
 
     return view('corporate_admin.view_orders.index', compact('deliveredOrders', 'shippedOrders', 'pendingOrders', 'paidOrders', 'orders', 'totalOrders'));
 }
-    public function updateStatus(Request $request)
-    {
-        try {
-            // Log the raw request data for debugging
-            \Log::info('Update status request data:', $request->all());
+public function updateStatus(Request $request)
+{
+    try {
+        // Log the raw request data for debugging
+        \Log::info('Update status request data:', $request->all());
 
-            $validated = $request->validate([
-                'status' => 'required|string|in:Pending,Paid,Shipped,Delivered',
-                'date_transaction' => 'required|string',
-                'id' => 'required'
-            ]);
+        $validated = $request->validate([
+            'status' => 'required|string|in:Pending,Paid,Shipped,Delivered',
+            'date_transaction' => 'required|string',
+            'fgp_ordersID' => 'required|exists:fgp_orders,fgp_ordersID' // Validate fgp_ordersID
+        ]);
 
-            // Log that validation passed
-            \Log::info('Validation passed, proceeding with update');
+        // Log that validation passed
+        \Log::info('Validation passed, proceeding with update');
 
-            // Use a single method to update - by ID is more reliable
-            $order = FpgOrder::find($request->id);
+        // Query by fgp_ordersID
+        $order = FpgOrder::where('fgp_ordersID', $request->fgp_ordersID)->firstOrFail();
 
-            if (!$order) {
-                \Log::warning('Order not found with ID: ' . $request->id);
-                return response()->json([
-                    'message' => 'Order not found'
-                ], 404);
-            }
+        $order->status = $request->status;
+        $order->save();
 
-            $order->status = $request->status;
-            $order->save();
+        \Log::info('Order updated successfully, fgp_ordersID: ' . $request->fgp_ordersID);
 
-            \Log::info('Order updated successfully, ID: ' . $request->id);
+        return response()->json([
+            'message' => 'Order status updated successfully!'
+        ]);
+    } catch (ValidationException $e) {
+        // Log validation errors
+        \Log::error('Validation failed:', $e->errors());
 
-            return response()->json([
-                'message' => 'Order status updated successfully!'
-            ]);
-        } catch (ValidationException $e) {
-            // Log validation errors
-            \Log::error('Validation failed:', $e->errors());
+        return response()->json([
+            'message' => 'Validation failed',
+            'errors' => $e->errors()
+        ], 422);
+    } catch (\Exception $e) {
+        // Log other errors
+        \Log::error('Exception in updateStatus: ' . $e->getMessage());
 
-            return response()->json([
-                'message' => 'Validation failed',
-                'errors' => $e->errors()
-            ], 422);
-        } catch (\Exception $e) {
-            // Log other errors
-            \Log::error('Exception in updateStatus: ' . $e->getMessage());
-
-            return response()->json([
-                'message' => $e->getMessage()
-            ], 500);
-        }
+        return response()->json([
+            'message' => $e->getMessage()
+        ], 500);
     }
+}
 
     public function edit($orderId)
     {
