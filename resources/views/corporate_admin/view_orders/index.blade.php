@@ -1,8 +1,8 @@
 @extends('layouts.app')
 @section('content')
     <!--**********************************
-                                                    Content body start
-                                                ***********************************-->
+                                                                    Content body start
+                                                                ***********************************-->
     <div class="content-body default-height">
         <!-- row -->
         <div class="container-fluid">
@@ -188,41 +188,47 @@
                         </table>
 
 
-                        @if ($paginator->hasPages())
-                        <nav>
-                            <ul class="pagination justify-content-center">
-                                {{-- Previous Page Link --}}
-                                <li class="page-item {{ $paginator->onFirstPage() ? 'disabled' : '' }}">
-                                    <a class="page-link custom-arrow" href="{{ $paginator->previousPageUrl() }}" rel="prev">
-                                        &laquo;
-                                    </a>
-                                </li>
-                    
-                                {{-- Pagination Elements --}}
-                                @foreach ($elements as $element)
-                                    @if (is_string($element))
-                                        <li class="page-item disabled"><span class="page-link">{{ $element }}</span></li>
-                                    @endif
-                    
-                                    @if (is_array($element))
-                                        @foreach ($element as $page => $url)
-                                            <li class="page-item {{ $page == $paginator->currentPage() ? 'active' : '' }}">
-                                                <a class="page-link custom-page" href="{{ $url }}">{{ $page }}</a>
+                        @if ($orders->hasPages())
+                            <nav>
+                                <ul class="pagination justify-content-center">
+                                    {{-- Previous Page Link --}}
+                                    <li class="page-item {{ $orders->onFirstPage() ? 'disabled' : '' }}">
+                                        <a class="page-link custom-arrow" href="{{ $orders->previousPageUrl() }}"
+                                            rel="prev">
+                                            &laquo;
+                                        </a>
+                                    </li>
+
+                                    {{-- Pagination Elements --}}
+                                    @php
+                                        $elements = $orders->toArray()['links'];
+                                    @endphp
+
+                                    @foreach ($elements as $element)
+                                        @if (isset($element['url']))
+                                            <li class="page-item {{ $element['active'] ? 'active' : '' }}">
+                                                <a class="page-link custom-page"
+                                                    href="{{ $element['url'] }}">{{ $element['label'] }}</a>
                                             </li>
-                                        @endforeach
-                                    @endif
-                                @endforeach
-                    
-                                {{-- Next Page Link --}}
-                                <li class="page-item {{ !$paginator->hasMorePages() ? 'disabled' : '' }}">
-                                    <a class="page-link custom-arrow" href="{{ $paginator->nextPageUrl() }}" rel="next">
-                                        &raquo;
-                                    </a>
-                                </li>
-                            </ul>
-                        </nav>
-                    @endif
-                    
+                                        @else
+                                            <li class="page-item disabled">
+                                                <span class="page-link">{{ $element['label'] }}</span>
+                                            </li>
+                                        @endif
+                                    @endforeach
+
+                                    {{-- Next Page Link --}}
+                                    <li class="page-item {{ !$orders->hasMorePages() ? 'disabled' : '' }}">
+                                        <a class="page-link custom-arrow" href="{{ $orders->nextPageUrl() }}"
+                                            rel="next">
+                                            &raquo;
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        @endif
+
+
 
                     </div>
                 </div>
@@ -265,8 +271,8 @@
 
 
     <!--**********************************
-                                                    Content body end
-                                                ***********************************-->
+                                                                    Content body end
+                                                                ***********************************-->
     <script>
         $(document).ready(function() {
             if (!$.fn.DataTable.isDataTable('#example5')) {
@@ -354,37 +360,35 @@
     </script>
 
 
-<style>
-.pagination .page-item {
-    margin: 0 5px;
-}
+    <style>
+        .pagination .page-item {
+            margin: 0 5px;
+        }
 
-.pagination .page-link {
-    border: none;
-    background-color: transparent;
-    color: #00abc9;
-    font-weight: bold;
-    padding: 8px 12px;
-    font-size: 1rem;
-}
+        .pagination .page-link {
+            border: none;
+            background-color: transparent;
+            color: #00abc9;
+            font-weight: bold;
+            padding: 8px 12px;
+            font-size: 1rem;
+        }
 
-.pagination .custom-page {
-    background-color: #00abc9;
-    color: white !important;
-    border-radius: 8px;
-    min-width: 40px;
-    text-align: center;
-}
+        .pagination .custom-page {
+            background-color: #00abc9;
+            color: white !important;
+            border-radius: 8px;
+            min-width: 40px;
+            text-align: center;
+        }
 
-.pagination .custom-arrow {
-    font-size: 1.2rem;
-}
+        .pagination .custom-arrow {
+            font-size: 1.2rem;
+        }
 
-.pagination .page-item.disabled .page-link {
-    opacity: 0.5;
-    pointer-events: none;
-}
-
-
-</style>
+        .pagination .page-item.disabled .page-link {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+    </style>
 @endsection

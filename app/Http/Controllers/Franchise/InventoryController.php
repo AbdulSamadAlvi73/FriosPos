@@ -53,7 +53,11 @@ class InventoryController extends Controller
                 'available' => $flavor->availableQuantity(),
             ];
         }
-        return view('franchise_admin.inventory.locations', compact('flavors', 'initialPopFlavors'));
+        $allocatedInventory = InventoryAllocation::join('fpg_items','fpg_items.fgp_item_id','=','inventory_allocations.fpg_item_id')
+        ->select('fpg_items.name as flavor', 'inventory_allocations.location as location', 'inventory_allocations.quantity as cases')->get();
+        // 'allocatedInventory' => $allocatedInventory, // This must be an array like [{flavor: "Mango", location: "Van 1", cases: 3}]
+
+        return view('franchise_admin.inventory.locations', compact('flavors', 'initialPopFlavors', 'allocatedInventory'));
     }
     public function allocateInventory(Request $request)
     {
@@ -62,13 +66,21 @@ class InventoryController extends Controller
                 $fpg_item_id = FpgItem::where('name', $item['flavor'])->first()->fgp_item_id ?? null;
                 if (!$fpg_item_id) {
                     continue;
-                }
-                // return $fpg_item_id;
-                InventoryAllocation::create([
-                    'fpg_item_id' => $fpg_item_id,
+                } 
+                $exists = InventoryAllocation::where('fpg_item_id', $fpg_item_id)->where('location', $item['location'])->first();
+                if($exists){
+                    $exists->update([
                     'quantity' => $item['cases'],
-                    'location' => $item['location']
-                ]);
+                    ]);
+                }else{
+                    // return $fpg_item_id;
+                    InventoryAllocation::create([
+                        'fpg_item_id' => $fpg_item_id,
+                        'quantity' => $item['cases'],
+                        'location' => $item['location']
+                    ]);
+
+                }
             }
             return response()->json([
                 'error' => false,
