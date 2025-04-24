@@ -161,17 +161,24 @@
         </div>
     </div>
 
-    <div class="modal fade" id="modalId" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm" role="document">
+    <div class="modal fade" id="orderModal{{ $order->id }}" tabindex="-1"
+        aria-labelledby="orderModalLabel{{ $order->id }}" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-md">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modalTitleId">Modal title</h5>
+                    <h5 class="modal-title" id="orderModalLabel{{ $order->id }}">Order Details</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">Body</div>
+                <div class="modal-body">
+                    <p><strong>Customer:</strong> {{ $order->user->name ?? 'N/A' }}</p>
+                    <p><strong>Total Items:</strong> {{ $order->total_quantity }}</p>
+                    <p><strong>Total Amount:</strong> ${{ number_format($order->total_amount, 2) }}</p>
+                    <p><strong>Status:</strong> {{ $order->status }}</p>
+                    <p><strong>Date:</strong> {{ $order->date_transaction->format('M d, Y h:i A') }}</p>
+                    <!-- Add more order details as needed -->
+                </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save</button>
                 </div>
             </div>
         </div>
