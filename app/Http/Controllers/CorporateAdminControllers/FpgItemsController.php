@@ -40,9 +40,9 @@ class FpgItemsController extends Controller
             'description' => 'nullable|string',
             'case_cost' => 'required|numeric',
             'internal_inventory' => 'required|integer',
-            'image1' => 'nullable|image|mimes:jpeg,png,jpg,gif',
-            'image2' => 'nullable|image|mimes:jpeg,png,jpg,gif',
-            'image3' => 'nullable|image|mimes:jpeg,png,jpg,gif',
+            'image1' => 'nullable|image',
+            'image2' => 'nullable|image',
+            'image3' => 'nullable|image',
         ]);
     
         // Handle image uploads
@@ -100,9 +100,9 @@ class FpgItemsController extends Controller
             'description' => 'nullable|string',
             'case_cost' => 'required|numeric',
             'internal_inventory' => 'required|integer',
-            'image1' => 'nullable|image|mimes:jpeg,png,jpg,gif',
-            'image2' => 'nullable|image|mimes:jpeg,png,jpg,gif',
-            'image3' => 'nullable|image|mimes:jpeg,png,jpg,gif',
+            'image1' => 'nullable|image',
+            'image2' => 'nullable|image',
+            'image3' => 'nullable|image',
         ]);
     
         // Preserve old images if new images are not uploaded

@@ -93,9 +93,9 @@
                                 <tr>
                                     <th>User Name</th>
                                     <th>Items Ordered</th>
-                                    <th>Status</th>
                                     <th>Total Price</th>
                                     <th>Order Date/Time</th>
+                                    <th>Status</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -108,7 +108,9 @@
                                                 {{ $order->total_quantity }} items
                                             </span>
                                         </td>
-
+                                        {{-- <td>{{ $order->status }}</td> --}}
+                                        <td>${{ number_format($order->total_amount, 2) }}</td>
+                                        <td>{{ $order->date_transaction->format('M d, Y h:i A') }}</td>
                                         <td>
                                             <select class="status-select" data-date="{{ $order->date_transaction }}"
                                                 data-fgp-orders-id="{{ $order->fgp_ordersID }}">
@@ -124,9 +126,6 @@
                                             </select>
                                         </td>
 
-                                        {{-- <td>{{ $order->status }}</td> --}}
-                                        <td>${{ number_format($order->total_amount, 2) }}</td>
-                                        <td>{{ $order->date_transaction->format('M d, Y h:i A') }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>
