@@ -7,12 +7,12 @@
         <div class="content-body default-height">
             <!-- row -->
 			<div class="container-fluid">
-				
+
 				<div class="form-head mb-4 d-flex flex-wrap align-items-center">
 					<div class="me-auto">
 						<h2 class="font-w600 mb-0">Dashboard \</h2>
 						<p>Pops Order List</p>
-					</div>	
+					</div>
 					<div class="input-group search-area2 d-xl-inline-flex mb-2 me-lg-4 me-md-2">
 						<button class="input-group-text"><i class="flaticon-381-search-2 text-primary"></i></button>
 						<input type="text" class="form-control" placeholder="Search here...">
@@ -66,7 +66,7 @@
                                         <a href="javascript:void(0);" class="btn btn-outline-warning rounded ms-2">Edit</a>
                                         <a href="javascript:void(0);" class="btn btn-danger rounded ms-2">Delete</a>
                                     </div>
-                                </div>							
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -92,23 +92,50 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($orders as $index => $order)
-                                        <tr style="text-wrap: no-wrap;">
-                                            <td>{{ $order->user->name ?? 'N/A' }}</td>
-                                            <td>{{ $order->total_quantity }} items</td>
-                                            <td>{{ $order->status }}</td>
-                                            <td>${{ number_format($order->total_amount, 2) }}</td>
-                                            <td>{{ $order->date_transaction->format('M d, Y h:i A') }}</td>
-                                        </tr>
-                                    @endforeach
+                                    @php
+                                        $totalAmount = \DB::table('fgp_order_details')
+                                            ->where('fpg_order_id', $order->fgp_ordersID)
+                                            ->selectRaw('SUM(unit_number * unit_cost) as total')
+                                            ->value('total');
+                                    @endphp
+                                    <tr style="text-wrap: no-wrap;">
+                                        <td>{{ $order->user->name ?? 'N/A' }}</td>
+                                        <td>
+                                            <span class="cursor-pointer text-primary order-detail-trigger" data-id="{{ $order->fgp_ordersID }}">
+                                                {{ \DB::table('fgp_order_details')->where('fpg_order_id', $order->fgp_ordersID)->count() }} items
+                                            </span>
+                                        </td>
+                                        <td>{{ $order->status }}</td>
+                                        <td>${{ number_format($totalAmount, 2) }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($order->date_transaction)->format('M d, Y h:i A') }}</td>
+                                    </tr>
+                                @endforeach
                                 </tbody>
                             </table>
-                             
+
                         </div>
                     </div>
                 </div>
-                
+
             </div>
-			
+
+        </div>
+
+        <div class="modal fade" id="orderModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Order Details</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- The order details will be injected here by JavaScript -->
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary rounded text-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
         </div>
 
          {{-- <td>
@@ -122,7 +149,7 @@
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit" class="ms-4 delete-user">
-                                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"> 
+                                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                                 <path d="M3 6H5H21" stroke="#FF3131" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                                                 <path d="M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6M19 6V20C19 20.5304 18.7893 21.0391 18.4142 21.4142C18.0391 21.7893 17.5304 22 17 22H7C6.46957 22 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20V6H19Z" stroke="#FF3131" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                                             </svg>
@@ -140,7 +167,7 @@
                     select.addEventListener('change', function() {
                         let orderId = this.getAttribute('data-id');
                         let newStatus = this.value;
-                        
+
                         fetch(`/corporate-admin/vieworders/${orderId}/update-status`, {
                             method: "POST",
                             headers: {
@@ -154,7 +181,7 @@
                         .catch(error => console.error('Error:', error));
                     });
                 });
-        
+
                 document.querySelectorAll('.delete-order').forEach(button => {
                     button.addEventListener('click', function() {
                         let orderId = this.getAttribute('data-id');
@@ -172,3 +199,64 @@
         </script>
 
 @endsection
+@push('scripts')
+<script>
+$(document).ready(function () {
+    $('.order-detail-trigger').on('click', function () {
+        const orderId = $(this).data('id'); // Get the order ID from the data-id attribute
+
+        $.ajax({
+            url: '{{ route('franchise.inventory.detail') }}', // Backend route to fetch order details
+            method: 'GET',
+            data: { id: orderId }, // Pass orderId to backend
+            success: function (response) {
+    // Assuming response contains the orderDetails array
+    let orderDetails = response.orderDetails;
+
+    // Prepare HTML to display the order details inside a table
+    let detailsHtml = `
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th scope="col">Item</th>
+                    <th scope="col">Unit Cost</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Transaction Date</th>
+                </tr>
+            </thead>
+            <tbody>
+    `;
+
+    // Loop through orderDetails and create table rows
+    orderDetails.forEach(function(detail) {
+        detailsHtml += `
+            <tr>
+                <td>${detail.name}</td>
+                <td>$${detail.unit_cost}</td>
+                <td>${detail.unit_number}</td>
+                <td>${detail.formatted_date}</td>
+            </tr>
+        `;
+    });
+
+    // Close the table
+    detailsHtml += `</tbody></table>`;
+
+    // Insert the details HTML into the modal body
+    $('#orderModal .modal-body').html(detailsHtml);
+
+    // Show the modal
+    $('#orderModal').modal('show');
+},
+
+            error: function () {
+                alert('Error loading order details.');
+            }
+        });
+    });
+});
+
+
+
+</script>
+@endpush

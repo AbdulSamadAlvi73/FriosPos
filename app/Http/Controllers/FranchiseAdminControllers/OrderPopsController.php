@@ -11,12 +11,15 @@ use App\Models\AdditionalCharge;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\Models\FgpOrder;
+use DB;
+
 class OrderPopsController extends Controller
 {
     public function index()
     {
         $currentMonth = strval(Carbon::now()->format('n')); // Get current month as single-digit (1-12)
-    
+
         // Fetch only items that are orderable, in stock, and available in the current month
         $pops = FpgItem::where('orderable', 1)
             ->where('internal_inventory', '>', 0) // Ensure the item is in stock
@@ -25,17 +28,17 @@ class OrderPopsController extends Controller
                 $availableMonths = json_decode($pop->dates_available, true);
                 return in_array($currentMonth, $availableMonths ?? []);
             });
-    
+
         // Count total available flavor pops
         $totalPops = $pops->count();
-    
+
         return view('franchise_admin.orderpops.index', compact('pops', 'totalPops'));
     }
-    
+
     public function create()
     {
         $currentMonth = strval(Carbon::now()->format('n'));
-    
+
         // Fetch only orderable, in-stock, and currently available items
         $pops = FpgItem::where('orderable', 1)
             ->where('internal_inventory', '>', 0) // Ensure item is in stock
@@ -44,39 +47,39 @@ class OrderPopsController extends Controller
                 $availableMonths = json_decode($pop->dates_available, true);
                 return in_array($currentMonth, $availableMonths ?? []);
             });
-    
+
         $categorizedItems = [];
         foreach ($pops as $pop) {
             foreach ($pop->categories as $category) {
                 $types = json_decode($category->type, true); // Decode JSON types
-    
+
                 foreach ($types as $type) {
                     $categorizedItems[$type][$category->name][] = $pop;
                 }
             }
         }
-    
+
         return view('franchise_admin.orderpops.create', compact('categorizedItems'));
     }
-    
+
     // public function confirmOrder(Request $request)
     // {
     //     \Log::info('Received Order Data:', ['ordered_items' => $request->input('ordered_items')]);
-    
+
     //     // Decode the JSON input
     //     $items = json_decode($request->input('ordered_items'), true) ?: [];
-    
+
     //     if (empty($items)) {
     //         \Log::warning('No items received in order confirmation.');
     //     }
-    
+
     //     // Fetch additional charges from the database
     //     $requiredCharges = AdditionalCharge::where('charge_optional', 'required')->get();
     //     $optionalCharges = AdditionalCharge::where('charge_optional', 'optional')->get();
-    
+
     //     return view('franchise.orderpops.confirm', compact('items', 'requiredCharges', 'optionalCharges'));
     // }
-    
+
     public function confirmOrder(Request $request)
 {
     try {
@@ -119,7 +122,7 @@ public function showConfirmPage()
     return view('franchise_admin.orderpops.confirm', compact('items', 'requiredCharges', 'optionalCharges'));
 }
 
-    
+
 public function store(Request $request)
 {
     $minCases = 12; // Can be made configurable via settings
@@ -127,6 +130,7 @@ public function store(Request $request)
 
     // Validate request
     $validated = $request->validate([
+
         'items' => 'required|array',
         'items.*.fgp_item_id' => 'required|exists:fpg_items,fgp_item_id',
         'items.*.user_ID' => 'required|exists:users,user_id',
@@ -147,46 +151,53 @@ public function store(Request $request)
         return redirect()->back()->withErrors(['Order quantity must be a multiple of ' . $factorCase . '.']);
     }
 
+    $orders = FpgOrder::create([
+        'user_ID' => Auth::id(),
+        'date_transaction' => now(),
+        'status' => 'Pending',
+    ]);
+
     foreach ($validated['items'] as $item) {
-        FpgOrder::create([
-            'user_ID' => $item['user_ID'],
+        DB::table('fgp_order_details')->insert([
+            'fpg_order_id' => $orders->id,
             'fgp_item_id' => $item['fgp_item_id'],
             'unit_cost' => $item['unit_cost'],
             'unit_number' => $item['unit_number'],
             'date_transaction' => now(),
             'ACH_data' => null,
-            'status' => 'Pending',
         ]);
     }
 
     return redirect()->route('franchise.orderpops.index')->with('success', 'Order placed successfully!');
 }
 
-  
+
 public function viewOrders()
 {
-    $orders = FpgOrder::where('user_ID', Auth::id())
-        ->select(
-            'user_ID',
-            'date_transaction',
-            \DB::raw('SUM(unit_number) as total_quantity'),
-            \DB::raw('SUM(unit_number * unit_cost) as total_amount'),
-            'status'
-        )
-        ->groupBy('date_transaction', 'user_ID', 'status')
-        ->orderBy('date_transaction', 'desc')
-        ->with('user') // Eager load user information
-        ->get()
-        ->map(function ($order) {
-            $order->date_transaction = Carbon::parse($order->date_transaction);
-            return $order;
-        });
+    // $orders = FpgOrder::where('user_ID', Auth::id())
+    //     ->select(
+    //         'user_ID',
+    //         'date_transaction',
+    //         \DB::raw('SUM(unit_number) as total_quantity'),
+    //         \DB::raw('SUM(unit_number * unit_cost) as total_amount'),
+    //         'status'
+    //     )
+    //     ->groupBy('date_transaction', 'user_ID', 'status')
+    //     ->orderBy('date_transaction', 'desc')
+    //     ->with('user')
+    //     ->get()
+    //     ->map(function ($order) {
+    //         $order->date_transaction = Carbon::parse($order->date_transaction);
+    //         return $order;
+    //     });
+
+    $orders = FpgOrder::where('user_ID' , Auth::id())->get();
 
     $totalOrders = $orders->count();
 
     return view('franchise_admin.orderpops.vieworders', compact('orders', 'totalOrders'));
 }
 
-    
+
 }
 

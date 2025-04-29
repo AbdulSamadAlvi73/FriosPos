@@ -74,7 +74,7 @@
                 <div class="flex-1 p-6">
                     <x-notify::notify />
                     @yield('content')
-                    
+
                 </div>
             </div>
 
@@ -87,6 +87,7 @@
         Scripts
     ***********************************-->
     <!-- Laravel Notify JS -->
+    @stack('scripts')
     @notifyJs
     <!-- Select2 JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
@@ -96,37 +97,37 @@
     <script src="{{ asset('assets/vendor/bootstrap-datetimepicker/js/moment.js') }}"></script>
     <script src="{{ asset('assets/vendor/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/bootstrap-select/js/bootstrap-select.min.js') }}"></script>
-    
+
     <!-- Chart piety plugin files -->
     <script src="{{ asset('assets/vendor/peity/jquery.peity.min.js') }}"></script>
-    
+
     <!-- Apex Chart -->
     <script src="{{ asset('assets/vendor/apexchart/apexchart.js') }}"></script>
-    
+
     <!-- Dashboard 1 -->
     <script src="{{ asset('assets/js/dashboard/dashboard-1.js') }}"></script>
-    
+
     <!-- Datatable -->
     <script src="{{ asset('assets/vendor/datatables/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('assets/js/plugins-init/datatables.init.js') }}"></script>
     <script src="{{ asset('assets/vendor/bootstrap-datepicker-master/js/bootstrap-datepicker.min.js') }}"></script>
-    
+
     <!-- Localization Tool -->
     <script src="{{ asset('assets/js/jquery.localizationTool.js') }}"></script>
     <script src="{{ asset('assets/js/translator.js') }}"></script>
-    
+
     <script src="{{ asset('assets/js/custom.min.js') }}"></script>
     <script src="{{ asset('assets/js/deznav-init.js') }}"></script>
     <script src="{{ asset('assets/js/demo.js') }}"></script>
-    
+
     {{-- <script src="{{ asset('assets/js/styleSwitcher.js') }}"></script> --}}
 	<script>
 		$(function () {
-			  $("#datepicker").datepicker({ 
-					autoclose: true, 
+			  $("#datepicker").datepicker({
+					autoclose: true,
 					todayHighlight: true
 			  }).datepicker('update', new Date());
-		
+
 		});
 
 	</script>

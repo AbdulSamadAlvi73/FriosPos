@@ -88,7 +88,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="table-responsive rounded">
-                        <table class="table customer-table display mb-4 fs-14 card-table">
+                        <table id="example5" class="table customer-table display mb-4 fs-14 card-table">
                             <thead>
                                 <tr>
                                     <th>User Name</th>
@@ -100,17 +100,22 @@
                             </thead>
                             <tbody>
                                 @foreach ($orders as $order)
+                                @php
+                                    $totalAmount = \DB::table('fgp_order_details')
+                                        ->where('fpg_order_id', $order->fgp_ordersID)
+                                        ->selectRaw('SUM(unit_number * unit_cost) as total')
+                                        ->value('total');
+                                @endphp
                                     <tr style="text-wrap: nowrap;">
                                         <td>{{ $order->user->name ?? 'N/A' }}</td>
                                         <td>
-                                            <span class="cursor-pointer text-primary" data-bs-toggle="modal"
-                                                data-bs-target="#orderModal{{ $order->id }}">
-                                                {{ $order->total_quantity }} items
+                                            <span class="cursor-pointer text-primary order-detail-trigger" data-id="{{ $order->fgp_ordersID }}">
+                                                {{ \DB::table('fgp_order_details')->where('fpg_order_id', $order->fgp_ordersID)->count() }} items
                                             </span>
                                         </td>
                                         {{-- <td>{{ $order->status }}</td> --}}
-                                        <td>${{ number_format($order->total_amount, 2) }}</td>
-                                        <td>{{ $order->date_transaction->format('M d, Y h:i A') }}</td>
+                                        <td>${{ number_format($totalAmount, 2) }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($order->date_transaction)->format('M d, Y h:i A') }}</td>
                                         <td>
                                             <select class="status-select" data-date="{{ $order->date_transaction }}"
                                                 data-fgp-orders-id="{{ $order->fgp_ordersID }}">
@@ -132,7 +137,7 @@
                         </table>
 
                         <!-- Custom Pagination -->
-                        <div class="d-flex justify-content-center mt-4">
+                        {{-- <div class="d-flex justify-content-center mt-4">
                             @if ($orders->hasPages())
                                 <nav>
                                     <ul class="pagination">
@@ -187,31 +192,27 @@
                                     </ul>
                                 </nav>
                             @endif
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="modal fade" id="orderModal{{ $order->id }}" tabindex="-1"
-        aria-labelledby="orderModalLabel{{ $order->id }}" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-md">
+
+    <div class="modal fade" id="orderModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="orderModalLabel{{ $order->id }}">Order Details</h5>
+                    <h5 class="modal-title">Order Details</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p><strong>Customer:</strong> {{ $order->user->name ?? 'N/A' }}</p>
-                    <p><strong>Total Items:</strong> {{ $order->total_quantity }}</p>
-                    <p><strong>Total Amount:</strong> ${{ number_format($order->total_amount, 2) }}</p>
-                    <p><strong>Status:</strong> {{ $order->status }}</p>
-                    <p><strong>Date:</strong> {{ $order->date_transaction->format('M d, Y h:i A') }}</p>
-                    <!-- Add more order details as needed -->
+                    <!-- Table for displaying order details -->
+
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary rounded text-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
@@ -219,61 +220,96 @@
 
     <!-- Scripts -->
     <script>
+        // $(document).ready(function () {
+        //     $(document).on('change', '.status-select', function () {
+        //         let select = $(this);
+        //         let dateTransaction = select.data('date');
+        //         let newStatus = select.val();
+        //         let fgpOrdersId = select.data('fgp-orders-id'); // Use fgp-orders-id
+
+        //         console.log('Data to be sent:', {
+        //             date_transaction: dateTransaction,
+        //             status: newStatus,
+        //             fgp_ordersID: fgpOrdersId
+        //         });
+
+        //         const data = {
+        //             date_transaction: dateTransaction,
+        //             status: newStatus,
+        //             fgp_ordersID: fgpOrdersId // Send fgp_ordersID
+        //         };
+
+        //         // Validate fields
+        //         for (const [key, value] of Object.entries(data)) {
+        //             if (!value && value !== 0) {
+        //                 console.error(`Field '${key}' is missing or empty!`);
+        //                 alert(`Error: Field '${key}' is missing or empty!`);
+        //                 return;
+        //             }
+        //         }
+
+        //         fetch("/corporate_admin/vieworders/update-status", {
+        //             method: "POST",
+        //             headers: {
+        //                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content'),
+        //                 "Content-Type": "application/json"
+        //             },
+        //             body: JSON.stringify(data)
+        //         })
+        //             .then(response => {
+        //                 console.log('Response status:', response.status);
+        //                 return response.json().then(data => {
+        //                     if (!response.ok) {
+        //                         throw new Error(data.message || 'Update failed');
+        //                     }
+        //                     return data;
+        //                 });
+        //             })
+        //             .then(data => {
+        //                 console.log('Success:', data);
+        //                 alert(data.message);
+        //             })
+        //             .catch(error => {
+        //                 console.error('Error:', error);
+        //                 alert('Error: ' + error.message);
+        //             });
+        //     });
+        // });
+
+
         $(document).ready(function () {
-            $(document).on('change', '.status-select', function () {
-                let select = $(this);
-                let dateTransaction = select.data('date');
-                let newStatus = select.val();
-                let fgpOrdersId = select.data('fgp-orders-id'); // Use fgp-orders-id
-        
-                console.log('Data to be sent:', {
-                    date_transaction: dateTransaction,
-                    status: newStatus,
-                    fgp_ordersID: fgpOrdersId
-                });
-        
-                const data = {
-                    date_transaction: dateTransaction,
-                    status: newStatus,
-                    fgp_ordersID: fgpOrdersId // Send fgp_ordersID
-                };
-        
-                // Validate fields
-                for (const [key, value] of Object.entries(data)) {
-                    if (!value && value !== 0) {
-                        console.error(`Field '${key}' is missing or empty!`);
-                        alert(`Error: Field '${key}' is missing or empty!`);
-                        return;
-                    }
+        $(document).on('change', '.status-select', function () {
+            let select = $(this);
+            let dateTransaction = select.data('date');
+            let newStatus = select.val();
+            let fgpOrdersId = select.data('fgp-orders-id'); // Use fgp-orders-id
+
+            const data = {
+                date_transaction: dateTransaction,
+                status: newStatus,
+                fgp_ordersID: fgpOrdersId // Send fgp_ordersID
+            };
+
+            // Validate fields
+            // jQuery Ajax request
+            $.ajax({
+                url: "/corporate_admin/vieworders/update-status",
+                method: "POST",
+                data: JSON.stringify(data),
+                contentType: "application/json",
+                headers: {
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function (response) {
+                    console.log('Success:', response);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.error('Error:', errorThrown);
                 }
-        
-                fetch("/corporate_admin/vieworders/update-status", {
-                    method: "POST",
-                    headers: {
-                        "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content'),
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(data)
-                })
-                    .then(response => {
-                        console.log('Response status:', response.status);
-                        return response.json().then(data => {
-                            if (!response.ok) {
-                                throw new Error(data.message || 'Update failed');
-                            }
-                            return data;
-                        });
-                    })
-                    .then(data => {
-                        console.log('Success:', data);
-                        alert(data.message);
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        alert('Error: ' + error.message);
-                    });
             });
         });
+    });
+
         </script>
 
     <!-- Custom Styles for Pagination -->
@@ -314,3 +350,64 @@
         }
     </style>
 @endsection
+@push('scripts')
+<script>
+$(document).ready(function () {
+    $('.order-detail-trigger').on('click', function () {
+        const orderId = $(this).data('id'); // Get the order ID from the data-id attribute
+
+        $.ajax({
+            url: '{{ route('corporate_admin.vieworders.detail') }}', // Backend route to fetch order details
+            method: 'GET',
+            data: { id: orderId }, // Pass orderId to backend
+            success: function (response) {
+    // Assuming response contains the orderDetails array
+    let orderDetails = response.orderDetails;
+
+    // Prepare HTML to display the order details inside a table
+    let detailsHtml = `
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th scope="col">Item</th>
+                    <th scope="col">Unit Cost</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Transaction Date</th>
+                </tr>
+            </thead>
+            <tbody>
+    `;
+
+    // Loop through orderDetails and create table rows
+    orderDetails.forEach(function(detail) {
+        detailsHtml += `
+            <tr>
+                <td>${detail.name}</td>
+                <td>$${detail.unit_cost}</td>
+                <td>${detail.unit_number}</td>
+                <td>${detail.formatted_date}</td>
+            </tr>
+        `;
+    });
+
+    // Close the table
+    detailsHtml += `</tbody></table>`;
+
+    // Insert the details HTML into the modal body
+    $('#orderModal .modal-body').html(detailsHtml);
+
+    // Show the modal
+    $('#orderModal').modal('show');
+},
+
+            error: function () {
+                alert('Error loading order details.');
+            }
+        });
+    });
+});
+
+
+
+</script>
+@endpush

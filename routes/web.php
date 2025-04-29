@@ -45,7 +45,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile/{profile}/edit', [AdminProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile/{profile}', [AdminProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile/{profile}', [AdminProfileController::class, 'destroy'])->name('profile.destroy');
-    
+
 });
 
 
@@ -55,7 +55,7 @@ Route::get('/auth/google/callback', [GoogleController::class, 'handleGoogleCallb
 
 Route::middleware(['auth', 'role:corporate_admin'])->prefix('corporate_admin')->name('corporate_admin.')->group(function () {
     Route::get('/corporate/dashboard', [CorporateAdminController::class, 'dashboard']);
-    
+
      // Franchise routes
      Route::get('/franchisee', [FranchiseController::class, 'index'])->name('franchise.index');
      Route::get('/franchisee/create', [FranchiseController::class, 'create'])->name('franchise.create');
@@ -71,7 +71,7 @@ Route::middleware(['auth', 'role:corporate_admin'])->prefix('corporate_admin')->
     Route::get('/owner/{owner}/edit', [OwnerController::class, 'edit'])->name('owner.edit');
     Route::put('/owner/{owner}', [OwnerController::class, 'update'])->name('owner.update');
     Route::delete('/owner/{owner}', [OwnerController::class, 'destroy'])->name('owner.destroy');
-    
+
     // fpg Category routes
     Route::get('/fpgcategory', [FpgCategoryController::class, 'index'])->name('fpgcategory.index');
     Route::get('/fpgcategory/create', [FpgCategoryController::class, 'create'])->name('fpgcategory.create');
@@ -79,7 +79,7 @@ Route::middleware(['auth', 'role:corporate_admin'])->prefix('corporate_admin')->
     Route::get('/fpgcategory/{fpgcategory}/edit', [FpgCategoryController::class, 'edit'])->name('fpgcategory.edit');
     Route::put('/fpgcategory/{fpgcategory}', [FpgCategoryController::class, 'update'])->name('fpgcategory.update');
     Route::delete('/fpgcategory/{fpgcategory}', [FpgCategoryController::class, 'destroy'])->name('fpgcategory.destroy');
-    
+
     // fpg items routes
     Route::get('/fpgitem', [FpgItemsController::class, 'index'])->name('fpgitem.index');
     Route::get('/fpgitem/create', [FpgItemsController::class, 'create'])->name('fpgitem.create');
@@ -101,18 +101,19 @@ Route::middleware(['auth', 'role:corporate_admin'])->prefix('corporate_admin')->
     Route::get('/additionalcharges/{additionalcharges}/edit', [AdditionalChargesController::class, 'edit'])->name('additionalcharges.edit');
     Route::put('/additionalcharges/{additionalcharges}', [AdditionalChargesController::class, 'update'])->name('additionalcharges.update');
     Route::delete('/additionalcharges/{additionalcharges}', [AdditionalChargesController::class, 'destroy'])->name('additionalcharges.destroy');
-    
+
     // View Orders routes
     Route::get('/vieworders', [ViewOrdersController::class, 'index'])->name('vieworders.index');
     Route::get('/vieworders/create', [ViewOrdersController::class, 'create'])->name('vieworders.create');
     Route::post('/vieworders', [ViewOrdersController::class, 'store'])->name('vieworders.store');
+    Route::get('/vieworders/detail', [ViewOrdersController::class, 'viewordersDetail'])->name('vieworders.detail');
     Route::get('/vieworders/{orderId}/edit', [ViewOrdersController::class, 'edit'])->name('vieworders.edit');
     Route::put('/vieworders/{vieworders}', [ViewOrdersController::class, 'update'])->name('vieworders.update');
     Route::delete('/vieworders/{vieworders}', [ViewOrdersController::class, 'destroy'])->name('vieworders.destroy');
     Route::get('/vieworders', [ViewOrdersController::class, 'index'])->name('vieworders.index');
     Route::post('/vieworders/update-status', [ViewOrdersController::class, 'updateStatus'])->name('vieworders.updateStatus');
 
-     
+
 });
 Route::middleware(['auth', 'role:franchise_admin|franchise_manager'])->prefix('franchise')->name('franchise.')->group(function () {
     Route::get('/dashboard', [FranchiseAdminController::class, 'dashboard'])->name('dashboard');
@@ -138,6 +139,7 @@ Route::middleware(['auth', 'role:franchise_admin|franchise_manager'])->prefix('f
     Route::get('/orderpops/view', [OrderPopsController::class, 'viewOrders'])->name('orderpops.view');
 
     Route::get('/inventory', [InventoryController::class, 'index'])->name('inventory.index');
+    Route::get('/inventory/detail', [InventoryController::class, 'inventoryDetail'])->name('inventory.detail');
     Route::get('/inventory-locations', [InventoryController::class, 'inventoryLocations'])->name('inventory.locations');
     Route::post('/allocate-inventory', [InventoryController::class, 'allocateInventory'])->name('allocate-inventory');
 
@@ -167,7 +169,7 @@ Route::middleware(['auth', 'role:franchise_admin|franchise_manager'])->prefix('f
 //     Route::get('/orderpops/{orderpops}/edit', [OrderPopsController::class, 'edit'])->name('orderpops.edit');
 //     Route::put('/orderpops/{orderpops}', [OrderPopsController::class, 'update'])->name('orderpops.update');
 //     Route::delete('/orderpops/{orderpops}', [OrderPopsController::class, 'destroy'])->name('orderpops.destroy');
-        
+
 
 //     Route::post('/orderpops/confirm', [OrderPopsController::class, 'confirmOrder'])->name('orderpops.confirm');
 //     Route::get('/orderpops/confirm/page', [OrderPopsController::class, 'showConfirmPage'])->name('orderpops.confirm.page');

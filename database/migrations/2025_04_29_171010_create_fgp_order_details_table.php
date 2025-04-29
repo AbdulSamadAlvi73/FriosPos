@@ -11,17 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('fpg_orders', function (Blueprint $table) {
-            $table->id('fgp_ordersID');
-            $table->unsignedBigInteger('user_ID');
-            $table->dateTime('date_transaction');
+        Schema::create('fgp_order_details', function (Blueprint $table) {
+            $table->id();
+            $table->integer('fpg_order_id');
+            $table->integer('fgp_item_id');
+            $table->decimal('unit_cost', 10, 2);
+            $table->integer('unit_number');
+            $table->dateTime('date_transaction')->nullable();
             $table->json('ACH_data')->nullable();
-            $table->enum('status', ['Pending', 'Paid','Shipped','Delivered']);
             $table->timestamps();
-
-            $table->foreign('user_ID')->references('user_id')->on('users')->onDelete('cascade');
         });
-
     }
 
     /**
@@ -29,7 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('fpg_orders');
+        Schema::dropIfExists('fgp_order_details');
     }
 };
-    
