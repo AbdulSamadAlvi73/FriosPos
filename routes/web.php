@@ -142,6 +142,8 @@ Route::middleware(['auth', 'role:franchise_admin|franchise_manager'])->prefix('f
     Route::get('/inventory/detail', [InventoryController::class, 'inventoryDetail'])->name('inventory.detail');
     Route::get('/inventory-locations', [InventoryController::class, 'inventoryLocations'])->name('inventory.locations');
     Route::post('/allocate-inventory', [InventoryController::class, 'allocateInventory'])->name('allocate-inventory');
+    Route::post('/update-quantity', [InventoryController::class, 'updateQuantity'])->name('updateQuantity');
+    Route::post('/remove-item', [InventoryController::class, 'removeItem'])->name('removeItem');
 
     Route::get('/events', [EventController::class, 'index'])->name('events.index');
     Route::get('/events/create', [EventController::class, 'create'])->name('events.create');

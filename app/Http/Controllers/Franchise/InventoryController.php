@@ -135,4 +135,79 @@ class InventoryController extends Controller
             ]);
         }
     }
+
+
+    public function updateQuantity(Request $request)
+    {
+        try {
+            $fpg_item_id = FpgItem::where('name', $request->flavor)->first()->fgp_item_id ?? null;
+
+            if (!$fpg_item_id) {
+                return response()->json([
+                    'error' => true,
+                    'message' => 'Invalid flavor'
+                ]);
+            }
+
+            $allocation = InventoryAllocation::where('fpg_item_id', $fpg_item_id)
+                ->where('location', $request->location)
+                ->first();
+
+            if ($allocation) {
+                if ($allocation->quantity <= 1) {
+                    $allocation->delete();
+                    return response()->json([
+                        'error' => false,
+                        'message' => 'Item deleted because quantity reached zero'
+                    ]);
+                } else {
+                    $allocation->decrement('quantity');
+                    return response()->json([
+                        'error' => false,
+                        'message' => 'Quantity decreased by 1'
+                    ]);
+                }
+            } else {
+                return response()->json([
+                    'error' => true,
+                    'message' => 'Allocation not found'
+                ]);
+            }
+        } catch (\Throwable $th) {
+            return response()->json([
+                'error' => true,
+                'message' => $th->getMessage()
+            ]);
+        }
+    }
+
+
+    public function removeItem(Request $request)
+    {
+        try {
+            $fpg_item_id = FpgItem::where('name', $request->flavor)->first()->fgp_item_id ?? null;
+
+            if (!$fpg_item_id) {
+                return response()->json([
+                    'error' => true,
+                    'message' => 'Invalid flavor'
+                ]);
+            }
+
+            InventoryAllocation::where('fpg_item_id', $fpg_item_id)
+                ->where('location', $request->location)
+                ->delete();
+
+            return response()->json([
+                'error' => false,
+                'message' => 'Item removed successfully'
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'error' => true,
+                'message' => $th->getMessage()
+            ]);
+        }
+    }
+
 }
