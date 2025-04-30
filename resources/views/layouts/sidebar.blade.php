@@ -142,23 +142,23 @@
 					<span class="nav-text">Return to Main</span>
 				</a></li> --}}
                 <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
-                        <i class="bi bi-shop-window"></i>
-                        <span class="nav-text">Inventory</span>
-                    </a>
-                    <ul aria-expanded="false">
-                        <li><a href="inventory_list.html">Inventory List</a></li>
-                        <li><a href="edit_inventory_locations.html">Edit Inventory Locations</a></li>
-                    </ul>
-                </li>
-                <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
-                        <i class="bi bi-cart-plus-fill"></i>
-                        <span class="nav-text">Orders</span>
-                    </a>
-                    <ul aria-expanded="false">
-                        <li><a href="{{ route('franchise.orderpops.index') }}">Order Pops</a></li>
-                        <li><a href="{{ route('franchise.orderpops.view') }}">View Orders</a></li>
-                    </ul>
-                </li>
+                    <i class="bi bi-shop-window"></i>
+                    <span class="nav-text">Inventory</span>
+                </a>
+                <ul aria-expanded="false">
+                    <li><a href="{{ route('franchise.inventory.index') }}">Inventory List</a></li>
+                    <li><a href="{{ route('franchise.inventory.locations') }}">Edit Inventory Locations</a></li>
+                </ul>
+            </li>
+            <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
+                    <i class="bi bi-cart-plus-fill"></i>
+                    <span class="nav-text">Orders</span>
+                </a>
+                <ul aria-expanded="false">
+                    <li><a href="{{ route('franchise.orderpops.index') }}">Order Pops</a></li>
+                    <li><a href="{{ route('franchise.orderpops.view') }}">View Orders</a></li>
+                </ul>
+            </li>
                 {{-- <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
 					<i class="bi bi-cash-coin"></i>
 					<span class="nav-text">Get Paid</span>
@@ -182,7 +182,7 @@
                         <i class="bi bi-person-fill-add"></i>
                         <span class="nav-text">Customers</span>
                     </a></li>
-                <li><a class="ai-icon" href="events.html" aria-expanded="false">
+                    <li><a class="ai-icon" href="{{ route('franchise.events.index') }}" aria-expanded="false">
                         <i class="bi bi-calendar-week-fill"></i>
                         <span class="nav-text">Events</span>
                     </a></li>
