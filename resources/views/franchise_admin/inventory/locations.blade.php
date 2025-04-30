@@ -310,17 +310,17 @@
             function updateAllocationTable() {
                 locations.forEach((location) => {
                     console.warn(locations);
-                    
+
                     let tbody = document.getElementById(`allocation-body-${location}`);
                     tbody.innerHTML = "";
                     console.log(allocatedInventory);
-                    
+
 
                     allocatedInventory
                         .filter((a) => a.location === location)
                         .forEach((allocation) => {
                             console.error(allocation);
-                            
+
                             // Retrieve the flavor object to get its image.
                             let flavorObj =
                                 popFlavors.find((f) => f.name === allocation.flavor) ||
@@ -331,7 +331,7 @@
                                     <td><span class="cases-input">${allocation.cases}</span></td>
                                     <td>
                                     <button class="btn   remove-btn p-1" data-location="${allocation.location}" data-flavor="${allocation.flavor}">
-                                        
+
                                         <svg width="25px" height="25px" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M17 12C17 11.4477 16.5523 11 16 11H8C7.44772 11 7 11.4477 7 12C7 12.5523 7.44771 13 8 13H16C16.5523 13 17 12.5523 17 12Z" fill="#0F0F0F"/>
                                             <path fill-rule="currentColor" clip-rule="currentColor" d="M12 23C18.0751 23 23 18.0751 23 12C23 5.92487 18.0751 1 12 1C5.92487 1 1 5.92487 1 12C1 18.0751 5.92487 23 12 23ZM12 20.9932C7.03321 20.9932 3.00683 16.9668 3.00683 12C3.00683 7.03321 7.03321 3.00683 12 3.00683C16.9668 3.00683 20.9932 7.03321 20.9932 12C20.9932 16.9668 16.9668 20.9932 12 20.9932Z" fill="#0F0F0F"/>

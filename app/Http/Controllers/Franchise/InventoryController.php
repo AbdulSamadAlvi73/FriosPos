@@ -72,21 +72,34 @@ class InventoryController extends Controller
 
     public function inventoryLocations()
     {
-        $flavors = FpgItem::get();
-        $initialPopFlavors = [];
-        foreach ($flavors as $flavor) {
-            $initialPopFlavors[] = [
-                'name' => $flavor->name,
-                'image1' => $flavor->image1,
-                'available' => $flavor->availableQuantity(),
-            ];
-        }
-        $allocatedInventory = InventoryAllocation::join('fpg_items','fpg_items.fgp_item_id','=','inventory_allocations.fpg_item_id')
-        ->select('fpg_items.name as flavor', 'inventory_allocations.location as location', 'inventory_allocations.quantity as cases')->get();
-        // 'allocatedInventory' => $allocatedInventory, // This must be an array like [{flavor: "Mango", location: "Van 1", cases: 3}]
+        try {
+            $flavors = FpgItem::all();
 
-        return view('franchise_admin.inventory.locations', compact('flavors', 'initialPopFlavors', 'allocatedInventory'));
+            $initialPopFlavors = [];
+            foreach ($flavors as $flavor) {
+                $initialPopFlavors[] = [
+                    'name' => $flavor->name,
+                    'image1' => $flavor->image1,
+                    'available' => $flavor->availableQuantity(),
+                ];
+            }
+
+            $allocatedInventory = InventoryAllocation::join('fpg_items', 'fpg_items.fgp_item_id', '=', 'inventory_allocations.fpg_item_id')
+                ->select('fpg_items.name as flavor', 'inventory_allocations.location', 'inventory_allocations.quantity as cases')
+                ->get();
+
+            return view('franchise_admin.inventory.locations', compact(
+                'flavors',
+                'initialPopFlavors',
+                'allocatedInventory'
+            ));
+        } catch (\Exception $e) {
+            // Log error or dd for debug
+            dd('Error: ' . $e->getMessage());
+        }
     }
+
+
     public function allocateInventory(Request $request)
     {
         try {
