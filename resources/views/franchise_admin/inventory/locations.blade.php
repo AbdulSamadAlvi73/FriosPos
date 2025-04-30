@@ -84,17 +84,16 @@
         <!-- row -->
         <div class="container-fluid">
             <div class="alert alert-success" id="success-msg" style="display: none">
-                <strong>Success:</strong> Order submitted successfully
+                <strong>Success:</strong> All Location submitted successfully
             </div>
             <div class="container mt-4">
                 <!-- Left Column: Location Selector, Incoming Orders, and Sold Bin -->
-                <div class="left-column">
-                    <label for="location-select" class="form-label"><strong>Select Location:</strong></label>
+                <div class="left-column" style="border: 2px solid #007BFF; border-radius: 10px; max-height: 100vh; overflow-y: auto; padding: 10px;">
+                    <label for="location-select" style="padding-top: 20px;" class="form-label"><strong>Select Location:</strong></label>
                     <select id="location-select" class="form-select mb-3"></select>
 
                     <strong>Delivered Pop Flavors</strong>
                     <p>Click to allocate a case.</p>
-                    <!-- Allocate All button -->
                     <button id="allocate-all-btn" class="btn btn-primary me-2">
                         Allocate All
                     </button>
@@ -105,6 +104,7 @@
                     <p>Click a flavor to reallocate the sold case.</p>
                     <div id="sold-container"></div>
                 </div>
+
 
                 <!-- Right Column: Inventory Allocation -->
                 <div class="right-column">

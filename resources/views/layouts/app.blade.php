@@ -34,7 +34,11 @@
 
     <!-- Select2 CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" />
-
+    <style>
+    .custom-hover:hover {
+        color: white !important;
+    }
+    </style>
 </head>
 
 

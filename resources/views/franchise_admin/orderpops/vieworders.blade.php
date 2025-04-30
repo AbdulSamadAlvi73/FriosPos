@@ -132,7 +132,7 @@
                         <!-- The order details will be injected here by JavaScript -->
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary rounded text-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary rounded text-secondary custom-hover" data-bs-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>
