@@ -243,21 +243,22 @@ $(document).on('input', 'input[name="quantity[]"]', preventNegativeInput);
         }
                     </script>
 
-                    <div class="col-md-4 form-group">
+<div class="col-md-4 form-group mt-3">
+    <label for="" class="form-label">Costs</label>
+    <input type="text" name="costs" class="form-control" value="{{ old('costs') }}">
+    @error('costs') <div class="text-danger">{{ $message }}</div> @enderror
+</div>
+                    <div class="col-md-4 form-group mt-3">
                         <label for="" class="form-label">Expected Sales</label>
                         <input type="text" name="expected_sales" class="form-control" value="{{ old('expected_sales') }}">
                         @error('expected_sales') <div class="text-danger">{{ $message }}</div> @enderror
                     </div>
-                    <div class="col-md-4 form-group">
+                    <div class="col-md-4 form-group mt-3">
                         <label for="" class="form-label">Actual Sales</label>
                         <input type="text" name="actual_sales" class="form-control" value="{{ old('actual_sales') }}">
                         @error('actual_sales') <div class="text-danger">{{ $message }}</div> @enderror
                     </div>
-                    <div class="col-md-4 form-group">
-                        <label for="" class="form-label">Costs</label>
-                        <input type="text" name="costs" class="form-control" value="{{ old('costs') }}">
-                        @error('costs') <div class="text-danger">{{ $message }}</div> @enderror
-                    </div>
+
                 </div>
                 <div class="mt-3 form-group">
                     <label for="" class="form-label">Events notes</label>

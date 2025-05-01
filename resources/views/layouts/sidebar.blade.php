@@ -137,7 +137,7 @@
 						<span class="nav-text"><span>Event</span></span>
 					</a>
 					<ul aria-expanded="false">
-							<li><a href="event.html">Events List</a></li>
+							<li><a href="{{ route('franchise.events.index') }}">Events List</a></li>
 							<li><a href="{{ route('franchise.events.calender') }}">Calender</a></li>
 						</ul>
 					</li>

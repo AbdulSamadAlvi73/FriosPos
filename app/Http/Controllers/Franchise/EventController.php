@@ -22,10 +22,9 @@ class EventController extends Controller
         // $events = FranchiseEvent::orderBy('start_date')->get();
         $today = Carbon::today()->toDateString();
 
-        $events = FranchiseEvent::select('*')
-            ->orderByRaw("CASE WHEN start_date >= ? THEN 0 ELSE 1 END", [$today])
-            ->orderBy('start_date')
-            ->get();
+        $events = Event::where('franchisee_id' , Auth::user()->franchisee_id)->get();
+
+        // dd($events);
         return view('franchise_admin.event.index', compact('events'));
     }
 
@@ -34,6 +33,20 @@ class EventController extends Controller
         $badgeEvents = Event::where('franchisee_id' , Auth::user()->franchisee_id)->orderBy('created_at' , 'DESC')->get();
         return view('franchise_admin.event.calender' , compact('events','badgeEvents'));
     }
+
+    public function updateStatus(Request $request)
+    {
+        $event = Event::find($request->event_id);
+        if (!$event) {
+            return response()->json(['success' => false, 'message' => 'Event not found'], 404);
+        }
+
+        $event->event_status = $request->status;
+        $event->save();
+
+        return response()->json(['success' => true , 'message' => 'Status updated successfully']);
+    }
+
 
     public function create() {
         $currentMonth = strval(Carbon::now()->format('n'));

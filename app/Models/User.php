@@ -77,4 +77,6 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Franchisee::class, 'franchisee_id', 'franchisee_id');
     }
+
+
 }
