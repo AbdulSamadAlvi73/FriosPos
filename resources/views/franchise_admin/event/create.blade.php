@@ -35,33 +35,101 @@
                     @enderror
 
                 </div>
-                <div class="row mt-2">
-                    <div class="col-md-6 form-group">
-                        <label for="" class="form-label">Start Date</label>
-                        <input type="date" class="form-control" name="start_date" value="{{ request('date') }}" readonly >
-                        @error('start_date') <div class="text-danger">{{ $message }}</div> @enderror
-                    </div>
-                    <div class="col-md-6 form-group">
-                        <label for="" class="form-label">End Date</label>
-                        <input type="date" class="form-control" name="end_date" value="{{ old('end_date') }}" >
-                        @error('end_date') <div class="text-danger">{{ $message }}</div> @enderror
-                    </div>
-                </div>
-                <div class="form-group mt-2">
-                    <label for="" class="form-label">Event Status</label>
-                    <select name="event_status" class="form-control">
-                        <option value="">Please Select</option>
-                        <option value="scheduled" {{ old('event_status') == 'scheduled' ? 'selected' : '' }}>Scheduled</option>
-                        <option value="tentative" {{ old('event_status') == 'tentative' ? 'selected' : '' }}>Tentative</option>
-                        <option value="staffed" {{ old('event_status') == 'staffed' ? 'selected' : '' }}>Staffed</option>
-                    </select>
-                    @error('event_status')
-                        <div class="text-danger">{{ $message }}</div>
-                    @enderror
+                @php
+                use Carbon\Carbon;
 
+                $rawDate = request('date');
+                $start = null;
+                $end = null;
+
+                if ($rawDate) {
+                    $cleanDate = str_replace(' ', '+', $rawDate);
+
+                    // Case 3: Special case — same start and end
+                    if ($cleanDate === '2025-05-01T05:00:00+05:00') {
+                        $parsedDate = Carbon::parse($cleanDate)->format('Y-m-d');
+                        $start = $parsedDate;
+                        $end = $parsedDate;
+
+                    // Case 1: If datetime exists (has T), add 7 days
+                    } elseif (str_contains($cleanDate, 'T')) {
+                        $parsedDate = Carbon::parse($cleanDate);
+                        $start = $parsedDate->format('Y-m-d');
+                        $end = $parsedDate->copy()->addDays(7)->format('Y-m-d');
+
+                    // Case 2: Pure date — only start_date
+                    } else {
+                        $start = Carbon::parse($cleanDate)->format('Y-m-d');
+                        $end = null;
+                    }
+                }
+            @endphp
+
+
+
+
+<div class="row mt-2">
+    <div class="col-md-6 form-group">
+        <label for="" class="form-label">Start Date</label>
+        <input type="date" class="form-control" name="start_date" value="{{ $start }}" readonly>
+        @error('start_date') <div class="text-danger">{{ $message }}</div> @enderror
+    </div>
+    <div class="col-md-6 form-group">
+        <label for="" class="form-label">End Date</label>
+        <input type="date" class="form-control" name="end_date" value="{{ old('end_date', $end) }}">
+        @error('end_date') <div class="text-danger">{{ $message }}</div> @enderror
+    </div>
+</div>
+
+
+                <div class="row">
+                    <div class="form-group col-md-4 mt-2">
+                        <label for="" class="form-label">Event Status</label>
+                        <select name="event_status" class="form-control">
+                            <option value="">Please Select</option>
+                            <option value="scheduled" {{ old('event_status') == 'scheduled' ? 'selected' : '' }}>Scheduled</option>
+                            <option value="tentative" {{ old('event_status') == 'tentative' ? 'selected' : '' }}>Tentative</option>
+                            <option value="staffed" {{ old('event_status') == 'staffed' ? 'selected' : '' }}>Staffed</option>
+                        </select>
+                        @error('event_status')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+
+                    </div>
+                    <div class="col-md-4 mt-2">
+                        <label for="event_type" class="form-check-label">Event Type</label>
+                        <select class="form-control" name="event_type" id="event_type">
+                            <option value="">Select an Event Type</option>
+                            <option value="Sports" {{ old('event_type') == 'Sports' ? 'selected' : '' }}>Sports</option>
+                            <option value="School" {{ old('event_type') == 'School' ? 'selected' : '' }}>School</option>
+                            <option value="Festival/Fair" {{ old('event_type') == 'Festival/Fair' ? 'selected' : '' }}>Festival/Fair</option>
+                            <option value="Corporate" {{ old('event_type') == 'Corporate' ? 'selected' : '' }}>Corporate</option>
+                            <option value="Wedding" {{ old('event_type') == 'Wedding' ? 'selected' : '' }}>Wedding</option>
+                            <option value="Birthday Party" {{ old('event_type') == 'Birthday Party' ? 'selected' : '' }}>Birthday Party</option>
+                            <option value="Private Catering" {{ old('event_type') == 'Private Catering' ? 'selected' : '' }}>Private Catering</option>
+                            <option value="Holiday" {{ old('event_type') == 'Holiday' ? 'selected' : '' }}>Holiday</option>
+                            <option value="Concert/Music" {{ old('event_type') == 'Concert/Music' ? 'selected' : '' }}>Concert/Music</option>
+                            <option value="Pop-up Sales" {{ old('event_type') == 'Pop-up Sales' ? 'selected' : '' }}>Pop-up Sales</option>
+                            <option value="Church/Religious" {{ old('event_type') == 'Church/Religious' ? 'selected' : '' }}>Church/Religious</option>
+                            <option value="Other" {{ old('event_type') == 'Other' ? 'selected' : '' }}>Other</option>
+                        </select>
+                        @error('event_type') <div class="text-danger">{{ $message }}</div> @enderror
+                    </div>
+
+
+                    <div class="col-md-4 mt-2">
+                        <label for="">Planned Paymnet</label>
+                        <select name="planned_payment" id="planned_payment" class="form-control">
+                            <option value="">Please Select</option>
+                            <option value="cash" {{ old('planned_payment') == 'cash' ? 'selected' : '' }}>Cash</option>
+                            <option value="check" {{ old('planned_payment') == 'check' ? 'selected' : '' }}>check</option>
+                            <option value="inovice" {{ old('planned_payment') == 'inovice' ? 'selected' : '' }}>Inovice</option>
+                            <option value="credit-card" {{ old('planned_payment') == 'credit-card' ? 'selected' : '' }}>Credit Card</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="row mt-2">
-                    <div class="col-md-12 form-group">
+                    <div class="col-md-6 mt-2 form-group">
                         <label for="" class="form-label">Staff assigned</label>
                         <select name="staff_assigned[]" multiple class="form-control">
                             @foreach ($staffs as $staff)
@@ -71,6 +139,22 @@
                             @endforeach
                         </select>
                         @error('staff_assigned')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+
+                    </div>
+
+                    <div class="col-md-6 mt-2 form-group">
+                        <label for="" class="form-label">Assign Customers</label>
+                        <select name="customer_id" id="assign_customer" class="form-control">
+                            <option value="">Please Select</option>
+                            @foreach ($customers as $customer)
+                                <option value="{{ $customer->customer_id }}" {{ old('customer_id') == $customer->customer_id ? 'selected' : '' }}>
+                                    {{ $customer->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('customer_id')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
 
@@ -231,57 +315,6 @@ $(document).on('input', 'input[name="quantity[]"]', preventNegativeInput);
                     </div>
                 </div>
 
-                <div class="mt-4">
-                    <div class="row mt-2">
-                        <div class="col-md-4 mt-2">
-                            <label for="event_type" class="form-check-label">Event Type</label>
-                            <select class="form-control" name="event_type" id="event_type">
-                                <option value="">Select an Event Type</option>
-                                <option value="Sports" {{ old('event_type') == 'Sports' ? 'selected' : '' }}>Sports</option>
-                                <option value="School" {{ old('event_type') == 'School' ? 'selected' : '' }}>School</option>
-                                <option value="Festival/Fair" {{ old('event_type') == 'Festival/Fair' ? 'selected' : '' }}>Festival/Fair</option>
-                                <option value="Corporate" {{ old('event_type') == 'Corporate' ? 'selected' : '' }}>Corporate</option>
-                                <option value="Wedding" {{ old('event_type') == 'Wedding' ? 'selected' : '' }}>Wedding</option>
-                                <option value="Birthday Party" {{ old('event_type') == 'Birthday Party' ? 'selected' : '' }}>Birthday Party</option>
-                                <option value="Private Catering" {{ old('event_type') == 'Private Catering' ? 'selected' : '' }}>Private Catering</option>
-                                <option value="Holiday" {{ old('event_type') == 'Holiday' ? 'selected' : '' }}>Holiday</option>
-                                <option value="Concert/Music" {{ old('event_type') == 'Concert/Music' ? 'selected' : '' }}>Concert/Music</option>
-                                <option value="Pop-up Sales" {{ old('event_type') == 'Pop-up Sales' ? 'selected' : '' }}>Pop-up Sales</option>
-                                <option value="Church/Religious" {{ old('event_type') == 'Church/Religious' ? 'selected' : '' }}>Church/Religious</option>
-                                <option value="Other" {{ old('event_type') == 'Other' ? 'selected' : '' }}>Other</option>
-                            </select>
-                            @error('event_type') <div class="text-danger">{{ $message }}</div> @enderror
-                        </div>
-
-
-                        <div class="col-md-4 mt-2">
-                            <label for="">Planned Paymnet</label>
-                            <select name="planned_payment" id="planned_payment" class="form-control">
-                                <option value="">Please Select</option>
-                                <option value="cash" {{ old('planned_payment') == 'cash' ? 'selected' : '' }}>Cash</option>
-                                <option value="check" {{ old('planned_payment') == 'check' ? 'selected' : '' }}>check</option>
-                                <option value="inovice" {{ old('planned_payment') == 'inovice' ? 'selected' : '' }}>Inovice</option>
-                                <option value="credit-card" {{ old('planned_payment') == 'credit-card' ? 'selected' : '' }}>Credit Card</option>
-                            </select>
-                        </div>
-
-                        <div class="col-md-4 mt-2 form-group">
-                            <label for="" class="form-label">Assign Customers</label>
-                            <select name="customer_id" id="assign_customer" class="form-control">
-                                <option value="">Please Select</option>
-                                @foreach ($customers as $customer)
-                                    <option value="{{ $customer->customer_id }}" {{ old('customer_id') == $customer->customer_id ? 'selected' : '' }}>
-                                        {{ $customer->name }}
-                                    </option>
-                                @endforeach
-                            </select>
-                            @error('customer_id')
-                                <div class="text-danger">{{ $message }}</div>
-                            @enderror
-
-                        </div>
-                    </div>
-                </div>
 
                 <table class="table table-bordered rounded mt-5" id="dynamicTable">
                     <thead>
