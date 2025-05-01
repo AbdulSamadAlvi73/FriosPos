@@ -13,8 +13,9 @@ return new class extends Migration
     {
         Schema::create('franchise_event_items', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('franchise_event_id');
-            $table->unsignedBigInteger('item_id');
+            $table->integer('event_id');
+            $table->integer('in_stock');
+            $table->integer('orderable');
             $table->integer('quantity');
             $table->timestamps();
         });

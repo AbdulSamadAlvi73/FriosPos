@@ -12,24 +12,27 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('events', function (Blueprint $table) {
-            $table->id('events_ID');
+            $table->id();
             $table->unsignedBigInteger('franchisee_id');
-            $table->string('title');
-            $table->date('date');
-            $table->time('time');
-            $table->string('location');
-            $table->text('staff')->nullable();
-            $table->text('type')->nullable();
-            $table->enum('status', ['Tentative', 'Confirmed', 'Staffed'])->nullable();
-            $table->text('resource_needed')->nullable();
-            $table->text('comments')->nullable();
-            $table->json('inventory_allocated')->nullable();
+            $table->string('event_name');
+            $table->date('start_date');
+            $table->date('end_date');
+            $table->enum('event_status' , ['scheduled' , 'tentative' , 'staffed']);
+            $table->json('staff_assigned')->nullable();
+            $table->integer('customer_id')->nullable();
+            $table->double('expected_sales')->nullable();
+            $table->double('actual_sales')->nullable();
+            $table->double('costs')->nullable();
+            $table->text('event_notes')->nullable();
+            $table->json('resources_selection')->nullable();
+            $table->string('event_type')->nullable();
+            $table->enum('planned_payment' , ['cash' , 'check' , 'inovice' , 'credit-card'])->nullable();
             $table->timestamps();
-        
+
             // Foreign Key
             $table->foreign('franchisee_id')->references('franchisee_id')->on('franchisees')->onDelete('cascade');
         });
-        
+
     }
 
     /**

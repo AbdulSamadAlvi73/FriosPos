@@ -23,7 +23,9 @@
     <link href="{{ asset('assets/vendor/datatables/css/jquery.dataTables.min.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/css/jquery.localizationTool.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
-
+    <link href="{{ asset('assets/vendor/fullcalendar/css/main.min.css') }}" rel="stylesheet">
+    <script src="{{ asset('assets/vendor/fullcalendar/js/main.min.js') }}"></script>
+	<script src="{{ asset('assets/js/plugins-init/fullcalendar-init.js') }}"></script>
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
@@ -38,6 +40,20 @@
     .custom-hover:hover {
         color: white !important;
     }
+    .btn-outline-yellow {
+        width: 100%;
+        padding: 0.5rem 1rem;
+    display: inline-block;
+    background-color: #fde68a22; /* light transparent fill on hover */
+    color: #000; /* or keep #FDE68A if you want */
+}
+
+/* .btn-outline-yellow:hover {
+    color: #FDE68A;
+    border: 1px solid #FDE68A;
+    background-color: transparent;
+} */
+
     </style>
 </head>
 

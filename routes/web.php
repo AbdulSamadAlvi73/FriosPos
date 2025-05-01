@@ -146,6 +146,7 @@ Route::middleware(['auth', 'role:franchise_admin|franchise_manager'])->prefix('f
     Route::post('/remove-item', [InventoryController::class, 'removeItem'])->name('removeItem');
 
     Route::get('/events', [EventController::class, 'index'])->name('events.index');
+    Route::get('/events/calender', [EventController::class, 'eventCalender'])->name('events.calender');
     Route::get('/events/create', [EventController::class, 'create'])->name('events.create');
     Route::post('/events', [EventController::class, 'store'])->name('events.store');
     Route::get('/events/{event}/compare', [EventController::class, 'compare'])->name('events.compare');

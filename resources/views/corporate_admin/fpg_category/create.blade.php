@@ -47,9 +47,9 @@
 
                                             <form action="{{ route('corporate_admin.fpgcategory.store') }}" method="POST">
                                                 @csrf
-                                            
+
                                                 <div class="row">
-                                            
+
                                                     <div class="mb-3 col-md-6">
                                                         <label class="form-label">Category Type <span class="text-danger">*</span></label>
                                                         <select class="form-control @error('type') is-invalid @enderror" name="type">
@@ -60,9 +60,9 @@
                                                         </select>
                                                         @error('type')
                                                             <div class="text-danger">{{ $message }}</div>
-                                                        @enderror                                                        
+                                                        @enderror
                                                     </div>
-                                                    
+
                                                     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/css/select2.min.css" rel="stylesheet">
                                                     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/js/select2.min.js"></script>
                                                     <script>
@@ -73,8 +73,8 @@
                                                             });
                                                         });
                                                     </script>
-                                                    
-                                                                                                                                                            
+
+
                                                     <div class="mb-3 col-md-6">
                                                         <label class="form-label">Category Name <span class="text-danger">*</span></label>
                                                         <input type="text" class="form-control @error('name') is-invalid @enderror"
@@ -86,7 +86,7 @@
                                                 </div>
                                                 <button type="submit" class="btn btn-primary bg-primary">Add Category</button>
                                             </form>
-                                            
+
                                         </div>
                                     </div>
                                 </div>
