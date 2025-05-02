@@ -29,9 +29,9 @@
             <table id="example5" class="table customer-table display mb-4 fs-14 card-table">
                 <thead>
                     <tr>
-                        <th>On hand flover</th>
-                        <th>Quantity</th>
                         <th>Orderable flover</th>
+                        <th>Quantity</th>
+                        <th>On hand flover</th>
                         <th>Quantity</th>
                         <th>Shortage / Overage</th>
                         <th>Month Avaliable to Order</th>

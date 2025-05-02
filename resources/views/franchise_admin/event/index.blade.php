@@ -4,16 +4,19 @@
 .status-wrapper.status-tentative {
     background-color: #f87171;
     color: white;
+    border-radius: 10px;
 }
 
 .status-wrapper.status-scheduled {
     background-color: #fde68a;
     color: black;
+    border-radius: 10px;
 }
 
 .status-wrapper.status-staffed {
     background-color: #4ade80;
     color: white;
+    border-radius: 10px;
 }
 
 .status-wrapper select {
@@ -72,7 +75,10 @@
 
 
                             <td>
-                                <a href="{{ route('franchise.events.view',$event->id) }}">{{ $event->event_name }}</a>
+                                <a href="{{ route('franchise.events.view',$event->id) }}" style="color: inherit; text-decoration: none;" onmouseover="this.style.color='blue'" onmouseout="this.style.color='inherit'">
+                                    {{ $event->event_name }}
+                                </a>
+
                             </td>
                             <td>
                                 {{ date('d M Y', strtotime($event->start_date)) }}

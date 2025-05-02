@@ -28,6 +28,10 @@
                 <h1 style="font-size: 28px; font-weight: bold">
                     Event View : {{ $event->event_name }}
                 </h1>
+
+                <a href="{{ route('franchise.events.index') }}" class="btn btn-primary">
+                    Back
+                </a>
             </div>
 
 
@@ -147,9 +151,9 @@
             <table id="example5" class="table customer-table display mb-4 fs-14 card-table">
                 <thead>
                     <tr>
-                        <th>On hand flover</th>
-                        <th>Quantity</th>
                         <th>Orderable flover</th>
+                        <th>Quantity</th>
+                        <th>On hand flover</th>
                         <th>Quantity</th>
                         <th>Shortage / Overage</th>
                         <th>Month Avaliable to Order</th>
