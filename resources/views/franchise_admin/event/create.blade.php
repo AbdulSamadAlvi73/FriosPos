@@ -32,6 +32,12 @@
                 </div>
             @endif
 
+            <div class="mt-3 alert alert-info message alert-dismissible fade show" style="display: none;" role="alert">
+                <strong></strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+
+
             <form action="{{ route('franchise.events.store') }}" method="post">
                 @csrf
                 <div class="form-group">
@@ -301,7 +307,7 @@
                 </div>
 
                 <div class="displayFlavor">
-                    
+
                 </div>
 
                 <button class="btn btn-outline-primary">
@@ -314,77 +320,43 @@
 
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/css/select2.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/js/select2.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $('select[name="staff_assigned"]').select2({
-                placeholder: "Please Select",
-            });
+
+
+<script>
+
+$(document).ready(function () {
+    $('input[name="end_date"]').on('change', function () {
+        var selectedEndDate = $(this).val();
+        var selectedStartDate = $('input[name="start_date"]').val(); // Get start date
+
+        $.ajax({
+            url: '{{ route('franchise.events.date') }}',
+            method: 'POST',
+            data: {
+                start_date: selectedStartDate,
+                end_date: selectedEndDate,
+                _token: '{{ csrf_token() }}'
+            },
+            beforeSend:function(response){
+                $('.displayFlavor').html('');
+                $('.message').hide();
+            },
+            success: function (response) {
+                    if (response.success) {
+                        $('.displayFlavor').html(response.html);
+                        if (response.message) {
+                            $('.message').html(response.message).show();
+                        } else {
+                            $('.message').hide();
+                        }
+                    }
+                },
+            error: function (xhr) {
+                console.error(xhr.responseText);
+            }
         });
+    });
+});
 
-        const popsOptions = `{!! collect($pops)->map(fn($item) => "<option value='{$item->fgp_item_id}'>{$item->name}</option>")->implode('') !!}`;
-        const orderOptions = `{!! collect($orderDetails)->map(fn($item) => "<option value='{$item->fgp_item_id}'>{$item->item_name} - (x{$item->total_units})</option>")->implode('') !!}`;
-
-        function addRow(button) {
-            let tableBody = document.getElementById("dynamicTable").getElementsByTagName("tbody")[0];
-
-            let newRow = document.createElement("tr");
-
-            newRow.innerHTML = `
-<td>
-<select name="in_stock[]" class="form-control status-select" style="width: 100%">
-${popsOptions}  <!-- Using dynamically created options for this select -->
-</select>
-</td>
-<td>
-<select name="orderable[]" class="form-control status-select" style="width: 100%">
-${orderOptions}  <!-- Using dynamically created options for this select -->
-</select>
-</td>
-<td>
-<input type="number" class="form-control" name="quantity[]" min="0" placeholder="0"  />
-
-</td>
-<td>
-<span class="btn btn-success action-btn" onclick="addRow(this)">+</span>
-<span class="btn btn-danger action-btn" onclick="removeRow(this)">−</span>
-</td>
-`;
-
-            tableBody.appendChild(newRow);
-
-            $('.status-select').selectpicker('refresh');
-        }
-
-        table.on('draw', function() {
-            $('.status-select').selectpicker('refresh');
-        });
-
-        function preventNegativeInput(event) {
-            let input = event.target;
-
-            if (input.value < 0) {
-                input.value = 0;
-            }
-
-            if (input.value.startsWith('-')) {
-                input.value = input.value.substring(1);
-            }
-        }
-
-        $(document).on('input', 'input[name="quantity[]"]', preventNegativeInput);
-
-
-
-        function removeRow(button) {
-            let row = button.closest("tr");
-            let table = document
-                .getElementById("dynamicTable")
-                .getElementsByTagName("tbody")[0];
-            if (table.rows.length > 1) {
-                row.remove();
-            } else {
-                alert("At least one row is !");
-            }
-        }
-    </script>
+</script>
 @endsection

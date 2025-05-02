@@ -153,6 +153,7 @@ Route::middleware(['auth', 'role:franchise_admin|franchise_manager'])->prefix('f
     Route::post('/events', [EventController::class, 'store'])->name('events.store');
     Route::post('/events/update-status', [EventController::class, 'updateStatus'])->name('updateStatus');
     Route::get('/events/{event}/compare', [EventController::class, 'compare'])->name('events.compare');
+    Route::post('/events/date', [EventController::class, 'date'])->name('events.date');
 
 });
 

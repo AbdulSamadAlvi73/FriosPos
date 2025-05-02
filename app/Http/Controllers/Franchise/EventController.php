@@ -131,10 +131,10 @@ class EventController extends Controller
             'resources_selection' => 'nullable|array',
             'event_type' => 'nullable|string|max:100',
             'planned_payment' => 'nullable|in:cash,check,inovice,credit-card',
-            'in_stock' => 'required|array',
+            'in_stock' => 'nullable|array',
             'orderable' => 'required|array',
             'quantity' => 'required|array',
-            'in_stock.*' => 'required|integer',
+            'in_stock.*' => 'nullable|integer',
             'orderable.*' => 'required|integer',
             'quantity.*' => 'required|numeric|min:0',
         ]);
@@ -158,11 +158,11 @@ class EventController extends Controller
             ]);
 
             // 3. Save Event Items
-            foreach ($validated['in_stock'] as $index => $inStockId) {
+            foreach ($validated['orderable'] as $index => $orderableId) {
                 FranchiseEventItem::create([
                     'event_id' => $event->id,
-                    'in_stock' => $inStockId,
-                    'orderable' => $validated['orderable'][$index],
+                    'in_stock' => $validated['in_stock'][$index] ?? null,
+                    'orderable' => $orderableId,
                     'quantity' => $validated['quantity'][$index],
                 ]);
             }
@@ -177,5 +177,61 @@ class EventController extends Controller
         $inventory = InventoryAllocation::get();
         return view('franchise_admin.event.compare', compact('event','inventory'));
         // dd($event);
+    }
+
+    public function date(Request $request){
+        $startDate = Carbon::parse($request->start_date);
+        $endDate = Carbon::parse($request->end_date);
+
+        // Calculate the difference between the start and end date
+        $diffInDays = $startDate->diffInDays($endDate);
+
+        // Check if the duration is less than 15 days and modify the $pops query accordingly
+        if ($diffInDays < 15) {
+            // If the duration is less than 15 days, set $pops to null and return a message
+            $pops = null;
+            $message = 'No Orderable pops will be available within the 15-day duration.';
+        } else {
+            // Fetch pops data if the duration is greater than or equal to 15 days
+            $pops = FpgItem::where('orderable', 1)
+                ->where('internal_inventory', '>', 0)
+                ->get();
+            $message = null;
+        }
+
+        // Fetch order details based on orders within the date range
+        $orders = DB::table('fpg_orders')
+            ->where('status', 'Delivered')
+            ->get();
+
+        $orderIds = $orders->pluck('fgp_ordersID');
+
+        $orderDetails = DB::table('fgp_order_details')
+            ->join('fpg_items', 'fgp_order_details.fgp_item_id', '=', 'fpg_items.fgp_item_id')
+            ->whereIn('fgp_order_details.fpg_order_id', $orderIds)
+            ->select(
+                'fgp_order_details.fgp_item_id',
+                'fpg_items.name as item_name',
+                DB::raw('SUM(fgp_order_details.unit_number) as total_units')
+            )
+            ->groupBy('fgp_order_details.fgp_item_id', 'fpg_items.name')
+            ->get();
+
+
+
+            $html = view('franchise_admin.event.flavor', [
+                'orderDetails' => $orderDetails,
+                'pops' => $pops,
+                'startDate' => $startDate->toDateString(),
+                'endDate' => $endDate->toDateString(),
+                'orderCount' => $orders->count(),
+            ])->render();
+
+            // Return JSON with rendered HTML
+            return response()->json([
+                'success' => true,
+                'html' => $html,
+                'message' => $message
+            ]);
     }
 }

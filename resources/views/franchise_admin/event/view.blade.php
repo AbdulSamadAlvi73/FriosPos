@@ -194,7 +194,14 @@
                                 {{ isset($orderDetail->unit_number, $eventItem->quantity) ? $orderDetail->unit_number - $eventItem->quantity : '' }}
                             </td>
                             <td>
-                                {{ \Carbon\Carbon::parse($pop->created_at)->month == now()->month ? \Carbon\Carbon::parse($pop->created_at)->format('d M Y') : '-' }}
+                                @if($pop && $pop->created_at)
+                                {{ \Carbon\Carbon::parse($pop->created_at)->month == now()->month
+                                    ? \Carbon\Carbon::parse($pop->created_at)->format('d M Y')
+                                    : '-' }}
+                            @else
+                                -
+                            @endif
+
                             </td>
                         </tr>
                     @endforeach
