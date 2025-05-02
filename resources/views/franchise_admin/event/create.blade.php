@@ -323,11 +323,14 @@
 
 
 <script>
-
 $(document).ready(function () {
-    $('input[name="end_date"]').on('change', function () {
-        var selectedEndDate = $(this).val();
-        var selectedStartDate = $('input[name="start_date"]').val(); // Get start date
+    function fetchFlavorData() {
+        var selectedEndDate = $('input[name="end_date"]').val();
+        var selectedStartDate = $('input[name="start_date"]').val();
+
+        if (!selectedEndDate || !selectedStartDate) {
+            return; // Don't fire AJAX if dates are not selected
+        }
 
         $.ajax({
             url: '{{ route('franchise.events.date') }}',
@@ -337,25 +340,31 @@ $(document).ready(function () {
                 end_date: selectedEndDate,
                 _token: '{{ csrf_token() }}'
             },
-            beforeSend:function(response){
+            beforeSend: function () {
                 $('.displayFlavor').html('');
                 $('.message').hide();
             },
             success: function (response) {
-                    if (response.success) {
-                        $('.displayFlavor').html(response.html);
-                        if (response.message) {
-                            $('.message').html(response.message).show();
-                        } else {
-                            $('.message').hide();
-                        }
+                if (response.success) {
+                    $('.displayFlavor').html(response.html);
+                    if (response.message) {
+                        $('.message').html(response.message).show();
+                    } else {
+                        $('.message').hide();
                     }
-                },
+                }
+            },
             error: function (xhr) {
                 console.error(xhr.responseText);
             }
         });
-    });
+    }
+
+    // Call on page load
+    fetchFlavorData();
+
+    // Call on end_date change
+    $('input[name="end_date"]').on('change', fetchFlavorData);
 });
 
 </script>
