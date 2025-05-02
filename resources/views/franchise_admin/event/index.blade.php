@@ -72,7 +72,7 @@
 
 
                             <td>
-                                {{ $event->event_name }}
+                                <a href="{{ route('franchise.events.view',$event->id) }}">{{ $event->event_name }}</a>
                             </td>
                             <td>
                                 {{ date('d M Y', strtotime($event->start_date)) }}

@@ -30,8 +30,20 @@ class EventController extends Controller
 
     public function eventCalender() {
         $events = Event::where('franchisee_id' , Auth::user()->franchisee_id)->get();
-        $badgeEvents = Event::where('franchisee_id' , Auth::user()->franchisee_id)->orderBy('created_at' , 'DESC')->get();
-        return view('franchise_admin.event.calender' , compact('events','badgeEvents'));
+        $badgeEvents = Event::where('franchisee_id', Auth::user()->franchisee_id)
+        ->orderBy('created_at', 'DESC')
+        ->get();
+
+    // Group by year and month
+    $distinctEvents = $badgeEvents->groupBy(function ($event) {
+        return Carbon::parse($event->created_at)->format('Y-m'); // Group by Year-Month (e.g., 2025-05)
+    });
+
+    // Take the first event of each group
+    $uniqueEvents = $distinctEvents->map(function ($group) {
+        return $group->first(); // Get the first event in each group
+    });
+        return view('franchise_admin.event.calender' , compact('events','uniqueEvents'));
     }
 
     public function updateStatus(Request $request)
@@ -47,6 +59,25 @@ class EventController extends Controller
         return response()->json(['success' => true , 'message' => 'Status updated successfully']);
     }
 
+    public function view($id) {
+        $event = Event::where('id' , $id)->firstorfail();
+        $eventItems = FranchiseEventItem::where('event_id' , $event->id)->get();
+        return view('franchise_admin.event.view' , compact('event','eventItems'));
+    }
+
+    public function report(Request $request) {
+        $monthYear = $request->input('month_year', Carbon::now()->format('Y-m'));
+
+        // Extract year and month from the provided monthYear
+        $year = Carbon::parse($monthYear)->year;
+        $month = Carbon::parse($monthYear)->month;
+
+        // Fetch the data based on the selected or default month/year
+        $eventItems = FranchiseEventItem::whereYear('created_at', $year)
+                                         ->whereMonth('created_at', $month)
+                                         ->get();
+        return view('franchise_admin.event.report', compact('eventItems'));
+    }
 
     public function create() {
         $currentMonth = strval(Carbon::now()->format('n'));
@@ -96,7 +127,7 @@ class EventController extends Controller
             'expected_sales' => 'nullable|numeric',
             'actual_sales' => 'nullable|numeric',
             'costs' => 'nullable|numeric',
-            'notes' => 'nullable|string',
+            'event_notes' => 'nullable|string',
             'resources_selection' => 'nullable|array',
             'event_type' => 'nullable|string|max:100',
             'planned_payment' => 'nullable|in:cash,check,inovice,credit-card',
@@ -120,7 +151,7 @@ class EventController extends Controller
                 'expected_sales' => $validated['expected_sales'] ?? null,
                 'actual_sales' => $validated['actual_sales'] ?? null,
                 'costs' => $validated['costs'] ?? null,
-                'event_notes' => $validated['notes'] ?? null,
+                'event_notes' => $validated['event_notes'] ?? null,
                 'resources_selection' => json_encode($validated['resources_selection'] ?? []),
                 'event_type' => $validated['event_type'] ?? null,
                 'planned_payment' => $validated['planned_payment'] ?? null,

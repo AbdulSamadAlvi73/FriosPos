@@ -139,6 +139,7 @@
 					<ul aria-expanded="false">
 							<li><a href="{{ route('franchise.events.index') }}">Events List</a></li>
 							<li><a href="{{ route('franchise.events.calender') }}">Calender</a></li>
+							<li><a href="{{ route('franchise.events.report') }}">Report</a></li>
 						</ul>
 					</li>
                 {{-- <li><a class="ai-icon" href="{{ route('franchise.events.index') }}" aria-expanded="false">

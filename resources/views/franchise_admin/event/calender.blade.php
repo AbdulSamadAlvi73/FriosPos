@@ -86,8 +86,8 @@ document.addEventListener('DOMContentLoaded', function() {
                         <div class="">
                             <div id="external-events" class="my-3">
                                 <p>Click in the calendar to create events.</p>
-                                @foreach ($badgeEvents as $index=>$badgeEvent)
-                                <div class="p-3 mt-3
+                                @foreach ($uniqueEvents as $index=>$badgeEvent)
+                                <div onclick="window.location.href='{{ route('franchise.events.report', ['month_year' => \Carbon\Carbon::parse($badgeEvent->created_at)->format('Y-m')]) }}'" class="cursor-pointer p-3 mt-3
                                         {{ $badgeEvent->event_status == 'scheduled' ? 'btn-outline-yellow' :
                                         ($badgeEvent->event_status == 'tentative' ? 'bg-success' :
                                         ($badgeEvent->event_status == 'staffed' ? 'btn-danger' : '')) }} light">
