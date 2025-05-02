@@ -316,7 +316,7 @@ $(document).on('input', 'input[name="quantity[]"]', preventNegativeInput);
                     </div>
                 </div>
 
-
+                <div style="max-height: 500px; overflow-y: auto; margin-bottom: 20px;">
                 <table class="table table-bordered rounded mt-5" id="dynamicTable">
                     <thead>
                         <tr>
@@ -363,6 +363,7 @@ $(document).on('input', 'input[name="quantity[]"]', preventNegativeInput);
 
                     </tbody>
                 </table>
+            </div>
 
                 <button class="btn btn-outline-primary">
                     Submit

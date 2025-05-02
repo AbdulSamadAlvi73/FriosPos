@@ -56,6 +56,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         events: window.eventsData.map(function(event) {
     return {
+        id: event.id,
         title: event.event_type
             ? event.event_name + " - " + event.event_type
             : event.event_name,
@@ -63,7 +64,12 @@ document.addEventListener('DOMContentLoaded', function() {
         end: event.end_date,
         className: event.className || ""
     };
-})
+}),
+eventClick: function(info) {
+    // Redirect to the correct URL
+    window.location.href = '/franchise/events/' + info.event.id + '/view';
+}
+
 
     });
 

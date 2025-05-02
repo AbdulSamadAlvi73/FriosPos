@@ -36,7 +36,7 @@
                     Create Event
                 </a> --}}
             </div>
-            <table class="table customer-table display mb-4 fs-14 card-table dataTable no-footer" id="dynamicTable">
+            <table id="example5" class="table customer-table display mb-4 fs-14 card-table">
                 <thead>
                     <tr>
                         <th>Status</th>

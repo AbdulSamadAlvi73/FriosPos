@@ -144,12 +144,12 @@
                 </h1>
             </div>
 
-            <table class="table customer-table display mb-4 fs-14 card-table dataTable no-footer mt-5" id="dynamicTable">
+            <table id="example5" class="table customer-table display mb-4 fs-14 card-table">
                 <thead>
                     <tr>
-                        <th>Stock</th>
-                        <th>Orderable</th>
-                        <th>Orderable Quantity</th>
+                        <th>On hand flover</th>
+                        <th>Quantity</th>
+                        <th>Orderable flover</th>
                         <th>Quantity</th>
                         <th>Shortage / Overage</th>
                         <th>Month Avaliable to Order</th>
@@ -178,13 +178,13 @@
                                 {{ $eventItem->fpgItem->name ?? '-' }}
                             </td>
                             <td>
+                                {{ $eventItem->quantity ?: '-' }}
+                            </td>
+                            <td>
                                 {{ $eventItem->orderableItem->name ?? '-' }}
                             </td>
                             <td>
                                 {{ isset($orderDetail->unit_number) ? $orderDetail->unit_number : '-' }}
-                            </td>
-                            <td>
-                                {{ $eventItem->quantity ?: '-' }}
                             </td>
                             <td>
                                 {{ isset($orderDetail->unit_number, $eventItem->quantity) ? $orderDetail->unit_number - $eventItem->quantity : '' }}
