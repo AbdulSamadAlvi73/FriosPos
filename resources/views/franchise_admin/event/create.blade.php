@@ -333,31 +333,40 @@ $(document).ready(function () {
         }
 
         $.ajax({
-            url: '{{ route('franchise.events.date') }}',
-            method: 'POST',
-            data: {
-                start_date: selectedStartDate,
-                end_date: selectedEndDate,
-                _token: '{{ csrf_token() }}'
-            },
-            beforeSend: function () {
-                $('.displayFlavor').html('');
+    url: '{{ route('franchise.events.date') }}',
+    method: 'POST',
+    data: {
+        start_date: selectedStartDate,
+        end_date: selectedEndDate,
+        _token: '{{ csrf_token() }}'
+    },
+    beforeSend: function () {
+        // Clear previous message and table content
+        $('.displayFlavor').html('');
+        $('.message').hide();
+        $('tbody').html('');
+    },
+    success: function (response) {
+        if (response.success) {
+            // Update the table content with the new data
+            $('.displayFlavor').html(response.html);  // Assuming response.html contains the new table content
+
+            // Show any message if returned
+            if (response.message) {
+                $('.message').html(response.message).show();
+            } else {
                 $('.message').hide();
-            },
-            success: function (response) {
-                if (response.success) {
-                    $('.displayFlavor').html(response.html);
-                    if (response.message) {
-                        $('.message').html(response.message).show();
-                    } else {
-                        $('.message').hide();
-                    }
-                }
-            },
-            error: function (xhr) {
-                console.error(xhr.responseText);
             }
-        });
+
+            // Re-initialize selectpicker for the newly loaded content
+            initializeSelectpicker();  // Make sure selectpicker is refreshed after new rows are added
+        }
+    },
+    error: function (xhr) {
+        console.error(xhr.responseText);
+    }
+});
+
     }
 
     // Call on page load
