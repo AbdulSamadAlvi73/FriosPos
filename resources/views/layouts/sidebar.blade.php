@@ -63,8 +63,8 @@
                         <span class="nav-text">Expenses</span>
                     </a>
                     <ul aria-expanded="false">
-                        <li><a href="expenses_by_category.html">Expenses by Category</a></li>
-                        <li><a href="expenses_by_franchisee.html">Expenses by Franchisee</a></li>
+                        <li><a href="{{ route('corporate_admin.expense-category') }}">Expenses by Category</a></li>
+                        <li><a href="{{ route('corporate_admin.expense.franchisee') }}">Expenses by Franchisee</a></li>
                         <li><a href="edit_expense_categories.html">Edit Expense Categories</a></li>
                     </ul>
                 </li>
@@ -81,7 +81,7 @@
                         <span class="nav-text">Events</span>
                     </a>
                     <ul aria-expanded="false">
-                        <li><a href="events_by_franchisee.html">Events by Franchisee</a></li>
+                        <li><a href="{{ route('corporate_admin.events.calender') }}">Calender</a></li>
                     </ul>
                 </li>
             @endrole
@@ -123,7 +123,7 @@
                         <span class="nav-text">Expenses</span>
                     </a>
                     <ul aria-expanded="false">
-                        <li><a href="expenses_list.html">Expenses List</a></li>
+                        <li><a href="{{ route('franchise.expense') }}">Expenses List</a></li>
                         <li><a href="expense_categories.html">Expense Categories</a></li>
                     </ul>
                 </li>
@@ -185,7 +185,7 @@
                         <span class="nav-text">Expenses</span>
                     </a>
                     <ul aria-expanded="false">
-                        <li><a href="expenses_list.html">Expenses List</a></li>
+                        <li><a href="{{ route('franchise.expense') }}">Expenses List</a></li>
                         <li><a href="expense_categories.html">Expense Categories</a></li>
                     </ul>
                 </li>

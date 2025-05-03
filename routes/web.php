@@ -9,6 +9,7 @@ use App\Http\Controllers\CorporateAdminControllers\OwnerController;
 use App\Http\Controllers\FranchiseAdminControllers\StaffController;
 use App\Http\Controllers\CorporateAdminControllers\FpgItemsController;
 use App\Http\Controllers\CorporateAdminControllers\FranchiseController;
+use App\Http\Controllers\CorporateAdminControllers\ExpensesCategoryController;
 use App\Http\Controllers\FranchiseAdminControllers\OrderPopsController;
 // Franchise Admin Controller
 use App\Http\Controllers\CorporateAdminControllers\ViewOrdersController;
@@ -21,6 +22,7 @@ use App\Http\Controllers\CorporateAdminControllers\CorporateAdminController;
 use App\Http\Controllers\FranchiseAdminControllers\FranchiseAdminController;
 use App\Http\Controllers\CorporateAdminControllers\AdditionalChargesController;
 use App\Http\Controllers\Franchise\EventController;
+use App\Http\Controllers\Franchise\ExpenseController;
 use App\Http\Controllers\Franchise\InventoryController;
 use App\Http\Controllers\FranchiseManagerControllers\FranchiseManagerController;
 
@@ -113,7 +115,21 @@ Route::middleware(['auth', 'role:corporate_admin'])->prefix('corporate_admin')->
     Route::get('/vieworders', [ViewOrdersController::class, 'index'])->name('vieworders.index');
     Route::post('/vieworders/update-status', [ViewOrdersController::class, 'updateStatus'])->name('vieworders.updateStatus');
 
+    // Event
+    Route::get('/events/calender', [EventController::class, 'eventCalenderAdmin'])->name('events.calender');
+    Route::get('/events/{id}/view', [EventController::class, 'viewAdmin'])->name('events.view');
 
+
+    // Expense Category
+    Route::get('expense-category' , [ExpensesCategoryController::class , 'index'])->name('expense-category');
+    Route::get('expense-category/create' , [ExpensesCategoryController::class , 'create'])->name('expense-category.create');
+    Route::get('expense-category/{id}/edit' , [ExpensesCategoryController::class , 'edit'])->name('expense-category.edit');
+    Route::put('expense-category/{id}/update' , [ExpensesCategoryController::class , 'update'])->name('expense-category.update');
+    Route::post('expense-category/store' , [ExpensesCategoryController::class , 'store'])->name('expense-category.store');
+    Route::post('expense-sub-category/store' , [ExpensesCategoryController::class , 'Substore'])->name('expense-sub-category.store');
+    Route::delete('expense-sub-category/{id}/delete' , [ExpensesCategoryController::class , 'delete'])->name('expense-sub-category.delete');
+
+    Route::get('expense' , [ExpensesCategoryController::class , 'expense'])->name('expense.franchisee');
 });
 Route::middleware(['auth', 'role:franchise_admin|franchise_manager'])->prefix('franchise')->name('franchise.')->group(function () {
     Route::get('/dashboard', [FranchiseAdminController::class, 'dashboard'])->name('dashboard');
@@ -154,6 +170,15 @@ Route::middleware(['auth', 'role:franchise_admin|franchise_manager'])->prefix('f
     Route::post('/events/update-status', [EventController::class, 'updateStatus'])->name('updateStatus');
     Route::get('/events/{event}/compare', [EventController::class, 'compare'])->name('events.compare');
     Route::post('/events/date', [EventController::class, 'date'])->name('events.date');
+
+    // Expense
+    Route::get('expense' , [ExpenseController::class , 'index'])->name('expense');
+    Route::get('expense-create' , [ExpenseController::class , 'create'])->name('expense.create');
+    Route::post('expense-store' , [ExpenseController::class , 'store'])->name('expense.store');
+    Route::get('expense/{id}/edit' , [ExpenseController::class , 'edit'])->name('expense.edit');
+    Route::put('expense/{id}/update' , [ExpenseController::class , 'update'])->name('expense.update');
+    Route::delete('expense/{id}/delete' , [ExpenseController::class , 'delete'])->name('expense.delete');
+    Route::get('/get-subcategories/{category_id}', [ExpenseController::class, 'getSubCategories'])->name('getSubCategories');
 
 });
 

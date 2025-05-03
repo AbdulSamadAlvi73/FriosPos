@@ -11,20 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('expenses', function (Blueprint $table) {
+        Schema::create('expense_sub_categories', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('franchisee_id');
             $table->integer('category_id');
-            $table->integer('sub_category_id');
-            $table->string('name');
-            $table->decimal('amount', 10, 2);
-            $table->date('date');
+            $table->string('sub_category');
+            $table->string('sub_category_description');
             $table->timestamps();
-
-            // Foreign Keys
-            $table->foreign('franchisee_id')->references('user_id')->on('users')->onDelete('cascade');
         });
-
     }
 
     /**
@@ -32,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('expenses');
+        Schema::dropIfExists('expense_sub_categories');
     }
 };

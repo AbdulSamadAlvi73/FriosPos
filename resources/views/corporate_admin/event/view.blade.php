@@ -32,6 +32,7 @@
                 <a href="javascript:history.back()" class="btn btn-primary" style="margin-right: 50px;">
                     Back
                 </a>
+
             </div>
 
 
