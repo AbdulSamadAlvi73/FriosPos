@@ -24,7 +24,7 @@
                     <div class="text-danger">{{ $message }}</div>
                     @enderror
                     @else
-                    Nope
+                    No Orderable available
                     @endif
                 </td>
                 <td>
@@ -85,7 +85,7 @@ $(document).ready(function() {
                         @endforeach
                     </select>
                 @else
-                    Nope
+                    No Orderable available
                 @endif
             </td>
 
