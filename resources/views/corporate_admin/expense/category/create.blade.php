@@ -53,7 +53,7 @@
 
 
                                                     <div class="mb-3 col-md-12">
-                                                        <label class="form-label">Category Name <span class="text-danger">*</span></label>
+                                                        <label class="form-label">Main Category <span class="text-danger">*</span></label>
                                                         <input type="text" class="form-control @error('category') is-invalid @enderror"
                                                             name="category" value="{{ old('category') }}" placeholder="Expense Category">
                                                         @error('category')

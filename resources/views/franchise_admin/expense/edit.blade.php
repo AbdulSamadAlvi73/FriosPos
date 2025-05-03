@@ -57,7 +57,7 @@
                                                 <div class="row">
 
                                                     <div class="mb-3 col-md-4">
-                                                        <label class="form-label">Name <span class="text-danger">*</span></label>
+                                                        <label class="form-label">Main Name <span class="text-danger">*</span></label>
                                                         <input type="text" class="form-control @error('name') is-invalid @enderror"
                                                             name="name" value="{{ $expense->name }}" placeholder="Name">
                                                         @error('name')

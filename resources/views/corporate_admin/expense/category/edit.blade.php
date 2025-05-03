@@ -99,7 +99,7 @@
                                                 <div class="row">
 
                                                     <div class="mb-3 col-md-6">
-                                                        <label class="form-label">Category <span class="text-danger">*</span></label>
+                                                        <label class="form-label">Main Category <span class="text-danger">*</span></label>
                                                         <select name="category_id" id="category_id" class="form-control  @error('category_id') is-invalid @enderror">
                                                             <option value="">Please Select</option>
                                                             @foreach ($ExpenseCategories as $ExpenseCategory)

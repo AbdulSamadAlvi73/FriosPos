@@ -89,7 +89,7 @@
                                                 <label class="form-check-label" for="checkAll"></label>
                                             </div>
                                         </th>
-                                        <th>Category</th>
+                                        <th>Main Category</th>
                                         <th>Sub Category</th>
                                         <th>Sub Category Description</th>
                                         <th>Actions</th>

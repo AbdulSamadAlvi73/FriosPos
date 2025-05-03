@@ -90,7 +90,7 @@
                                             </div>
                                         </th>
                                         <th>Name</th>
-                                        <th>Category</th>
+                                        <th>Main Category</th>
                                         <th>Sub Category</th>
                                         <th>Amount</th>
                                         <th>Date</th>
