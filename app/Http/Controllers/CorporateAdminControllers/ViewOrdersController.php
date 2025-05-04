@@ -183,7 +183,7 @@ class ViewOrdersController extends Controller
 
         $requiredCharges = AdditionalCharge::where('charge_optional', 'required')->where('status', 1)->get();
         $optionalCharges = AdditionalCharge::where('charge_optional', 'optional')->where('status', 1)->get();
-        $users = User::get();
+        $users = Franchisee::get();
         return view('corporate_admin.orderpops.confirm', compact('items', 'requiredCharges', 'optionalCharges','users'));
     }
 
