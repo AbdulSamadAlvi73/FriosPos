@@ -24,8 +24,8 @@ class CustomerController extends Controller
             'name' => 'required|max:191',
             'phone' => 'required|numeric|digits_between:8,16',
             'email' => 'required|email|max:191',
-            'state' => 'required|max:191',
-            'zip_code' => 'required|max:191',
+            'state' => 'required|digits_between:2,2',
+            'zip_code' => 'required|digits_between:5,5',
             'address1' => 'required|max:191',
             'address2' => 'nullable|max:191',
         ]);
@@ -55,8 +55,8 @@ class CustomerController extends Controller
             'name' => 'required|max:191',
             'phone' => 'required|numeric|digits_between:8,16',
             'email' => 'required|email|max:191',
-            'state' => 'required|max:191',
-            'zip_code' => 'required|max:191',
+            'state' => 'required|digits_between:2,2',
+            'zip_code' => 'required|digits_between:5,5',
             'address1' => 'required|max:191',
             'address2' => 'nullable|max:191',
         ]);
