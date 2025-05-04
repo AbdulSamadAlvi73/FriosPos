@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', function() {
 }),
 eventClick: function(info) {
     // Redirect to the correct URL
-    window.location.href = '/corporate_admin/events/' + info.event.id + '/view';
+    window.location.href = '/franchise_staff/events/' + info.event.id + '/view';
 }
 
 

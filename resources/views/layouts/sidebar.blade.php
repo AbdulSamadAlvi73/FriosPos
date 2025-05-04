@@ -210,7 +210,7 @@
                         <i class="bi bi-cart-check-fill"></i>
                         <span class="nav-text">POS</span>
                     </a></li>
-                <li><a class="ai-icon" href="flavors.html" aria-expanded="false">
+                <li><a class="ai-icon" href="{{ route('franchise_staff.flavors') }}" aria-expanded="false">
                         <i class="bi bi-basket3-fill"></i>
                         <span class="nav-text">Flavors</span>
                     </a></li>
@@ -219,8 +219,8 @@
                         <span class="nav-text">Customers</span>
                     </a>
                     <ul aria-expanded="false">
-                        <li><a href="viewcustomers.html">Customers List</a></li>
-                        <li><a href="addcustomer.html">Add Customer</a></li>
+                        <li><a href="{{ route('franchise_staff.customer') }}">Customers List</a></li>
+                        <li><a href="{{ route('franchise_staff.customer.create') }}">Add Customer</a></li>
                     </ul>
                 </li>
                 <li><a class="ai-icon" href="sales.html" aria-expanded="false">
@@ -232,7 +232,7 @@
                         <span class="nav-text">Events</span>
                     </a>
                     <ul aria-expanded="false">
-                        <li><a href="events.html">Events List</a></li>
+                        <li><a href="{{ route('franchise_staff.events.calendar') }}">Calender</a></li>
                     </ul>
                 </li>
             @endrole

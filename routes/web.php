@@ -243,6 +243,24 @@ Route::middleware(['auth', 'role:franchise_admin|franchise_manager'])->prefix('f
 
 Route::middleware(['auth', 'role:franchise_staff'])->group(function () {
     Route::get('/staff/dashboard', [FranchiseStaffController::class, 'dashboard']);
+
+    Route::prefix('franchise_staff')->name('franchise_staff.')->group(function (){
+
+        Route::get('calendar' , [FranchiseStaffController::class , 'calendar'])->name('events.calendar');
+        Route::get('events/{id}/view' , [FranchiseStaffController::class , 'eventView'])->name('events.view');
+        Route::get('flavors' , [FranchiseStaffController::class , 'flavors'])->name('flavors');
+        Route::get('/flavors/detail', [FranchiseStaffController::class, 'flavorsDetail'])->name('flavors.detail');
+
+
+        Route::get('customer' , [FranchiseStaffController::class , 'index'])->name('customer');
+        Route::get('customer-create' , [FranchiseStaffController::class , 'create'])->name('customer.create');
+        Route::post('customer-store' , [FranchiseStaffController::class , 'store'])->name('customer.store');
+        Route::get('customer/{id}/edit' , [FranchiseStaffController::class , 'edit'])->name('customer.edit');
+        Route::get('customer/{id}/view' , [FranchiseStaffController::class , 'view'])->name('customer.view');
+        Route::put('customer/{id}/update' , [FranchiseStaffController::class , 'update'])->name('customer.update');
+        Route::delete('customer/{id}/delete' , [FranchiseStaffController::class , 'delete'])->name('customer.delete');
+    });
+
 });
 
 

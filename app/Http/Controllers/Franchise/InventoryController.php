@@ -98,7 +98,7 @@ class InventoryController extends Controller
             dd('Error: ' . $e->getMessage());
         }
     }
-
+    
 
     public function allocateInventory(Request $request)
     {
