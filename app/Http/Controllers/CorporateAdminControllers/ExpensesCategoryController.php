@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\ExpenseCategory;
 use App\Models\ExpenseSubCategory;
 use App\Models\Expense;
+use App\Models\Customer;
 
 class ExpensesCategoryController extends Controller
 {
@@ -86,5 +87,16 @@ class ExpensesCategoryController extends Controller
         $data['expenses'] = Expense::get();
         $data['expenseCount'] = Expense::count();
         return view('corporate_admin.expense.index' ,$data);
+    }
+
+    public function customer() {
+        $data['customers'] = Customer::get();
+        $data['customerCount'] = Customer::count();
+        return view('corporate_admin.customer.index' ,$data);
+    }
+
+    public function customerView($id) {
+        $data['customer'] = Customer::where('customer_id' , $id)->firstorfail();
+        return view('corporate_admin.customer.view' ,$data);
     }
 }

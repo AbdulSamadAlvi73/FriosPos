@@ -11,7 +11,7 @@
 				<div class="form-head mb-4 d-flex flex-wrap align-items-center">
 					<div class="me-auto">
 						<h2 class="font-w600 mb-0">Dashboard \</h2>
-						<p>Pops Order List</p>
+						<p>Flover Pops List</p>
 					</div>
 					<div class="input-group search-area2 d-xl-inline-flex mb-2 me-lg-4 me-md-2">
 						<button class="input-group-text"><i class="flaticon-381-search-2 text-primary"></i></button>
@@ -36,8 +36,11 @@
 					</div>
 				</div>
                 <div class="row mb-4 align-items-center">
+                    {{-- <div class="col-xl-3 col-lg-4 mb-4 mb-lg-0">
+                        <a href="{{ route('franchise.orderpops.create') }}" class="btn btn-secondary btn-lg btn-block rounded text-white">+ New Order</a>
+                    </div> --}}
                     <div class="col-xl-3 col-lg-4 mb-4 mb-lg-0">
-                        <a href="" class="btn btn-secondary btn-lg btn-block rounded text-white">+ New Order</a>
+                        <button id="orderButton" class="btn btn-secondary btn-lg btn-block rounded text-white">Place Order</button>
                     </div>
                     <div class="col-xl-9 col-lg-8">
                         <div class="card m-0">
@@ -55,8 +58,8 @@
                                             </defs>
                                         </svg>
                                         <div class="media-body">
-                                            <p class="mb-1 fs-12">Total Orders Pops</p>
-                                            <h3 class="mb-0 font-w600 fs-22">{{ $totalOrders }} Flavor Pops</h3>
+                                            <p class="mb-1 fs-12">Total Flavor Pops</p>
+                                            <h3 class="mb-0 font-w600 fs-22">{{ $totalPops }} Flavor Pops</h3>
                                         </div>
                                     </div>
                                     <div>
@@ -78,62 +81,138 @@
                 @endif
 
 				<div class="row">
-                    <div class="col-lg-12">
-                        <div class="table-responsive rounded">
-                            <table id="example5" class="table customer-table display mb-4 fs-14 card-table">
-                                <thead>
-                                    <tr>
-                                        <th>Items Ordered</th>
-                                        <th>Status</th>
-                                        <th>Total Price</th>
-                                        <th>Order Date/Time</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($orders as $index => $order)
-                                    @php
-                                        $totalAmount = \DB::table('fgp_order_details')
-                                            ->where('fpg_order_id', $order->fgp_ordersID)
-                                            ->selectRaw('SUM(unit_number * unit_cost) as total')
-                                            ->value('total');
-                                    @endphp
-                                    <tr style="text-wrap: no-wrap;">
-                                        <td>
-                                            <span class="cursor-pointer text-primary order-detail-trigger" data-id="{{ $order->fgp_ordersID }}">
-                                                {{ \DB::table('fgp_order_details')->where('fpg_order_id', $order->fgp_ordersID)->count() }} items
-                                            </span>
-                                        </td>
-                                        <td>{{ $order->status }}</td>
-                                        <td>${{ number_format($totalAmount, 2) }}</td>
-                                        <td>{{ \Carbon\Carbon::parse($order->date_transaction)->format('M d, Y h:i A') }}</td>
-                                    </tr>
-                                @endforeach
-                                </tbody>
-                            </table>
+					<div class="col-lg-12">
+						<div class="table-responsive rounded">
+							<!-- New Order Button -->
 
-                        </div>
-                    </div>
+<!-- Pops Table -->
+<table id="example5" class="table customer-table display mb-4 fs-14 card-table">
+    <thead>
+        <tr>
+            <th>
+                <div class="form-check checkbox-secondary">
+                    <input class="form-check-input" type="checkbox" value="" id="checkAll">
+                    <label class="form-check-label" for="checkAll"></label>
                 </div>
+            </th>
+            <th>Name</th>
+            <th>Image</th>
+            <th>Price Per Case</th>
+            <th>Category</th>
+            <th>Stock Status</th>
+            <th>Availability</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach ($pops as $pop)
+        <tr>
+            <td>
+                <div class="form-check checkbox-secondary">
+                    <input class="form-check-input pop-checkbox" type="checkbox" value="{{ $pop->fgp_item_id }}" id="flexCheckDefault{{ $pop->fgp_item_id }}">
+                    <label class="form-check-label" for="flexCheckDefault{{ $pop->fgp_item_id }}"></label>
+                </div>
+            </td>
+            <td class="item-name">{{ $pop->name }}</td>
+            <td class="item-image">
+                @if ($pop->image1)
+                    <img src="{{ asset('storage/' . $pop->image1) }}" alt="Image" style="width: 50px; height: 50px; object-fit: contain;">
+                @else
+                    <span>No Image</span>
+                @endif
+            </td>
+            <td class="item-price">${{ number_format($pop->case_cost, 2) }}</td>
+            <td class="item-category">
+                @if($pop->categories->isNotEmpty())
+                @php
+                        $chunks = $pop->categories->pluck('name')->chunk(5);
+                        @endphp
+                    @foreach($chunks as $chunk)
+                    {{ $chunk->join(', ') }} <br>
+                    @endforeach
+                    @else
+                    No Category
+                @endif
+            </td>
+            <td><span class="badge bg-success">In Stock</span></td>
+            <td><span class="badge bg-success">Available</span></td>
+        </tr>
+        @endforeach
+    </tbody>
 
+</table>
+
+
+<script>
+document.getElementById('orderButton').addEventListener('click', function () {
+    console.log("Confirm Order button clicked");
+
+    let checkedItems = [];
+
+    document.querySelectorAll('.pop-checkbox:checked').forEach((checkbox) => {
+        const row = checkbox.closest('tr');
+
+        const itemDetails = {
+            id: checkbox.value,
+            name: row.querySelector('.item-name').innerText.trim(),
+            image: row.querySelector('.item-image img') ? row.querySelector('.item-image img').src : 'No Image',
+            price: row.querySelector('.item-price').innerText.trim(),
+            category: row.querySelector('.item-category').innerText.trim(),
+            quantity: 1
+        };
+
+        console.log("Collected item details:", itemDetails);
+        checkedItems.push(itemDetails);
+    });
+
+    console.log("Checked Items:", checkedItems);
+
+    if (checkedItems.length < 3) {
+    alert("Please select at least three items to order.");
+    console.log("Less than three items selected, alert displayed.");
+    return;
+}
+
+
+    console.log("Sending request to server with checked items...");
+
+    const url = "{{ route('corporate_admin.orderpops.confirm') }}";
+
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}' // Make sure to include CSRF token for Laravel
+        },
+        body: JSON.stringify({ ordered_items: checkedItems })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log("Parsed Response Data:", data);
+
+        if (data.redirect) {
+            console.log("Redirecting to:", data.redirect);
+            window.location.href = data.redirect;
+        } else {
+            console.error('Invalid response format:', data);
+        }
+    })
+    .catch(error => console.error('Error occurred:', error));
+});
+
+</script>
+
+
+
+						</div>
+					</div>
+				</div>
             </div>
 
-        </div>
-
-        <div class="modal fade" id="orderModal" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-xl">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Order Details</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <!-- The order details will be injected here by JavaScript -->
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary rounded text-secondary custom-hover" data-bs-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            </div>
         </div>
 
          {{-- <td>
@@ -160,101 +239,35 @@
         ***********************************-->
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script>
-            document.addEventListener("DOMContentLoaded", function() {
-                document.querySelectorAll('.status-select').forEach(select => {
-                    select.addEventListener('change', function() {
-                        let orderId = this.getAttribute('data-id');
-                        let newStatus = this.value;
+            $(document).ready(function() {
+                $('.orderable-dropdown').change(function() {
+                    let itemId = $(this).data('id');
+                    let orderableValue = $(this).val();
 
-                        fetch(`/corporate-admin/vieworders/${orderId}/update-status`, {
-                            method: "POST",
-                            headers: {
-                                "X-CSRF-TOKEN": "{{ csrf_token() }}",
-                                "Content-Type": "application/json"
-                            },
-                            body: JSON.stringify({ status: newStatus })
-                        })
-                        .then(response => response.json())
-                        .then(data => alert(data.message))
-                        .catch(error => console.error('Error:', error));
-                    });
-                });
-
-                document.querySelectorAll('.delete-order').forEach(button => {
-                    button.addEventListener('click', function() {
-                        let orderId = this.getAttribute('data-id');
-                        if (confirm("Are you sure you want to delete this order?")) {
-                            fetch(`/corporate-admin/vieworders/${orderId}`, {
-                                method: "DELETE",
-                                headers: { "X-CSRF-TOKEN": "{{ csrf_token() }}" }
-                            })
-                            .then(() => location.reload())
-                            .catch(error => console.error('Error:', error));
+                    $.ajax({
+                        url: "{{ route('corporate_admin.fpgitem.updateOrderable') }}",
+                        type: "POST",
+                        data: {
+                            _token: "{{ csrf_token() }}",
+                            id: itemId,
+                            orderable: orderableValue
+                        },
+                        success: function(response) {
+                            console.log(response); // Debugging: Check response in console
+                            if (response.success) {
+                                // location.reload();
+                            } else {
+                                alert("Error: " + response.message);
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.error(xhr.responseText);
+                            alert("AJAX Error: " + xhr.responseText);
                         }
                     });
                 });
             });
         </script>
 
+
 @endsection
-@push('scripts')
-<script>
-$(document).ready(function () {
-    $('.order-detail-trigger').on('click', function () {
-        const orderId = $(this).data('id'); // Get the order ID from the data-id attribute
-
-        $.ajax({
-            url: '{{ route('franchise.inventory.detail') }}', // Backend route to fetch order details
-            method: 'GET',
-            data: { id: orderId }, // Pass orderId to backend
-            success: function (response) {
-    // Assuming response contains the orderDetails array
-    let orderDetails = response.orderDetails;
-
-    // Prepare HTML to display the order details inside a table
-    let detailsHtml = `
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th scope="col">Item</th>
-                    <th scope="col">Unit Cost</th>
-                    <th scope="col">Quantity</th>
-                    <th scope="col">Transaction Date</th>
-                </tr>
-            </thead>
-            <tbody>
-    `;
-
-    // Loop through orderDetails and create table rows
-    orderDetails.forEach(function(detail) {
-        detailsHtml += `
-            <tr>
-                <td>${detail.name}</td>
-                <td>$${detail.unit_cost}</td>
-                <td>${detail.unit_number}</td>
-                <td>${detail.formatted_date}</td>
-            </tr>
-        `;
-    });
-
-    // Close the table
-    detailsHtml += `</tbody></table>`;
-
-    // Insert the details HTML into the modal body
-    $('#orderModal .modal-body').html(detailsHtml);
-
-    // Show the modal
-    $('#orderModal').modal('show');
-},
-
-            error: function () {
-                alert('Error loading order details.');
-            }
-        });
-    });
-});
-
-
-
-</script>
-@endpush

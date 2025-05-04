@@ -23,6 +23,7 @@ use App\Http\Controllers\FranchiseAdminControllers\FranchiseAdminController;
 use App\Http\Controllers\CorporateAdminControllers\AdditionalChargesController;
 use App\Http\Controllers\Franchise\EventController;
 use App\Http\Controllers\Franchise\ExpenseController;
+use App\Http\Controllers\Franchise\CustomerController;
 use App\Http\Controllers\Franchise\InventoryController;
 use App\Http\Controllers\FranchiseManagerControllers\FranchiseManagerController;
 
@@ -115,6 +116,12 @@ Route::middleware(['auth', 'role:corporate_admin'])->prefix('corporate_admin')->
     Route::get('/vieworders', [ViewOrdersController::class, 'index'])->name('vieworders.index');
     Route::post('/vieworders/update-status', [ViewOrdersController::class, 'updateStatus'])->name('vieworders.updateStatus');
 
+    Route::get('orderpops' , [ViewOrdersController::class , 'orderposps'])->name('orderposps');
+    Route::get('orderpops/confirm/page' , [ViewOrdersController::class , 'confirmPage'])->name('confirm.page');
+    Route::post('/orderpops/confirm', [ViewOrdersController::class, 'confirmOrder'])->name('orderpops.confirm');
+    Route::post('/orderpops/store', [ViewOrdersController::class, 'store'])->name('orderpops.store');
+    Route::get('get-customer/{customer_id}', [OrderPopsController::class, 'customer'])->name('orderpops.customer');
+
     // Event
     Route::get('/events/calender', [EventController::class, 'eventCalenderAdmin'])->name('events.calender');
     Route::get('/events/{id}/view', [EventController::class, 'viewAdmin'])->name('events.view');
@@ -130,6 +137,10 @@ Route::middleware(['auth', 'role:corporate_admin'])->prefix('corporate_admin')->
     Route::delete('expense-sub-category/{id}/delete' , [ExpensesCategoryController::class , 'delete'])->name('expense-sub-category.delete');
 
     Route::get('expense' , [ExpensesCategoryController::class , 'expense'])->name('expense.franchisee');
+
+    // Customer
+    Route::get('customer' , [ExpensesCategoryController::class , 'customer'])->name('customer');
+    Route::get('customer/{id}/view' , [ExpensesCategoryController::class , 'customerView'])->name('customer.view');
 });
 Route::middleware(['auth', 'role:franchise_admin|franchise_manager'])->prefix('franchise')->name('franchise.')->group(function () {
     Route::get('/dashboard', [FranchiseAdminController::class, 'dashboard'])->name('dashboard');
@@ -180,6 +191,14 @@ Route::middleware(['auth', 'role:franchise_admin|franchise_manager'])->prefix('f
     Route::delete('expense/{id}/delete' , [ExpenseController::class , 'delete'])->name('expense.delete');
     Route::get('/get-subcategories/{category_id}', [ExpenseController::class, 'getSubCategories'])->name('getSubCategories');
 
+    // Customer
+    Route::get('customer' , [CustomerController::class , 'index'])->name('customer');
+    Route::get('customer-create' , [CustomerController::class , 'create'])->name('customer.create');
+    Route::post('customer-store' , [CustomerController::class , 'store'])->name('customer.store');
+    Route::get('customer/{id}/edit' , [CustomerController::class , 'edit'])->name('customer.edit');
+    Route::get('customer/{id}/view' , [CustomerController::class , 'view'])->name('customer.view');
+    Route::put('customer/{id}/update' , [CustomerController::class , 'update'])->name('customer.update');
+    Route::delete('customer/{id}/delete' , [CustomerController::class , 'delete'])->name('customer.delete');
 });
 
 

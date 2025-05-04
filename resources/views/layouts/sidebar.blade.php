@@ -45,7 +45,7 @@
                     </a>
                     <ul aria-expanded="false">
                         <li><a href="{{ route('corporate_admin.vieworders.index') }}">View Orders</a></li>
-                        <li><a href="edit_orders.html">Edit/Delete Orders</a></li>
+                        <li><a href="{{ route('corporate_admin.orderposps') }}">Edit/Delete Orders</a></li>
                         <li><a href="{{ route('corporate_admin.additionalcharges.index') }}">Edit Charges</a></li>
                     </ul>
                 </li>
@@ -73,7 +73,7 @@
                         <span class="nav-text">Customers</span>
                     </a>
                     <ul aria-expanded="false">
-                        <li><a href="customers_by_franchisee.html">Customers by Franchisee</a></li>
+                        <li><a href="{{ route('corporate_admin.customer') }}">Customers by Franchisee</a></li>
                     </ul>
                 </li>
                 <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
@@ -127,7 +127,7 @@
                         <li><a href="expense_categories.html">Expense Categories</a></li>
                     </ul>
                 </li>
-                <li><a class="ai-icon" href="customers.html" aria-expanded="false">
+                <li><a class="ai-icon" href="{{ route('franchise.customer') }}" aria-expanded="false">
                         <i class="bi bi-person-fill-add"></i>
                         <span class="nav-text">Customers</span>
                     </a></li>
@@ -189,7 +189,7 @@
                         <li><a href="expense_categories.html">Expense Categories</a></li>
                     </ul>
                 </li>
-                <li><a class="ai-icon" href="customers.html" aria-expanded="false">
+                <li><a class="ai-icon" href="{{ route('franchise.customer') }}" aria-expanded="false">
                         <i class="bi bi-person-fill-add"></i>
                         <span class="nav-text">Customers</span>
                     </a></li>
