@@ -74,9 +74,29 @@
                                                     </div>
 
                                                     <div class="mb-3 col-md-6">
+                                                        <label class="form-label">Address 1 <span class="text-danger">*</span></label>
+                                                        <input type="text" name="address1" id="address1"
+                                                               class="form-control @error('address1') is-invalid @enderror"
+                                                               value="{{ old('address1') }}" placeholder="Address Line 1">
+                                                        @error('address1')
+                                                            <div class="text-danger">{{ $message }}</div>
+                                                        @enderror
+                                                    </div>
+
+                                                    <div class="mb-3 col-md-6">
+                                                        <label class="form-label">Address 2</label>
+                                                        <input type="text" name="address2" id="address2"
+                                                               class="form-control @error('address2') is-invalid @enderror"
+                                                               value="{{ old('address2') }}" placeholder="Address Line 2">
+                                                        @error('address2')
+                                                            <div class="text-danger">{{ $message }}</div>
+                                                        @enderror
+                                                    </div>
+
+                                                    <div class="mb-3 col-md-6">
                                                         <label class="form-label">State <span class="text-danger">*</span></label>
                                                         <input type="text" class="form-control @error('state') is-invalid @enderror"
-                                                            name="state" value="{{ old('state') }}" placeholder="State">
+                                                               name="state" value="{{ old('state') }}" placeholder="State">
                                                         @error('state')
                                                             <div class="text-danger">{{ $message }}</div>
                                                         @enderror
@@ -85,27 +105,8 @@
                                                     <div class="mb-3 col-md-6">
                                                         <label class="form-label">Zip code <span class="text-danger">*</span></label>
                                                         <input type="text" class="form-control @error('zip_code') is-invalid @enderror"
-                                                        name="zip_code" id="zip_code" value="{{ old('zip_code') }}">
-
-
+                                                               name="zip_code" id="zip_code" value="{{ old('zip_code') }}" placeholder="Zip Code">
                                                         @error('zip_code')
-                                                            <div class="text-danger">{{ $message }}</div>
-                                                        @enderror
-                                                    </div>
-
-
-                                                    <div class="mb-3 col-md-6">
-                                                        <label class="form-label">Address 1 <span class="text-danger">*</span></label>
-                                                        <textarea name="address1" id="address1" cols="10" rows="5" class="form-control">{{ old('address1') }}</textarea>
-                                                        @error('address1')
-                                                            <div class="text-danger">{{ $message }}</div>
-                                                        @enderror
-                                                    </div>
-
-                                                    <div class="mb-3 col-md-6">
-                                                        <label class="form-label">Address 2</label>
-                                                        <textarea name="address2" id="address2" cols="10" rows="5" class="form-control">{{ old('address2') }}</textarea>
-                                                        @error('address2')
                                                             <div class="text-danger">{{ $message }}</div>
                                                         @enderror
                                                     </div>

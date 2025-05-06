@@ -4,7 +4,7 @@
 {{-- <div class="container">
     <h1>Franchise List</h1>
     <a href="{{ route('corporate_admin.franchise.create') }}" class="btn btn-primary">Add Franchise</a>
-    
+
     @if (session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
@@ -44,33 +44,13 @@
         <div class="content-body default-height">
             <!-- row -->
 			<div class="container-fluid">
-				
+
 				<div class="form-head mb-4 d-flex flex-wrap align-items-center">
 					<div class="me-auto">
 						<h2 class="font-w600 mb-0">Dashboard \</h2>
 						<p>Franchise List</p>
-					</div>	
-					<div class="input-group search-area2 d-xl-inline-flex mb-2 me-lg-4 me-md-2">
-						<button class="input-group-text"><i class="flaticon-381-search-2 text-primary"></i></button>
-						<input type="text" class="form-control" placeholder="Search here...">
 					</div>
-					<div class="dropdown custom-dropdown mb-2 period-btn">
-						<div class="btn btn-sm  d-flex align-items-center" data-bs-toggle="dropdown" aria-expanded="false" role="button">
-							<svg class="primary-icon" width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-								<path d="M22.167 5.83362H21.0003V3.50028C21.0003 3.19087 20.8774 2.89412 20.6586 2.67533C20.4398 2.45653 20.143 2.33362 19.8336 2.33362C19.5242 2.33362 19.2275 2.45653 19.0087 2.67533C18.7899 2.89412 18.667 3.19087 18.667 3.50028V5.83362H9.33362V3.50028C9.33362 3.19087 9.2107 2.89412 8.99191 2.67533C8.77312 2.45653 8.47637 2.33362 8.16695 2.33362C7.85753 2.33362 7.56079 2.45653 7.34199 2.67533C7.1232 2.89412 7.00028 3.19087 7.00028 3.50028V5.83362H5.83362C4.90536 5.83362 4.01512 6.20237 3.35874 6.85874C2.70237 7.51512 2.33362 8.40536 2.33362 9.33362V10.5003H25.667V9.33362C25.667 8.40536 25.2982 7.51512 24.6418 6.85874C23.9854 6.20237 23.0952 5.83362 22.167 5.83362Z" fill="#0E8A74"/>
-								<path d="M2.33362 22.1669C2.33362 23.0952 2.70237 23.9854 3.35874 24.6418C4.01512 25.2982 4.90536 25.6669 5.83362 25.6669H22.167C23.0952 25.6669 23.9854 25.2982 24.6418 24.6418C25.2982 23.9854 25.667 23.0952 25.667 22.1669V12.8336H2.33362V22.1669Z" fill="#0E8A74"/>
-							</svg>
-							<div class="text-start ms-3 flex-1">
-								<span class="d-block text-black">Change Periode</span>
-								<small class="d-block text-muted">August 28th - October 28th, 2021</small>
-							</div>
-							<i class="fa fa-caret-down text-light scale5 ms-3"></i>
-						</div>
-						<div class="dropdown-menu dropdown-menu-end">
-							<a class="dropdown-item" href="javascript:void(0);">October 29th - November 29th, 2021</a>
-							<a class="dropdown-item" href="javascript:void(0);">July 27th - Auguts 27th, 2021</a>
-						</div>
-					</div>
+
 				</div>
                 <div class="row mb-4 align-items-center">
                     <div class="col-xl-3 col-lg-4 mb-4 mb-lg-0">
@@ -87,14 +67,8 @@
                                             <h3 class="mb-0 font-w600 fs-22">{{ $totalFranchises }} Franchises</h3>
                                         </div>
                                     </div>
-                                    <div>
-                                        <a href="javascript:void(0);" class="btn btn-outline-primary rounded">
-                                            <i class="fa fa-check-square me-2 scale4" aria-hidden="true"></i>Active
-                                        </a>
-                                        <a href="javascript:void(0);" class="btn btn-outline-warning rounded ms-2">Edit</a>
-                                        <a href="javascript:void(0);" class="btn btn-danger rounded ms-2">Delete</a>
-                                    </div>
-                                </div>							
+
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -111,12 +85,7 @@
 							<table id="example5" class="table customer-table display mb-4 fs-14 card-table">
 								<thead>
                                     <tr>
-                                        <th>
-                                            <div class="form-check checkbox-secondary">
-                                                <input class="form-check-input" type="checkbox" value="" id="checkAll">
-                                                <label class="form-check-label" for="checkAll"></label>
-                                            </div>
-                                        </th>
+
                                         <th>Franchisee ID</th>
                                         <th>Business Name</th>
                                         <th>City</th>
@@ -125,16 +94,11 @@
                                         <th>Territory Zip codes</th>
                                         <th>Actions</th>
                                     </tr>
-                                </thead>                                
+                                </thead>
 								<tbody>
                                     @foreach ($franchisees as $franchisee)
                                         <tr>
-                                            <td>
-                                                <div class="form-check checkbox-secondary">
-                                                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault{{ $franchisee->franchisee_id }}">
-                                                    <label class="form-check-label" for="flexCheckDefault{{ $franchisee->franchisee_id }}"></label>
-                                                </div>
-                                            </td>
+                                      
                                             <td>#{{ str_pad($franchisee->franchisee_id, 7, '0', STR_PAD_LEFT) }}</td>
                                             <td>{{ $franchisee->business_name }}</td>
                                             <td>{{ $franchisee->city }}</td>
@@ -146,11 +110,11 @@
                                                     $zipCodes = explode(',', $franchisee->location_zip); // Convert ZIP codes into an array
                                                     $chunks = array_chunk($zipCodes, 5); // Split array into chunks of 5
                                                 @endphp
-                                            
+
                                                 @foreach($chunks as $chunk)
                                                     {{ implode(', ', $chunk) }}<br>
                                                 @endforeach
-                                            </td>                                            
+                                            </td>
                                             <!-- No data available for 'Last Order' -->
                                             {{-- <td class="text-secondary font-w500">$0</td> <!-- No data available for 'Total Spent' --> --}}
                                             <td>
@@ -160,7 +124,7 @@
                                                             <path d="M17 3C17.2626 2.73735 17.5744 2.52901 17.9176 2.38687C18.2608 2.24473 18.6286 2.17157 19 2.17157C19.3714 2.17157 19.7392 2.24473 20.0824 2.38687C20.4256 2.52901 20.7374 2.73735 21 3C21.2626 3.26264 21.471 3.57444 21.6131 3.9176C21.7553 4.26077 21.8284 4.62856 21.8284 5C21.8284 5.37143 21.7553 5.73923 21.6131 6.08239C21.471 6.42555 21.2626 6.73735 21 7L7.5 20.5L2 22L3.5 16.5L17 3Z" stroke="#FF7B31" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                                         </svg>
                                                     </a>
-                                                    
+
                                                     <form action="{{ route('corporate_admin.franchise.destroy', $franchisee->franchisee_id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this franchisee?')">
                                                         @csrf
                                                         @method('DELETE')
@@ -173,22 +137,22 @@
                                                     </form>
                                                 </div>
                                             </td>
-                                            
+
                                         </tr>
                                     @endforeach
                                 </tbody>
-                                
+
 							</table>
 						</div>
 					</div>
 				</div>
             </div>
-			
+
         </div>
         <!--**********************************
             Content body end
         ***********************************-->
-		
+
 		<script>
             document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll(".edit-franchisee").forEach(button => {

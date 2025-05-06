@@ -75,6 +75,23 @@
                                                     </div>
 
                                                     <div class="mb-3 col-md-6">
+                                                        <label class="form-label">Address 1 <span class="text-danger">*</span></label>
+                                                        <input name="address1" id="address1" cols="10" rows="5" class="form-control" value="{{ $customer->address1 }}">
+                                                        @error('address1')
+                                                            <div class="text-danger">{{ $message }}</div>
+                                                        @enderror
+                                                    </div>
+
+                                                    <div class="mb-3 col-md-6">
+                                                        <label class="form-label">Address 2</label>
+                                                        <input name="address2" id="address2" cols="10" rows="5" class="form-control" value="{{ $customer->address2 }}">
+                                                        @error('address2')
+                                                            <div class="text-danger">{{ $message }}</div>
+                                                        @enderror
+                                                    </div>
+
+
+                                                    <div class="mb-3 col-md-6">
                                                         <label class="form-label">State <span class="text-danger">*</span></label>
                                                         <input type="text" class="form-control @error('state') is-invalid @enderror"
                                                             name="state" value="{{ $customer->state }}" placeholder="State">
@@ -94,22 +111,6 @@
                                                         @enderror
                                                     </div>
 
-
-                                                    <div class="mb-3 col-md-6">
-                                                        <label class="form-label">Address 1 <span class="text-danger">*</span></label>
-                                                        <textarea name="address1" id="address1" cols="10" rows="5" class="form-control">{{ $customer->address1 }}</textarea>
-                                                        @error('address1')
-                                                            <div class="text-danger">{{ $message }}</div>
-                                                        @enderror
-                                                    </div>
-
-                                                    <div class="mb-3 col-md-6">
-                                                        <label class="form-label">Address 2</label>
-                                                        <textarea name="address2" id="address2" cols="10" rows="5" class="form-control">{{ $customer->address2 }}</textarea>
-                                                        @error('address2')
-                                                            <div class="text-danger">{{ $message }}</div>
-                                                        @enderror
-                                                    </div>
 
 
                                                 </div>
