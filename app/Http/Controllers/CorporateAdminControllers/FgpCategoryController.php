@@ -4,22 +4,22 @@ namespace App\Http\Controllers\CorporateAdminControllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\FpgCategory; // Import the model
+use App\Models\FgpCategory; // Import the model
 
-class FpgCategoryController extends Controller
+class FgpCategoryController extends Controller
 {
     // Display all categories
     public function index()
     {
-        $categories = FpgCategory::all();
+        $categories = FgpCategory::all();
         $totalCategories = $categories->count();
-        return view('corporate_admin.fpg_category.index', compact('categories','totalCategories'));
+        return view('corporate_admin.fgp_category.index', compact('categories','totalCategories'));
     }
 
     // Show form to create a new category
     public function create()
     {
-        return view('corporate_admin.fpg_category.create');
+        return view('corporate_admin.fgp_category.create');
     }
 
     // Store the new category
@@ -29,50 +29,50 @@ class FpgCategoryController extends Controller
             'name' => 'required|string|max:255',
             'type' => 'required|string|max:255', // Changed from array to string
         ]);
-    
-        FpgCategory::create([
+
+        FgpCategory::create([
             'name' => $request->name,
             'type' => $request->type, // Store as a simple string
         ]);
-    
-        return redirect()->route('corporate_admin.fpgcategory.index')->with('success', 'Category created successfully.');
+
+        return redirect()->route('corporate_admin.fgpcategory.index')->with('success', 'Category created successfully.');
     }
-    
+
 
     // Show edit form
-    public function edit(FpgCategory $fpgcategory)
+    public function edit(FgpCategory $fgpcategory)
     {
-        return view('corporate_admin.fpg_category.edit', compact('fpgcategory'));
+        return view('corporate_admin.fgp_category.edit', compact('fgpcategory'));
     }
-    
+
 
     // Update category
-    public function update(Request $request, FpgCategory $fpgcategory)
+    public function update(Request $request, FgpCategory $fgpcategory)
     {
         $request->validate([
             'name' => 'required|string|max:255',
             'type' => 'required|string|max:255', // Ensure type is a string (single-select)
         ]);
-    
-        $fpgcategory->update([
+
+        $fgpcategory->update([
             'name' => $request->name,
             'type' => $request->type, // Store as a string (not JSON)
         ]);
-    
-        return redirect()->route('corporate_admin.fpgcategory.index')->with('success', 'Category updated successfully.');
+
+        return redirect()->route('corporate_admin.fgpcategory.index')->with('success', 'Category updated successfully.');
     }
-    
+
 
     // Delete category
-    public function destroy(FpgCategory $fpgcategory)
+    public function destroy(FgpCategory $fgpcategory)
     {
-        
+
         try {
 
-            $fpgcategory->delete();
-            return redirect()->route('corporate_admin.fpgcategory.index')->with('success', 'Category deleted successfully.');
+            $fgpcategory->delete();
+            return redirect()->route('corporate_admin.fgpcategory.index')->with('success', 'Category deleted successfully.');
         } catch (\Exception $e) {
-            return redirect()->route('corporate_admin.fpgcategory.index')->with('error', 'Failed to delete user.');
+            return redirect()->route('corporate_admin.fgpcategory.index')->with('error', 'Failed to delete user.');
         }
     }
 }

@@ -65,14 +65,14 @@
                                     @foreach ($orders as $index => $order)
                                     @php
                                         $totalAmount = \DB::table('fgp_order_details')
-                                            ->where('fpg_order_id', $order->fgp_ordersID)
+                                            ->where('fgp_order_id', $order->fgp_ordersID)
                                             ->selectRaw('SUM(unit_number * unit_cost) as total')
                                             ->value('total');
                                     @endphp
                                     <tr style="text-wrap: no-wrap;">
                                         <td>
                                             <span class="cursor-pointer text-primary order-detail-trigger" data-id="{{ $order->fgp_ordersID }}">
-                                                {{ \DB::table('fgp_order_details')->where('fpg_order_id', $order->fgp_ordersID)->count() }} items
+                                                {{ \DB::table('fgp_order_details')->where('fgp_order_id', $order->fgp_ordersID)->count() }} items
                                             </span>
                                         </td>
                                         <td>{{ $order->status }}</td>

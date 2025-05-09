@@ -2,7 +2,6 @@
 @section('content')
 
 
-
     <!--**********************************
                 Content body start
             ***********************************-->
@@ -18,7 +17,7 @@
             <div class="form-head mb-4 d-flex flex-wrap align-items-center">
                 <div class="me-auto">
                     <h2 class="font-w600 mb-0">Dashboard \</h2>
-                    <p>Add Category</p>
+                    <p>Edit Category</p>
                 </div>
 
                 <a href="javascript:history.back()" class="btn btn-secondary btn-sm">
@@ -33,7 +32,7 @@
                             <div class="col-xl-12 col-lg-12">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h4 class="card-title">Add Category</h4>
+                                        <h4 class="card-title">Edit Category</h4>
                                     </div>
                                     <div class="card-body">
                                         <div class="basic-form">
@@ -45,24 +44,25 @@
                                                 </div>
                                             @endif
 
-                                            <form action="{{ route('corporate_admin.fpgcategory.store') }}" method="POST">
+                                            <form action="{{ route('corporate_admin.fgpcategory.update', $fgpcategory->category_ID) }}" method="POST">
                                                 @csrf
+                                                @method('PUT')
 
                                                 <div class="row">
 
                                                     <div class="mb-3 col-md-6">
                                                         <label class="form-label">Category Type <span class="text-danger">*</span></label>
-                                                        <select class="form-control @error('type') is-invalid @enderror" name="type">
-                                                            <option value="" selected disabled>Select Category Type</option>
-                                                            <option value="Availability" {{ old('type') == 'Availability' ? 'selected' : '' }}>Availability</option>
-                                                            <option value="Flavor" {{ old('type') == 'Flavor' ? 'selected' : '' }}>Flavor</option>
-                                                            <option value="Allergen" {{ old('type') == 'Allergen' ? 'selected' : '' }}>Allergen</option>
+                                                        <select class="form-control @error('type') is-invalid @enderror" name="type"> <!-- Removed multiple attribute -->
+                                                            <option value="Availability" {{ $fgpcategory->type == 'Availability' ? 'selected' : '' }}>Availability</option>
+                                                            <option value="Flavor" {{ $fgpcategory->type == 'Flavor' ? 'selected' : '' }}>Flavor</option>
+                                                            <option value="Allergen" {{ $fgpcategory->type == 'Allergen' ? 'selected' : '' }}>Allergen</option>
                                                         </select>
                                                         @error('type')
                                                             <div class="text-danger">{{ $message }}</div>
                                                         @enderror
                                                     </div>
 
+                                                    <!-- Include Select2 for better UI -->
                                                     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/css/select2.min.css" rel="stylesheet">
                                                     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/js/select2.min.js"></script>
                                                     <script>
@@ -74,18 +74,19 @@
                                                         });
                                                     </script>
 
-
                                                     <div class="mb-3 col-md-6">
                                                         <label class="form-label">Category Name <span class="text-danger">*</span></label>
                                                         <input type="text" class="form-control @error('name') is-invalid @enderror"
-                                                            name="name" value="{{ old('name') }}" placeholder="Subcategory">
-                                                        @error('name')
-                                                            <div class="text-danger">{{ $message }}</div>
-                                                        @enderror
+                                                            name="name" value="{{ old('name', $fgpcategory->name) }}" required>
+                                                        @error('name') <div class="text-danger">{{ $message }}</div> @enderror
                                                     </div>
                                                 </div>
-                                                <button type="submit" class="btn btn-primary bg-primary">Add Category</button>
+
+                                                <button type="submit" class="btn btn-primary bg-primary">Update Category</button>
                                             </form>
+
+
+
 
                                         </div>
                                     </div>

@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('fpg_items', function (Blueprint $table) {
+        Schema::create('fgp_items', function (Blueprint $table) {
             $table->id('fgp_item_id');
             $table->unsignedBigInteger('category_ID')->nullable();
             $table->string('name');
@@ -25,8 +25,8 @@ return new class extends Migration
             $table->boolean('orderable')->default(1);
             $table->timestamps();
 
-            // Ensure category_ID exists in fpg_categories
-            $table->foreign('category_ID')->references('category_ID')->on('fpg_categories')->onDelete('cascade');
+            // Ensure category_ID exists in fgp_categories
+            $table->foreign('category_ID')->references('category_ID')->on('fgp_categories')->onDelete('cascade');
         });
     }
 
@@ -35,6 +35,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('fpg_items');
+        Schema::dropIfExists('fgp_items');
     }
 };

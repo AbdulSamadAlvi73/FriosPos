@@ -69,12 +69,12 @@
                                 <tbody>
                                     @foreach ($customers as $index => $customer)
                                     <tr>
-                                       
+
                                         <td>{{ $customer->name }}</td>
-                                        <td>{{ $customer->email }}</td>
-                                        <td>{{ $customer->phone }}</td>
-                                        <td>{{ $customer->state }}</td>
-                                        <td>{{ $customer->zip_code }}</td>
+                                        <td>{{ $customer->email ?: '-' }}</td>
+                                        <td>{{ $customer->phone ?: '-' }}</td>
+                                        <td>{{ $customer->state ?: '-' }}</td>
+                                        <td>{{ $customer->zip_code ?: '-' }}</td>
                                         <td>
                                             <div class="d-flex">
                                                 <a href="{{ route('franchise.customer.view', $customer->customer_id) }}">

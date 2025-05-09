@@ -26,7 +26,7 @@
                                         <h3 class="mb-0 font-w600 fs-22">{{ $totalOrders }} Flavor Pops</h3>
                                     </div>
                                 </div>
-                               
+
                             </div>
                         </div>
                     </div>
@@ -55,7 +55,7 @@
                                 @foreach ($orders as $order)
                                 @php
                                     $totalAmount = \DB::table('fgp_order_details')
-                                        ->where('fpg_order_id', $order->fgp_ordersID)
+                                        ->where('fgp_order_id', $order->fgp_ordersID)
                                         ->selectRaw('SUM(unit_number * unit_cost) as total')
                                         ->value('total');
 
@@ -66,7 +66,7 @@
                                         <td>{{ $customer->name ?? $franchisee->business_name }}</td>
                                         <td>
                                             <span class="cursor-pointer text-primary order-detail-trigger" data-id="{{ $order->fgp_ordersID }}">
-                                                {{ \DB::table('fgp_order_details')->where('fpg_order_id', $order->fgp_ordersID)->count() }} items
+                                                {{ \DB::table('fgp_order_details')->where('fgp_order_id', $order->fgp_ordersID)->count() }} items
                                             </span>
                                         </td>
                                         {{-- <td>{{ $order->status }}</td> --}}

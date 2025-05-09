@@ -69,12 +69,12 @@
                                         $franchisee = App\Models\User::where('franchisee_id' , $customer->franchisee_id)->first();
                                     @endphp
                                     <tr>
-                                     
+
                                         <td>{{ $franchisee->name ?? '-' }}</td>
                                         <td>{{ $customer->name }}</td>
-                                        <td>{{ $customer->email }}</td>
-                                        <td>{{ $customer->phone }}</td>
-                                        <td>{{ $customer->state }}</td>
+                                        <td>{{ $customer->email ?: '-' }}</td>
+                                        <td>{{ $customer->phone ?: '-' }}</td>
+                                        <td>{{ $customer->state ?: '-' }}</td>
                                         <td>
                                             <div class="d-flex">
                                                 <a href="{{ route('corporate_admin.customer.view', $customer->customer_id) }}">

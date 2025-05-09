@@ -34,9 +34,9 @@
                         <span class="nav-text">Frios Flavors</span>
                     </a>
                     <ul aria-expanded="false">
-                        <li><a href="{{ route('corporate_admin.fpgitem.index') }}">Flavor List</a></li>
-                        <li><a href="{{ route('corporate_admin.fpgitem.availability') }}">Availability</a></li>
-                        <li><a href="{{ route('corporate_admin.fpgcategory.index') }}">Edit Flavor Categories</a></li>
+                        <li><a href="{{ route('corporate_admin.fgpitem.index') }}">Flavor List</a></li>
+                        <li><a href="{{ route('corporate_admin.fgpitem.availability') }}">Availability</a></li>
+                        <li><a href="{{ route('corporate_admin.fgpcategory.index') }}">Edit Flavor Categories</a></li>
                     </ul>
                 </li>
                 <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
@@ -82,6 +82,7 @@
                     </a>
                     <ul aria-expanded="false">
                         <li><a href="{{ route('corporate_admin.events.calender') }}">Calender</a></li>
+                        <li><a href="{{ route('corporate_admin.events.report') }}">Report</a></li>
                     </ul>
                 </li>
             @endrole
@@ -233,6 +234,7 @@
                     </a>
                     <ul aria-expanded="false">
                         <li><a href="{{ route('franchise_staff.events.calendar') }}">Calender</a></li>
+                        <li><a href="{{ route('franchise_staff.events.report') }}">Report</a></li>
                     </ul>
                 </li>
             @endrole

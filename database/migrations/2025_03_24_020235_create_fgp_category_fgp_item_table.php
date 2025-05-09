@@ -11,21 +11,21 @@
          */
         public function up()
         {
-            Schema::create('fpg_category_fpg_item', function (Blueprint $table) {
+            Schema::create('fgp_category_fgp_item', function (Blueprint $table) {
                 $table->id();
                 $table->unsignedBigInteger('category_ID');
                 $table->unsignedBigInteger('fgp_item_id');
                 $table->timestamps();
-        
+
                 // Foreign keys
-                $table->foreign('category_ID')->references('category_ID')->on('fpg_categories')->onDelete('cascade');
-                $table->foreign('fgp_item_id')->references('fgp_item_id')->on('fpg_items')->onDelete('cascade');
+                $table->foreign('category_ID')->references('category_ID')->on('fgp_categories')->onDelete('cascade');
+                $table->foreign('fgp_item_id')->references('fgp_item_id')->on('fgp_items')->onDelete('cascade');
             });
         }
-        
+
         public function down()
         {
-            Schema::dropIfExists('fpg_category_fpg_item');
+            Schema::dropIfExists('fgp_category_fgp_item');
         }
-        
+
     };

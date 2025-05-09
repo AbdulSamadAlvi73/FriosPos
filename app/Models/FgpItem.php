@@ -8,11 +8,11 @@ use Illuminate\Support\Facades\Log;
 use DB;
 
 
-class FpgItem extends Model
+class FgpItem extends Model
 {
     use HasFactory;
 
-    protected $table = 'fpg_items'; // Ensure table name is correct
+    protected $table = 'fgp_items'; // Ensure table name is correct
     protected $primaryKey = 'fgp_item_id'; // Explicitly define primary key
     public $timestamps = true; // Ensure timestamps are handled
 
@@ -29,17 +29,17 @@ class FpgItem extends Model
         'orderable'
     ];
 
-    // Many-to-many relationship with FpgCategory
+    // Many-to-many relationship with FgpCategory
     public function categories()
     {
-        return $this->belongsToMany(FpgCategory::class, 'fpg_category_fpg_item', 'fgp_item_id', 'category_ID');
+        return $this->belongsToMany(FgpCategory::class, 'fgp_category_fgp_item', 'fgp_item_id', 'category_ID');
     }
 
     public function Orders() {
-        return $this->hasMany(FpgOrder::class, 'fgp_item_id')->where('status', 'delivered');
+        return $this->hasMany(FgpOrder::class, 'fgp_item_id')->where('status', 'delivered');
     }
     public function InventoryAllocations() {
-        return $this->hasMany(InventoryAllocation::class, 'fpg_item_id');
+        return $this->hasMany(InventoryAllocation::class, 'fgp_item_id');
     }
 
     // public function availableQuantity() {
@@ -56,9 +56,9 @@ class FpgItem extends Model
     public function availableQuantity()
 {
     return DB::table('fgp_order_details')
-        ->join('fpg_orders', 'fpg_orders.fgp_ordersID', '=', 'fgp_order_details.fpg_order_id')
+        ->join('fgp_orders', 'fgp_orders.fgp_ordersID', '=', 'fgp_order_details.fgp_order_id')
         ->where('fgp_order_details.fgp_item_id', $this->fgp_item_id)
-        ->where('fpg_orders.status', 'Delivered')
+        ->where('fgp_orders.status', 'Delivered')
         ->sum('fgp_order_details.unit_number');
 }
 

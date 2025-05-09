@@ -219,7 +219,7 @@ document.getElementById('orderButton').addEventListener('click', function () {
                     let orderableValue = $(this).val();
 
                     $.ajax({
-                        url: "{{ route('corporate_admin.fpgitem.updateOrderable') }}",
+                        url: "{{ route('corporate_admin.fgpitem.updateOrderable') }}",
                         type: "POST",
                         data: {
                             _token: "{{ csrf_token() }}",

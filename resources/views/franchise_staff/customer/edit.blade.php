@@ -55,7 +55,7 @@
                                                     </div>
 
                                                     <div class="mb-3 col-md-4">
-                                                        <label class="form-label">Phone number <span class="text-danger">*</span></label>
+                                                        <label class="form-label">Phone number</label>
                                                         <input type="text" class="form-control @error('phone') is-invalid @enderror"
                                                             name="phone" value="{{ $customer->phone }}" placeholder="Phone">
                                                         @error('phone')
@@ -64,7 +64,7 @@
                                                     </div>
 
                                                     <div class="mb-3 col-md-4">
-                                                        <label class="form-label">Email <span class="text-danger">*</span></label>
+                                                        <label class="form-label">Email</label>
                                                         <input type="email" class="form-control @error('email') is-invalid @enderror"
                                                         name="email" id="email" value="{{ $customer->email }}">
 
@@ -75,7 +75,7 @@
                                                     </div>
 
                                                     <div class="mb-3 col-md-6">
-                                                        <label class="form-label">Address 1 <span class="text-danger">*</span></label>
+                                                        <label class="form-label">Address 1</label>
                                                         <input name="address1" id="address1" cols="10" rows="5" class="form-control" value="{{ $customer->address1 }}">
                                                         @error('address1')
                                                             <div class="text-danger">{{ $message }}</div>
@@ -92,7 +92,7 @@
 
 
                                                     <div class="mb-3 col-md-6">
-                                                        <label class="form-label">State <span class="text-danger">*</span></label>
+                                                        <label class="form-label">State</label>
                                                         <input type="text" class="form-control @error('state') is-invalid @enderror"
                                                             name="state" value="{{ $customer->state }}" placeholder="State">
                                                         @error('state')
@@ -101,7 +101,7 @@
                                                     </div>
 
                                                     <div class="mb-3 col-md-6">
-                                                        <label class="form-label">Zip code <span class="text-danger">*</span></label>
+                                                        <label class="form-label">Zip code</label>
                                                         <input type="text" class="form-control @error('zip_code') is-invalid @enderror"
                                                         name="zip_code" id="zip_code" value="{{ $customer->zip_code }}">
 
@@ -110,6 +110,16 @@
                                                             <div class="text-danger">{{ $message }}</div>
                                                         @enderror
                                                     </div>
+
+                                                    <div class="col-md-12 mb-3">
+                                                        <label class="form-label">Notes</label>
+                                                        <textarea name="notes" id="notes" cols="10" rows="5" class="form-control">{{ $customer->notes }}</textarea>
+                                                        @error('zip_code')
+                                                            <div class="text-danger">{{ $message }}</div>
+                                                        @enderror
+                                                    </div>
+
+
 
 
                                                 </div>

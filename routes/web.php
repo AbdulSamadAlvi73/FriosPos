@@ -7,13 +7,13 @@ use App\Http\Controllers\Auth\GoogleController;
 // Corporate Admin Controllers
 use App\Http\Controllers\CorporateAdminControllers\OwnerController;
 use App\Http\Controllers\FranchiseAdminControllers\StaffController;
-use App\Http\Controllers\CorporateAdminControllers\FpgItemsController;
+use App\Http\Controllers\CorporateAdminControllers\FgpItemsController;
 use App\Http\Controllers\CorporateAdminControllers\FranchiseController;
 use App\Http\Controllers\CorporateAdminControllers\ExpensesCategoryController;
 use App\Http\Controllers\FranchiseAdminControllers\OrderPopsController;
 // Franchise Admin Controller
 use App\Http\Controllers\CorporateAdminControllers\ViewOrdersController;
-use App\Http\Controllers\CorporateAdminControllers\FpgCategoryController;
+use App\Http\Controllers\CorporateAdminControllers\FgpCategoryController;
 use App\Http\Controllers\FranchiseAdminControllers\AdminProfileController;
 use App\Http\Controllers\FranchiseStaffController\FranchiseStaffController;
 // Franchise Manager Controllers
@@ -75,25 +75,25 @@ Route::middleware(['auth', 'role:corporate_admin'])->prefix('corporate_admin')->
     Route::put('/owner/{owner}', [OwnerController::class, 'update'])->name('owner.update');
     Route::delete('/owner/{owner}', [OwnerController::class, 'destroy'])->name('owner.destroy');
 
-    // fpg Category routes
-    Route::get('/fpgcategory', [FpgCategoryController::class, 'index'])->name('fpgcategory.index');
-    Route::get('/fpgcategory/create', [FpgCategoryController::class, 'create'])->name('fpgcategory.create');
-    Route::post('/fpgcategory', [FpgCategoryController::class, 'store'])->name('fpgcategory.store');
-    Route::get('/fpgcategory/{fpgcategory}/edit', [FpgCategoryController::class, 'edit'])->name('fpgcategory.edit');
-    Route::put('/fpgcategory/{fpgcategory}', [FpgCategoryController::class, 'update'])->name('fpgcategory.update');
-    Route::delete('/fpgcategory/{fpgcategory}', [FpgCategoryController::class, 'destroy'])->name('fpgcategory.destroy');
+    // fgp Category routes
+    Route::get('/fgpcategory', [FgpCategoryController::class, 'index'])->name('fgpcategory.index');
+    Route::get('/fgpcategory/create', [FgpCategoryController::class, 'create'])->name('fgpcategory.create');
+    Route::post('/fgpcategory', [FgpCategoryController::class, 'store'])->name('fgpcategory.store');
+    Route::get('/fgpcategory/{fgpcategory}/edit', [FgpCategoryController::class, 'edit'])->name('fgpcategory.edit');
+    Route::put('/fgpcategory/{fgpcategory}', [FgpCategoryController::class, 'update'])->name('fgpcategory.update');
+    Route::delete('/fgpcategory/{fgpcategory}', [FgpCategoryController::class, 'destroy'])->name('fgpcategory.destroy');
 
-    // fpg items routes
-    Route::get('/fpgitem', [FpgItemsController::class, 'index'])->name('fpgitem.index');
-    Route::get('/fpgitem/create', [FpgItemsController::class, 'create'])->name('fpgitem.create');
-    Route::post('/fpgitem', [FpgItemsController::class, 'store'])->name('fpgitem.store');
-    Route::get('/fpgitem/{fpgitem}/edit', [FpgItemsController::class, 'edit'])->name('fpgitem.edit');
-    Route::put('/fpgitem/{fpgitem}', [FpgItemsController::class, 'update'])->name('fpgitem.update');
-    Route::delete('/fpgitem/{fpgitem}', [FpgItemsController::class, 'destroy'])->name('fpgitem.destroy');
-    Route::post('/fpgitem/update-orderable', [FpgItemsController::class, 'updateOrderable'])->name('fpgitem.updateOrderable');
-    Route::get('/fpgitemavailability', [FpgItemsController::class, 'availability'])->name('fpgitem.availability');
-    Route::post('/fpgitem/update-status/{id}', [FpgItemsController::class, 'updateStatus'])->name('fpgitem.updateStatus');
-    Route::post('/fpgitem/update-month/{id}', [FpgItemsController::class, 'updateMonth']);
+    // fgp items routes
+    Route::get('/fgpitem', [FgpItemsController::class, 'index'])->name('fgpitem.index');
+    Route::get('/fgpitem/create', [FgpItemsController::class, 'create'])->name('fgpitem.create');
+    Route::post('/fgpitem', [FgpItemsController::class, 'store'])->name('fgpitem.store');
+    Route::get('/fgpitem/{fgpitem}/edit', [FgpItemsController::class, 'edit'])->name('fgpitem.edit');
+    Route::put('/fgpitem/{fgpitem}', [FgpItemsController::class, 'update'])->name('fgpitem.update');
+    Route::delete('/fgpitem/{fgpitem}', [FgpItemsController::class, 'destroy'])->name('fgpitem.destroy');
+    Route::post('/fgpitem/update-orderable', [FgpItemsController::class, 'updateOrderable'])->name('fgpitem.updateOrderable');
+    Route::get('/fgpitemavailability', [FgpItemsController::class, 'availability'])->name('fgpitem.availability');
+    Route::post('/fgpitem/update-status/{id}', [FgpItemsController::class, 'updateStatus'])->name('fgpitem.updateStatus');
+    Route::post('/fgpitem/update-month/{id}', [FgpItemsController::class, 'updateMonth']);
 
     // Additional charges routes
     Route::put('/additional-charges/status', [AdditionalChargesController::class, 'changeStatus']);
@@ -124,6 +124,7 @@ Route::middleware(['auth', 'role:corporate_admin'])->prefix('corporate_admin')->
 
     // Event
     Route::get('/events/calender', [EventController::class, 'eventCalenderAdmin'])->name('events.calender');
+    Route::get('/events/report', [EventController::class, 'eventReportAdmin'])->name('events.report');
     Route::get('/events/{id}/view', [EventController::class, 'viewAdmin'])->name('events.view');
 
 
@@ -247,6 +248,7 @@ Route::middleware(['auth', 'role:franchise_staff'])->group(function () {
     Route::prefix('franchise_staff')->name('franchise_staff.')->group(function (){
 
         Route::get('calendar' , [FranchiseStaffController::class , 'calendar'])->name('events.calendar');
+        Route::get('report' , [FranchiseStaffController::class , 'report'])->name('events.report');
         Route::get('events/{id}/view' , [FranchiseStaffController::class , 'eventView'])->name('events.view');
         Route::get('flavors' , [FranchiseStaffController::class , 'flavors'])->name('flavors');
         Route::get('/flavors/detail', [FranchiseStaffController::class, 'flavorsDetail'])->name('flavors.detail');

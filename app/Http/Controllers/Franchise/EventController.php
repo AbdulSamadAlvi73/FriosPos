@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Franchise;
 
 use App\Http\Controllers\Controller;
-use App\Models\FpgItem;
+use App\Models\FgpItem;
 use App\Models\FranchiseEvent;
 use App\Models\FranchiseEventItem;
 use App\Models\InventoryAllocation;
@@ -81,7 +81,7 @@ class EventController extends Controller
 
     public function create() {
         $currentMonth = strval(Carbon::now()->format('n'));
-        $pops = FpgItem::where('orderable', 1)
+        $pops = FgpItem::where('orderable', 1)
             ->where('internal_inventory', '>', 0)
             ->get()
             ->filter(function ($pop) use ($currentMonth) {
@@ -92,21 +92,21 @@ class EventController extends Controller
         $staffs = User::where('role', 'franchise_staff')->get();
 
 
-        $orders = DB::table('fpg_orders')
+        $orders = DB::table('fgp_orders')
         ->where('status', 'Delivered')
         ->get();
 
     $orderIds = $orders->pluck('fgp_ordersID');
 
     $orderDetails = DB::table('fgp_order_details')
-        ->join('fpg_items', 'fgp_order_details.fgp_item_id', '=', 'fpg_items.fgp_item_id')
-        ->whereIn('fgp_order_details.fpg_order_id', $orderIds)
+        ->join('fgp_items', 'fgp_order_details.fgp_item_id', '=', 'fgp_items.fgp_item_id')
+        ->whereIn('fgp_order_details.fgp_order_id', $orderIds)
         ->select(
             'fgp_order_details.fgp_item_id',
-            'fpg_items.name as item_name',
+            'fgp_items.name as item_name',
             DB::raw('SUM(fgp_order_details.unit_number) as total_units')
         )
-        ->groupBy('fgp_order_details.fgp_item_id', 'fpg_items.name')
+        ->groupBy('fgp_order_details.fgp_item_id', 'fgp_items.name')
         ->get();
 
         $customers = Customer::get();
@@ -193,28 +193,28 @@ class EventController extends Controller
             $message = 'No Orderable pops will be available within the 15-day duration.';
         } else {
             // Fetch pops data if the duration is greater than or equal to 15 days
-            $pops = FpgItem::where('orderable', 1)
+            $pops = FgpItem::where('orderable', 1)
                 ->where('internal_inventory', '>', 0)
                 ->get();
             $message = null;
         }
 
         // Fetch order details based on orders within the date range
-        $orders = DB::table('fpg_orders')
+        $orders = DB::table('fgp_orders')
             ->where('status', 'Delivered')
             ->get();
 
         $orderIds = $orders->pluck('fgp_ordersID');
 
         $orderDetails = DB::table('fgp_order_details')
-            ->join('fpg_items', 'fgp_order_details.fgp_item_id', '=', 'fpg_items.fgp_item_id')
-            ->whereIn('fgp_order_details.fpg_order_id', $orderIds)
+            ->join('fgp_items', 'fgp_order_details.fgp_item_id', '=', 'fgp_items.fgp_item_id')
+            ->whereIn('fgp_order_details.fgp_order_id', $orderIds)
             ->select(
                 'fgp_order_details.fgp_item_id',
-                'fpg_items.name as item_name',
+                'fgp_items.name as item_name',
                 DB::raw('SUM(fgp_order_details.unit_number) as total_units')
             )
-            ->groupBy('fgp_order_details.fgp_item_id', 'fpg_items.name')
+            ->groupBy('fgp_order_details.fgp_item_id', 'fgp_items.name')
             ->get();
 
 
@@ -256,5 +256,19 @@ class EventController extends Controller
         $event = Event::where('id' , $id)->firstorfail();
         $eventItems = FranchiseEventItem::where('event_id' , $event->id)->get();
         return view('corporate_admin.event.view' , compact('event','eventItems'));
+    }
+
+    public function eventReportAdmin(Request $request) {
+        $monthYear = $request->input('month_year', Carbon::now()->format('Y-m'));
+
+        // Extract year and month from the provided monthYear
+        $year = Carbon::parse($monthYear)->year;
+        $month = Carbon::parse($monthYear)->month;
+
+        // Fetch the data based on the selected or default month/year
+        $eventItems = FranchiseEventItem::whereYear('created_at', $year)
+                                         ->whereMonth('created_at', $month)
+                                         ->get();
+        return view('corporate_admin.event.report', compact('eventItems'));
     }
 }

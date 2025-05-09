@@ -57,7 +57,7 @@
                             <table id="example5" class="table customer-table display mb-4 fs-14 card-table">
                                 <thead>
                                     <tr>
-                                       
+
                                         <th>Name</th>
                                         <th>Email</th>
                                         <th>Phone number</th>
@@ -71,10 +71,10 @@
                                     <tr>
 
                                         <td>{{ $customer->name }}</td>
-                                        <td>{{ $customer->email }}</td>
-                                        <td>{{ $customer->phone }}</td>
-                                        <td>{{ $customer->state }}</td>
-                                        <td>{{ $customer->zip_code }}</td>
+                                        <td>{{ $customer->email ?: '-' }}</td>
+                                        <td>{{ $customer->phone ?: '-' }}</td>
+                                        <td>{{ $customer->state ?: '-' }}</td>
+                                        <td>{{ $customer->zip_code ?: '-' }}</td>
                                         <td>
                                             <div class="d-flex">
                                                 <a href="{{ route('franchise_staff.customer.view', $customer->customer_id) }}">

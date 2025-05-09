@@ -2,40 +2,40 @@
 
 namespace App\Http\Controllers\CorporateAdminControllers;
 
-use App\Models\FpgItem;
-use App\Models\FpgCategory;
+use App\Models\FgpItem;
+use App\Models\FgpCategory;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
 
-class FpgItemsController extends Controller
+class FgpItemsController extends Controller
 {
     public function index()
     {
-        $items = FpgItem::with('categories')->get();
+        $items = FgpItem::with('categories')->get();
         $totalItems = $items->count();
-        return view('corporate_admin.fpg_items.index', compact('items','totalItems'));
+        return view('corporate_admin.fgp_items.index', compact('items','totalItems'));
     }
 
     public function create()
     {
         $categorizedCategories = [
-            'Availability' => FpgCategory::whereJsonContains('type', 'Availability')->get(),
-            'Flavor' => FpgCategory::whereJsonContains('type', 'Flavor')->get(),
-            'Allergen' => FpgCategory::whereJsonContains('type', 'Allergen')->get()
+            'Availability' => FgpCategory::whereJsonContains('type', 'Availability')->get(),
+            'Flavor' => FgpCategory::whereJsonContains('type', 'Flavor')->get(),
+            'Allergen' => FgpCategory::whereJsonContains('type', 'Allergen')->get()
         ];
-    
-        return view('corporate_admin.fpg_items.create', compact('categorizedCategories'));
+
+        return view('corporate_admin.fgp_items.create', compact('categorizedCategories'));
     }
-    
-    
-    
-    
+
+
+
+
     public function store(Request $request)
     {
         $validated = $request->validate([
             'category_ID' => 'required|array',
-            'category_ID.*' => 'exists:fpg_categories,category_ID',
+            'category_ID.*' => 'exists:fgp_categories,category_ID',
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'case_cost' => 'required|numeric',
@@ -44,20 +44,20 @@ class FpgItemsController extends Controller
             'image2' => 'nullable|image',
             'image3' => 'nullable|image',
         ]);
-    
+
         // Handle image uploads
         if ($request->hasFile('image1')) {
-            $validated['image1'] = $request->file('image1')->store('images/fpg_items', 'public');
+            $validated['image1'] = $request->file('image1')->store('images/fgp_items', 'public');
         }
         if ($request->hasFile('image2')) {
-            $validated['image2'] = $request->file('image2')->store('images/fpg_items', 'public');
+            $validated['image2'] = $request->file('image2')->store('images/fgp_items', 'public');
         }
         if ($request->hasFile('image3')) {
-            $validated['image3'] = $request->file('image3')->store('images/fpg_items', 'public');
+            $validated['image3'] = $request->file('image3')->store('images/fgp_items', 'public');
         }
-    
-        // Create the FpgItem
-        $item = FpgItem::create([
+
+        // Create the FgpItem
+        $item = FgpItem::create([
             'category_ID' => null, // Since it's a many-to-many relation
             'name' => $validated['name'],
             'description' => $validated['description'] ?? null,
@@ -68,34 +68,34 @@ class FpgItemsController extends Controller
             'image3' => $validated['image3'] ?? null,
             'orderable' => 1,
         ]);
-    
+
         // Attach categories in the pivot table
         $item->categories()->attach($validated['category_ID']);
-    
-        return redirect()->route('corporate_admin.fpgitem.index')->with('success', 'FPG Item added successfully.');
-    }
-    
 
-    
-    public function edit(FpgItem $fpgitem)
+        return redirect()->route('corporate_admin.fgpitem.index')->with('success', 'Fgp Item added successfully.');
+    }
+
+
+
+    public function edit(FgpItem $fgpitem)
 {
     $categorizedCategories = [
-        'Availability' => FpgCategory::whereJsonContains('type', 'Availability')->get(),
-        'Flavor' => FpgCategory::whereJsonContains('type', 'Flavor')->get(),
-        'Allergen' => FpgCategory::whereJsonContains('type', 'Allergen')->get()
+        'Availability' => FgpCategory::whereJsonContains('type', 'Availability')->get(),
+        'Flavor' => FgpCategory::whereJsonContains('type', 'Flavor')->get(),
+        'Allergen' => FgpCategory::whereJsonContains('type', 'Allergen')->get()
     ];
 
     // Fetch selected categories for the item
-    $selectedCategories = $fpgitem->categories->pluck('category_ID')->toArray();
+    $selectedCategories = $fgpitem->categories->pluck('category_ID')->toArray();
 
-    return view('corporate_admin.fpg_items.edit', compact('fpgitem', 'categorizedCategories', 'selectedCategories'));
+    return view('corporate_admin.fgp_items.edit', compact('fgpitem', 'categorizedCategories', 'selectedCategories'));
 }
 
-    public function update(Request $request, FpgItem $fpgitem)
+    public function update(Request $request, FgpItem $fgpitem)
     {
         $validated = $request->validate([
             'category_ID' => 'required|array',
-            'category_ID.*' => 'exists:fpg_categories,category_ID',
+            'category_ID.*' => 'exists:fgp_categories,category_ID',
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'case_cost' => 'required|numeric',
@@ -104,19 +104,19 @@ class FpgItemsController extends Controller
             'image2' => 'nullable|image',
             'image3' => 'nullable|image',
         ]);
-    
+
         // Preserve old images if new images are not uploaded
-        $validated['image1'] = $request->hasFile('image1') ? 
-            $request->file('image1')->store('images/fpg_items', 'public') : $fpgitem->image1;
-    
-        $validated['image2'] = $request->hasFile('image2') ? 
-            $request->file('image2')->store('images/fpg_items', 'public') : $fpgitem->image2;
-    
-        $validated['image3'] = $request->hasFile('image3') ? 
-            $request->file('image3')->store('images/fpg_items', 'public') : $fpgitem->image3;
-    
+        $validated['image1'] = $request->hasFile('image1') ?
+            $request->file('image1')->store('images/fgp_items', 'public') : $fgpitem->image1;
+
+        $validated['image2'] = $request->hasFile('image2') ?
+            $request->file('image2')->store('images/fgp_items', 'public') : $fgpitem->image2;
+
+        $validated['image3'] = $request->hasFile('image3') ?
+            $request->file('image3')->store('images/fgp_items', 'public') : $fgpitem->image3;
+
         // Update the item
-        $fpgitem->update([
+        $fgpitem->update([
             'name' => $validated['name'],
             'description' => $validated['description'] ?? null,
             'case_cost' => $validated['case_cost'],
@@ -126,45 +126,45 @@ class FpgItemsController extends Controller
             'image3' => $validated['image3'],
             'orderable' => 1,
         ]);
-    
-        // Sync categories in the pivot table
-        $fpgitem->categories()->sync($validated['category_ID']);
-    
-        return redirect()->route('corporate_admin.fpgitem.index')->with('success', 'FPG Item updated successfully.');
-    }
-    
-    
 
-    public function destroy(FpgItem $fpgitem)
+        // Sync categories in the pivot table
+        $fgpitem->categories()->sync($validated['category_ID']);
+
+        return redirect()->route('corporate_admin.fgpitem.index')->with('success', 'Fgp Item updated successfully.');
+    }
+
+
+
+    public function destroy(FgpItem $fgpitem)
     {
         try {
             // Delete associated images if they exist
-            if ($fpgitem->image1) {
-                Storage::disk('public')->delete($fpgitem->image1);
+            if ($fgpitem->image1) {
+                Storage::disk('public')->delete($fgpitem->image1);
             }
-            if ($fpgitem->image2) {
-                Storage::disk('public')->delete($fpgitem->image2);
+            if ($fgpitem->image2) {
+                Storage::disk('public')->delete($fgpitem->image2);
             }
-            if ($fpgitem->image3) {
-                Storage::disk('public')->delete($fpgitem->image3);
+            if ($fgpitem->image3) {
+                Storage::disk('public')->delete($fgpitem->image3);
             }
-    
+
             // Detach related categories in the pivot table
-            $fpgitem->categories()->detach();
-    
+            $fgpitem->categories()->detach();
+
             // Delete the item
-            $fpgitem->delete();
-    
-            return redirect()->route('corporate_admin.fpgitem.index')->with('success', 'FPG Item deleted successfully.');
+            $fgpitem->delete();
+
+            return redirect()->route('corporate_admin.fgpitem.index')->with('success', 'Fgp Item deleted successfully.');
         } catch (\Exception $e) {
-            return redirect()->route('corporate_admin.fpgitem.index')->with('error', 'Failed to delete FPG Item.');
+            return redirect()->route('corporate_admin.fgpitem.index')->with('error', 'Failed to delete Fgp Item.');
         }
     }
-    
+
     public function updateOrderable(Request $request)
     {
         try {
-            $item = FpgItem::findOrFail($request->id);
+            $item = FgpItem::findOrFail($request->id);
             $item->orderable = $request->orderable;
             $item->save();
 
@@ -176,14 +176,14 @@ class FpgItemsController extends Controller
 
     public function availability()
 {
-    $flavors = FpgItem::with('categories')->get();
+    $flavors = FgpItem::with('categories')->get();
     $totalItems = $flavors->count();
 
-    return view('corporate_admin.fpg_items.availability_flavor', compact('flavors','totalItems'));
+    return view('corporate_admin.fgp_items.availability_flavor', compact('flavors','totalItems'));
 }
 public function updateStatus(Request $request, $id)
 {
-    $item = FpgItem::where('fgp_item_id', $id)->firstOrFail(); // Use explicit key
+    $item = FgpItem::where('fgp_item_id', $id)->firstOrFail(); // Use explicit key
     $item->orderable = $request->orderable;
     $item->save();
 
@@ -194,7 +194,7 @@ public function updateStatus(Request $request, $id)
 
 public function updateMonth(Request $request, $id)
 {
-    $item = FpgItem::findOrFail($id);
+    $item = FgpItem::findOrFail($id);
     $datesAvailable = json_decode($item->dates_available, true) ?? [];
 
     if ($request->available) {
@@ -212,6 +212,6 @@ public function updateMonth(Request $request, $id)
 }
 
 
-    
+
 
 }

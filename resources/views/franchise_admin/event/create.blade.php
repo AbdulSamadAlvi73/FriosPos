@@ -49,33 +49,37 @@
 
                 </div>
                 @php
-                    use Carbon\Carbon;
+use Carbon\Carbon;
 
-                    $rawDate = request('date');
-                    $start = null;
-                    $end = null;
+$rawDate = request('date');
+$start = null;
+$end = null;
 
-                    if ($rawDate) {
-                        $cleanDate = str_replace(' ', '+', $rawDate);
+if ($rawDate) {
+    // Clean up any spaces and replace them with a plus sign (in case there's a space between time and timezone)
+    $cleanDate = str_replace(' ', '+', $rawDate);
 
-                        // Case 3: Special case — same start and end
-                        if ($cleanDate === '2025-05-01T05:00:00+05:00') {
-                            $parsedDate = Carbon::parse($cleanDate)->format('Y-m-d');
-                            $start = $parsedDate;
-                            $end = $parsedDate;
+    // Check if the cleaned date is in a specific format (e.g., `2025-05-01T05:00:00+05:00`)
+    if ($cleanDate === '2025-05-01T05:00:00+05:00') {
+        // Parse the date and set both start and end to the same date, with time set to 12 AM (00:00:00)
+        $parsedDate = Carbon::parse($cleanDate)->format('Y-m-d\T00:00:00');
+        $start = $parsedDate;
+        $end = $parsedDate;
 
-                            // Case 1: If datetime exists (has T), add 7 days
-                        } elseif (str_contains($cleanDate, 'T')) {
-                            $parsedDate = Carbon::parse($cleanDate);
-                            $start = $parsedDate->format('Y-m-d');
-                            $end = $parsedDate->copy()->addDays(7)->format('Y-m-d');
+    } elseif (str_contains($cleanDate, 'T')) {
+        // If the date contains time (T), parse the date and set both start and end to the same date, with time set to 12 AM (00:00:00)
+        $parsedDate = Carbon::parse($cleanDate);
+        $start = $parsedDate->format('Y-m-d\T00:00:00');  // Set to 12 AM (midnight)
+        $end = $parsedDate->format('Y-m-d\T00:00:00');  // Set to 12 AM (midnight)
 
-                            // Case 2: Pure date — only start_date
-                        } else {
-                            $start = Carbon::parse($cleanDate)->format('Y-m-d');
-                            $end = null;
-                        }
-                    }
+    } else {
+        // If no time part is provided, assume it's just a date and add default time of '00:00:00' (12 AM)
+        $start = Carbon::parse($cleanDate)->format('Y-m-d\T00:00:00');
+        $end = null;  // End is null if no time is provided
+    }
+}
+
+
                 @endphp
 
 
@@ -84,14 +88,14 @@
                 <div class="row mt-2">
                     <div class="col-md-6 form-group">
                         <label for="" class="form-label">Start Date</label>
-                        <input type="date" class="form-control" name="start_date" value="{{ $start }}" readonly>
+                        <input type="datetime-local" class="form-control" name="start_date" value="{{ old('start_date', $start) }}" readonly>
                         @error('start_date')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="col-md-6 form-group">
                         <label for="" class="form-label">End Date</label>
-                        <input type="date" class="form-control" name="end_date" value="{{ old('end_date', $end) }}">
+                        <input type="datetime-local" class="form-control" name="end_date" value="{{ old('end_date', $start) }}">
                         @error('end_date')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror

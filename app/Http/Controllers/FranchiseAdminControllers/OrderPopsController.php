@@ -3,16 +3,15 @@
 namespace App\Http\Controllers\FranchiseAdminControllers;
 
 use Carbon\Carbon;
-use App\Models\FpgItem;
-use App\Models\FpgOrder;
-use App\Models\FpgCategory;
+use App\Models\FgpItem;
+use App\Models\FgpOrder;
+use App\Models\FgpCategory;
 use App\Models\Customer;
 use Illuminate\Http\Request;
 use App\Models\AdditionalCharge;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use App\Models\FgpOrder;
 use DB;
 
 class OrderPopsController extends Controller
@@ -22,7 +21,7 @@ class OrderPopsController extends Controller
         $currentMonth = strval(Carbon::now()->format('n')); // Get current month as single-digit (1-12)
 
         // Fetch only items that are orderable, in stock, and available in the current month
-        $pops = FpgItem::where('orderable', 1)
+        $pops = FgpItem::where('orderable', 1)
             ->where('internal_inventory', '>', 0) // Ensure the item is in stock
             ->get()
             ->filter(function ($pop) use ($currentMonth) {
@@ -41,7 +40,7 @@ class OrderPopsController extends Controller
         $currentMonth = strval(Carbon::now()->format('n'));
 
         // Fetch only orderable, in-stock, and currently available items
-        $pops = FpgItem::where('orderable', 1)
+        $pops = FgpItem::where('orderable', 1)
             ->where('internal_inventory', '>', 0) // Ensure item is in stock
             ->get()
             ->filter(function ($pop) use ($currentMonth) {
@@ -131,7 +130,7 @@ public function store(Request $request)
     // Validate request
     $validated = $request->validate([
         'items' => 'required|array',
-        'items.*.fgp_item_id' => 'required|exists:fpg_items,fgp_item_id',
+        'items.*.fgp_item_id' => 'required|exists:fgp_items,fgp_item_id',
         'items.*.user_ID' => 'required|exists:users,user_id',
         'items.*.unit_cost' => 'required|numeric|min:0',
         'items.*.unit_number' => 'required|integer|min:1', // Allow any positive integer
@@ -150,7 +149,7 @@ public function store(Request $request)
         return redirect()->back()->withErrors(['Order quantity must be a multiple of ' . $factorCase . '.']);
     }
 
-    $orders = FpgOrder::create([
+    $orders = FgpOrder::create([
         'user_ID' => Auth::user()->franchisee_id,
         'date_transaction' => now(),
         'status' => 'Pending',
@@ -158,7 +157,7 @@ public function store(Request $request)
 
     foreach ($validated['items'] as $item) {
         DB::table('fgp_order_details')->insert([
-            'fpg_order_id' => $orders->id,
+            'fgp_order_id' => $orders->id,
             'fgp_item_id' => $item['fgp_item_id'],
             'unit_cost' => $item['unit_cost'],
             'unit_number' => $item['unit_number'],
@@ -173,7 +172,7 @@ public function store(Request $request)
 
 public function viewOrders()
 {
-    // $orders = FpgOrder::where('user_ID', Auth::id())
+    // $orders = FgpOrder::where('user_ID', Auth::id())
     //     ->select(
     //         'user_ID',
     //         'date_transaction',
@@ -190,7 +189,7 @@ public function viewOrders()
     //         return $order;
     //     });
 
-    $orders = FpgOrder::where('user_ID' , Auth::user()->franchisee_id)->get();
+    $orders = FgpOrder::where('user_ID' , Auth::user()->franchisee_id)->get();
 
     $totalOrders = $orders->count();
 

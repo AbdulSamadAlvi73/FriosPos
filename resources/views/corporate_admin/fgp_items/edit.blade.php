@@ -45,10 +45,10 @@
                                                 </div>
                                             @endif
 
-                                            <form action="{{ route('corporate_admin.fpgitem.update', $fpgitem->fgp_item_id) }}" method="POST" enctype="multipart/form-data">
+                                            <form action="{{ route('corporate_admin.fgpitem.update', $fgpitem->fgp_item_id) }}" method="POST" enctype="multipart/form-data">
                                                 @csrf
                                                 @method('PUT')
-                                            
+
                                                 <div class="row">
                                                     <!-- Left Column -->
                                                     <div class="col-md-6">
@@ -56,18 +56,18 @@
                                                         <div class="mb-3">
                                                             <label class="form-label">Item Name <span class="text-danger">*</span></label>
                                                             <input type="text" class="form-control @error('name') is-invalid @enderror"
-                                                                   name="name" value="{{ old('name', $fpgitem->name) }}" placeholder="Enter Item Name">
+                                                                   name="name" value="{{ old('name', $fgpitem->name) }}" placeholder="Enter Item Name">
                                                             @error('name') <div class="text-danger">{{ $message }}</div> @enderror
                                                         </div>
-                                            
+
                                                         <!-- Case Cost -->
                                                         <div class="mb-3 ">
                                                             <label class="form-label">Case Cost <span class="text-danger">*</span></label>
                                                             <input type="number" step="0.01" class="form-control @error('case_cost') is-invalid @enderror"
-                                                                   name="case_cost" value="{{ old('case_cost', $fpgitem->case_cost) }}" placeholder="Enter Case Cost">
+                                                                   name="case_cost" value="{{ old('case_cost', $fgpitem->case_cost) }}" placeholder="Enter Case Cost">
                                                             @error('case_cost') <div class="text-danger">{{ $message }}</div> @enderror
                                                         </div>
-                                            
+
                                                        <!-- Category Selection -->
                                                        <div class="mb-3">
                                                         <label class="form-label">Category <span class="text-danger">*</span></label>
@@ -76,7 +76,7 @@
                                                                 <h6 class="fw-bold p-2">{{ $categoryGroup }}</h6>
                                                                 @foreach ($categories as $category)
                                                                     <div class="form-check">
-                                                                        <input class="form-check-input" type="checkbox" name="category_ID[]" 
+                                                                        <input class="form-check-input" type="checkbox" name="category_ID[]"
                                                                             value="{{ $category->category_ID }}" id="category_{{ $category->category_ID }}"
                                                                             {{ in_array($category->category_ID, $selectedCategories) ? 'checked' : '' }}>
                                                                         <label class="form-check-label" for="category_{{ $category->category_ID }}">
@@ -91,70 +91,70 @@
                                                             <div class="text-danger">{{ $message }}</div>
                                                         @enderror
                                                     </div>
-                                                    
+
 
                                                     </div>
-                                            
+
                                                     <!-- Right Column -->
                                                     <div class="col-md-6">
                                                         <!-- Description -->
                                                         <div class="mb-3">
                                                             <label class="form-label">Description</label>
                                                             <input type="text" class="form-control @error('description') is-invalid @enderror"
-                                                                   name="description" value="{{ old('description', $fpgitem->description) }}" placeholder="Enter Description">
+                                                                   name="description" value="{{ old('description', $fgpitem->description) }}" placeholder="Enter Description">
                                                             @error('description') <div class="text-danger">{{ $message }}</div> @enderror
                                                         </div>
-                                            
+
                                                         <!-- Internal Inventory -->
                                                         <div class="mb-3">
                                                             <label class="form-label">Internal Inventory <span class="text-danger">*</span></label>
                                                             <input type="number" class="form-control @error('internal_inventory') is-invalid @enderror"
-                                                                   name="internal_inventory" value="{{ old('internal_inventory', $fpgitem->internal_inventory) }}"
+                                                                   name="internal_inventory" value="{{ old('internal_inventory', $fgpitem->internal_inventory) }}"
                                                                    placeholder="Enter Inventory Count">
                                                             @error('internal_inventory') <div class="text-danger">{{ $message }}</div> @enderror
                                                         </div>
-                                            
+
                                                           <!-- Image Uploads -->
                                                     <div class="mb-3">
                                                         <label class="form-label">Image 1</label>
                                                         <input type="file" class="form-control @error('image1') is-invalid @enderror" name="image1">
-                                                        @if ($fpgitem->image1)
-                                                            <img src="{{ asset('storage/'.$fpgitem->image1) }}" alt="Item Image 1" class="img-thumbnail mt-2" width="100">
+                                                        @if ($fgpitem->image1)
+                                                            <img src="{{ asset('storage/'.$fgpitem->image1) }}" alt="Item Image 1" class="img-thumbnail mt-2" width="100">
                                                         @endif
                                                         @error('image1') <div class="text-danger">{{ $message }}</div> @enderror
                                                     </div>
-                                            
+
                                                     <div class="mb-3">
                                                         <label class="form-label">Image 2</label>
                                                         <input type="file" class="form-control @error('image2') is-invalid @enderror" name="image2">
-                                                        @if ($fpgitem->image2)
-                                                            <img src="{{ asset('storage/'.$fpgitem->image2) }}" alt="Item Image 2" class="img-thumbnail mt-2" width="100">
+                                                        @if ($fgpitem->image2)
+                                                            <img src="{{ asset('storage/'.$fgpitem->image2) }}" alt="Item Image 2" class="img-thumbnail mt-2" width="100">
                                                         @endif
                                                         @error('image2') <div class="text-danger">{{ $message }}</div> @enderror
                                                     </div>
-                                            
+
                                                     <div class="mb-3">
                                                         <label class="form-label">Image 3</label>
                                                         <input type="file" class="form-control @error('image3') is-invalid @enderror" name="image3">
-                                                        @if ($fpgitem->image3)
-                                                            <img src="{{ asset('storage/'.$fpgitem->image3) }}" alt="Item Image 3" class="img-thumbnail mt-2" width="100">
+                                                        @if ($fgpitem->image3)
+                                                            <img src="{{ asset('storage/'.$fgpitem->image3) }}" alt="Item Image 3" class="img-thumbnail mt-2" width="100">
                                                         @endif
                                                         @error('image3') <div class="text-danger">{{ $message }}</div> @enderror
                                                     </div>
                                                     </div>
                                                 </div>
-                                            
 
-                                            
+
+
                                                 <button type="submit" class="btn btn-primary bg-primary">Update Item</button>
                                             </form>
-                                            
+
                                             <!-- Flatpickr CSS -->
                                             <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-                                            
+
                                             <!-- Flatpickr JS -->
                                             <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-                                            
+
                                             <script>
                                                 document.addEventListener("DOMContentLoaded", function () {
                                                     flatpickr("#dates_available", {
@@ -164,7 +164,7 @@
                                                     });
                                                 });
                                             </script>
-                                            
+
 
 
                                         </div>

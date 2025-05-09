@@ -11,7 +11,7 @@ return new class extends Migration
      */
         public function up(): void
     {
-        Schema::create('fpg_categories', function (Blueprint $table) {
+        Schema::create('fgp_categories', function (Blueprint $table) {
             $table->id('category_ID');
             $table->string('name');
             $table->json('type'); // Change from string to json for multiple values
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('fpg_categories');
+        Schema::dropIfExists('fgp_categories');
     }
 };

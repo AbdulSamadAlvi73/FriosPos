@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class FpgOrder extends Model
+class FgpOrder extends Model
 {
     use HasFactory;
 
-    // protected $table = 'fpg_order_details';
+    // protected $table = 'fgp_order_details';
     protected $guarded = [];
 
     public function user()
@@ -19,6 +19,6 @@ class FpgOrder extends Model
 
     public function item()
     {
-        return $this->belongsTo(FpgItem::class, 'fgp_item_id', 'name');
+        return $this->belongsTo(FgpItem::class, 'fgp_item_id', 'name');
     }
 }
