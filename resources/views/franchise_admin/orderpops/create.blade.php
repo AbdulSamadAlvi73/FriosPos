@@ -188,21 +188,21 @@
                                                         <div id="inventorySlots" class="row-container"></div>
                                                         {{-- {{dd($categorizedItems)}} --}}
                                                         <!-- Cart Section -->
-                                                        
+
                                                             <form action="{{ route('franchise.orderpops.confirm') }}" method="get">
                                                                 @csrf
                                                                 <input type="hidden" name="ordered_items" id="orderedItemsInput">
-                                                                
+
                                                                 <div class="row-container">
                                                                     <div class="category-column" style="width: 100%">
                                                                         <div class="column-title" id="totalPrice">Cart Total = $0</div>
                                                                         <div class="cart-slot" id="cart" ondragover="allowDrop(event)" ondrop="drop(event)"></div>
                                                                     </div>
                                                                 </div>
-                                                            
+
                                                                 <button type="button" class="btn btn-primary bg-primary" onclick="submitCart()">Next</button>
                                                             </form>
-                                                        
+
                                                         <script>
 function submitCart() {
     let cartItems = [];
@@ -212,7 +212,7 @@ function submitCart() {
 
         cartItems.push({
             itemId: data.itemId,  // Ensure item ID is retrieved correctly
-            name: caseType,  
+            name: caseType,
             price: data.price,
             quantity: data.quantity,
             image: data.image
@@ -229,7 +229,7 @@ function submitCart() {
     let csrfToken = document.createElement('input');
     csrfToken.type = 'hidden';
     csrfToken.name = '_token';
-    csrfToken.value = "{{ csrf_token() }}"; 
+    csrfToken.value = "{{ csrf_token() }}";
 
     let input = document.createElement('input');
     input.type = 'hidden';
@@ -244,21 +244,21 @@ function submitCart() {
 
 
 
-                                                        
+
                                                         // Allow drag and drop
                                                         function allowDrop(event) {
                                                             event.preventDefault();
                                                         }
-                                                        
+
                                                         function drop(event) {
                                                             event.preventDefault();
                                                             let draggedItem = event.dataTransfer.getData("text/html");
                                                             document.getElementById("cart").innerHTML += draggedItem;
                                                         }
                                                         </script>
-                                                        
-                                                        
-                                                        
+
+
+
                                                         {{-- <script>
                                                            function submitCart() {
     let cartItems = [];
@@ -287,11 +287,11 @@ console.log(cartItems);
 }
 
                                                         </script> --}}
-                                                        
-                                                        
+
+
                                                     </div>
                                                 </div>
-                                            
+
 
 
                                         </div>
@@ -308,7 +308,7 @@ console.log(cartItems);
         </div>
 
     </div>
-    
+
     <script>
         // Categories Data Array; Create in php
         const categoriesData = {!! json_encode(
@@ -325,7 +325,7 @@ console.log(cartItems);
         return collect($items)->flatMap(function ($subItems, $subCategory) {
             return collect($subItems)->map(function ($item) use ($subCategory) {
                 return [
-                    'fgp_item_id' => $item['fgp_item_id'], 
+                    'fgp_item_id' => $item['fgp_item_id'],
                     'type' => strtolower(trim($item['name'])), // Normalize caseType
                     'flavor' => strtoupper($subCategory),
                     'availability' => strtoupper($subCategory),
@@ -419,7 +419,7 @@ console.log(cartItems);
 
         // Create a draggable case element that shows the image,
         // uses the flavor name as a tooltip, and overlays the price.
-        function createCase(type, price, imageUrl, slot) { 
+        function createCase(type, price, imageUrl, slot) {
     const caseDiv = document.createElement("div");
     caseDiv.classList.add("case");
     caseDiv.title = type.trim();
@@ -451,7 +451,7 @@ function drag(event) {
 
 function drop(event) {
     event.preventDefault();
-    
+
     const caseType = event.dataTransfer.getData("caseType").toLowerCase().trim(); // Normalize caseType
     const price = parseInt(event.dataTransfer.getData("price"), 10);
     const image = event.dataTransfer.getData("image");

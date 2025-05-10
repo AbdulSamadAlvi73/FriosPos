@@ -12,6 +12,9 @@ use App\Models\AdditionalCharge;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Stripe\Stripe;
+use Stripe\Charge;
+use App\Models\OrderTransaction;
 use DB;
 
 class OrderPopsController extends Controller
@@ -125,39 +128,75 @@ public function showConfirmPage()
 
 public function store(Request $request)
 {
-    $minCases = 12; // Can be made configurable via settings
-    $factorCase = 3; // Can be made configurable via settings
-    // Validate request
+    $minCases = 12;
+    $factorCase = 3;
+
+    // ✅ Step 1: Validation
     $validated = $request->validate([
+        'stripeToken' => 'required|string',
+        'cardholder_name' => 'required|string|max:191',
+        'grandTotal' => 'required|numeric|min:1',
         'items' => 'required|array',
         'items.*.fgp_item_id' => 'required|exists:fgp_items,fgp_item_id',
         'items.*.user_ID' => 'required|exists:users,user_id',
         'items.*.unit_cost' => 'required|numeric|min:0',
-        'items.*.unit_number' => 'required|integer|min:1', // Allow any positive integer
+        'items.*.unit_number' => 'required|integer|min:1',
     ]);
 
-    // Calculate total case quantity
+    // ✅ Step 2: Case quantity checks
     $totalCaseQty = collect($validated['items'])->sum('unit_number');
 
-    // Check if the total order quantity meets the minimum required cases
     if ($totalCaseQty < $minCases) {
         return redirect()->back()->withErrors(['Order must have at least ' . $minCases . ' cases.']);
     }
 
-    // Check if the total order quantity is a valid multiple of the factor case
     if ($totalCaseQty % $factorCase !== 0) {
         return redirect()->back()->withErrors(['Order quantity must be a multiple of ' . $factorCase . '.']);
     }
 
-    $orders = FgpOrder::create([
+    // ✅ Step 3: Charge with Stripe
+    \Stripe\Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
+
+    try {
+        $amountInCents = $request->grandTotal * 100;
+
+        $charge = \Stripe\Charge::create([
+            'amount' => $amountInCents,
+            'currency' => 'usd',
+            'description' => 'Order Payment by: ' . $request->cardholder_name,
+            'source' => $request->stripeToken,
+            'metadata' => [
+                'franchisee_id' => Auth::user()->franchisee_id,
+            ],
+        ]);
+    } catch (\Exception $e) {
+        return redirect()->back()->withErrors(['Stripe Error: ' . $e->getMessage()]);
+    }
+
+    // ✅ Step 4: Save Order
+    $order = \App\Models\FgpOrder::create([
         'user_ID' => Auth::user()->franchisee_id,
         'date_transaction' => now(),
         'status' => 'Pending',
     ]);
 
+    // ✅ Step 5: Save Transaction
+    \App\Models\OrderTransaction::create([
+        'franchisee_id' => Auth::user()->franchisee_id,
+        'fgp_order_id' => $order->id,
+        'cardholder_name' => $request->cardholder_name,
+        'amount' => $request->grandTotal,
+        'stripe_payment_intent_id' => $charge->id,
+        'stripe_payment_method' => $charge->payment_method ?? null,
+        'stripe_currency' => $charge->currency,
+        'stripe_client_secret' => $charge->client_secret ?? null,
+        'stripe_status' => $charge->status,
+    ]);
+
+    // ✅ Step 6: Save Order Items
     foreach ($validated['items'] as $item) {
         DB::table('fgp_order_details')->insert([
-            'fgp_order_id' => $orders->id,
+            'fgp_order_id' => $order->id,
             'fgp_item_id' => $item['fgp_item_id'],
             'unit_cost' => $item['unit_cost'],
             'unit_number' => $item['unit_number'],
@@ -166,8 +205,9 @@ public function store(Request $request)
         ]);
     }
 
-    return redirect()->route('franchise.orderpops.view')->with('success', 'Order placed successfully!');
+    return redirect()->route('franchise.orderpops.view')->with('success', 'Order placed and paid successfully!');
 }
+
 
 
 public function viewOrders()

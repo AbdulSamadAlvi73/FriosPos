@@ -54,8 +54,7 @@
                         <span class="nav-text">Payments</span>
                     </a>
                     <ul aria-expanded="false">
-                        <li><a href="payments_total.html">Payments Total</a></li>
-                        <li><a href="payments_by_franchisee.html">Payments by Franchisee</a></li>
+                        <li><a href="{{ route('corporate_admin.transaction') }}">Payments by Franchisee</a></li>
                     </ul>
                 </li>
                 <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
@@ -114,9 +113,9 @@
                         <span class="nav-text">Get Paid</span>
                     </a>
                     <ul aria-expanded="false">
-                        <li><a href="invoices.html">Invoices</a></li>
+                        <li><a href="{{ route('franchise.invoice') }}">Invoices</a></li>
                         <li><a href="sales.html">Sales</a></li>
-                        <li><a href="payments.html">Payments</a></li>
+                        <li><a href="{{ route('franchise.transaction') }}">Transactions</a></li>
                     </ul>
                 </li>
                 <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">

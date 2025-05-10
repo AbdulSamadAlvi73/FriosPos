@@ -9,11 +9,15 @@ use App\Models\FranchiseEventItem;
 use App\Models\InventoryAllocation;
 use App\Models\Customer;
 use App\Models\User;
+use App\Models\FgpOrderDetail;
 use App\Models\Event;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Stripe\Stripe;
+use Stripe\Charge;
+use App\Models\EventTransaction;
 use DB;
 
 class EventController extends Controller
@@ -116,12 +120,13 @@ class EventController extends Controller
 
     public function store(Request $request)
     {
+        // dd($request->all());
         $validated = $request->validate([
             'event_name' => 'required|string|max:255',
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
             'event_status' => 'required|in:scheduled,tentative,staffed',
-            'staff_assigned' => 'nullable|array',
+            'staff_assigned' => 'required|array',
             'staff_assigned.*' => 'integer',
             'customer_id' => 'nullable|integer',
             'expected_sales' => 'nullable|numeric',
@@ -139,6 +144,59 @@ class EventController extends Controller
             'quantity.*' => 'required|numeric|min:0',
         ]);
 
+        $instock    = $request->in_stock;
+        $quantities = $request->quantity;
+        $orderable  = $request->orderable;
+
+
+        $inStockItems = FgpItem::whereIn('fgp_item_id', $instock)->get();
+
+        $totalCaseCost = 0;
+        foreach ($inStockItems as $index => $item) {
+            $qty = $quantities[$index] ?? 0;
+            $itemTotal = $item->case_cost * $qty;
+            $totalCaseCost += $itemTotal;
+            $item->total_cost = $itemTotal;
+        }
+
+        $orderItems = FgpOrderDetail::whereIn('id', $orderable)->get();
+
+        $itemsWithCost = $orderItems->map(function ($item) {
+            $item->total_cost = $item->unit_number * $item->unit_cost;
+            return $item;
+        });
+
+        $grandTotal = $itemsWithCost->sum('total_cost');
+
+        $finalTotal = $totalCaseCost + $grandTotal;
+
+
+        // dd([
+        //     'finalTotal' => $finalTotal,
+        //     'total_case_cost' => $totalCaseCost,
+        //     'grand_total'     => $grandTotal,
+        //     'case_items'      => $inStockItems,
+        //     'order_items'     => $itemsWithCost,
+        // ]);
+
+    \Stripe\Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
+
+    try {
+        $amountInCents = $finalTotal * 100;
+
+        $charge = \Stripe\Charge::create([
+            'amount' => $amountInCents,
+            'currency' => 'usd',
+            'description' => 'Order Payment by: ' . $request->cardholder_name,
+            'source' => $request->stripeToken,
+            'metadata' => [
+                'franchisee_id' => Auth::user()->franchisee_id,
+            ],
+        ]);
+    } catch (\Exception $e) {
+        return redirect()->back()->withErrors(['Stripe Error: ' . $e->getMessage()]);
+    }
+
         // try {
             $event = \App\Models\Event::create([
                 'franchisee_id' => Auth::user()->franchisee_id,
@@ -155,6 +213,18 @@ class EventController extends Controller
                 'resources_selection' => json_encode($validated['resources_selection'] ?? []),
                 'event_type' => $validated['event_type'] ?? null,
                 'planned_payment' => $validated['planned_payment'] ?? null,
+            ]);
+
+                \App\Models\EventTransaction::create([
+                'franchisee_id' => Auth::user()->franchisee_id,
+                'event_id' => $event->id,
+                'cardholder_name' => $request->cardholder_name,
+                'amount' => $finalTotal,
+                'stripe_payment_intent_id' => $charge->id,
+                'stripe_payment_method' => $charge->payment_method ?? null,
+                'stripe_currency' => $charge->currency,
+                'stripe_client_secret' => $charge->client_secret ?? null,
+                'stripe_status' => $charge->status,
             ]);
 
             // 3. Save Event Items
@@ -183,23 +253,18 @@ class EventController extends Controller
         $startDate = Carbon::parse($request->start_date);
         $endDate = Carbon::parse($request->end_date);
 
-        // Calculate the difference between the start and end date
         $diffInDays = $startDate->diffInDays($endDate);
 
-        // Check if the duration is less than 15 days and modify the $pops query accordingly
         if ($diffInDays < 15) {
-            // If the duration is less than 15 days, set $pops to null and return a message
             $pops = null;
             $message = 'No Orderable pops will be available within the 15-day duration.';
         } else {
-            // Fetch pops data if the duration is greater than or equal to 15 days
             $pops = FgpItem::where('orderable', 1)
                 ->where('internal_inventory', '>', 0)
                 ->get();
             $message = null;
         }
 
-        // Fetch order details based on orders within the date range
         $orders = DB::table('fgp_orders')
             ->where('status', 'Delivered')
             ->get();
@@ -210,14 +275,23 @@ class EventController extends Controller
             ->join('fgp_items', 'fgp_order_details.fgp_item_id', '=', 'fgp_items.fgp_item_id')
             ->whereIn('fgp_order_details.fgp_order_id', $orderIds)
             ->select(
+                'fgp_order_details.id',
+                'fgp_order_details.fgp_order_id',
                 'fgp_order_details.fgp_item_id',
                 'fgp_items.name as item_name',
-                DB::raw('SUM(fgp_order_details.unit_number) as total_units')
+                'fgp_order_details.unit_number'
             )
-            ->groupBy('fgp_order_details.fgp_item_id', 'fgp_items.name')
             ->get();
 
 
+
+//                 return response()->json([
+//  'orderDetails' => $orderDetails,
+//                 'pops' => $pops,
+//                 'startDate' => $startDate->toDateString(),
+//                 'endDate' => $endDate->toDateString(),
+//                 'orderCount' => $orders->count(),
+//                 ]);
 
             $html = view('franchise_admin.event.flavor', [
                 'orderDetails' => $orderDetails,

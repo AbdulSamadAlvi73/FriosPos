@@ -183,6 +183,14 @@
                             ->first();
                         }
 
+                        $orderable = \DB::table('fgp_order_details')
+                                    ->where('id', $eventItem->orderable)
+                                    ->first();
+
+                        $fgpItem = isset($orderable->fgp_item_id)
+                            ? \App\Models\FgpItem::where('fgp_item_id', $orderable->fgp_item_id)->first()
+                            : null;
+
                         // dd($orderDetail);
                     @endphp
                         <tr>
@@ -193,13 +201,13 @@
                                 {{ $eventItem->quantity ?: '-' }}
                             </td>
                             <td>
-                                {{ $eventItem->orderableItem->name ?? '-' }}
+                                {{ $fgpItem->name ?? '-' }}
                             </td>
                             <td>
-                                {{ isset($orderDetail->unit_number) ? $orderDetail->unit_number : '-' }}
+                                {{ isset($orderable->unit_number) ? $orderable->unit_number : '-' }}
                             </td>
                             <td>
-                                {{ isset($orderDetail->unit_number, $eventItem->quantity) ? $orderDetail->unit_number - $eventItem->quantity : '' }}
+                                {{ isset($orderable->unit_number, $eventItem->quantity) ? $orderable->unit_number - $eventItem->quantity : '' }}
                             </td>
                             <td>
                                 @if($pop && $pop->created_at)

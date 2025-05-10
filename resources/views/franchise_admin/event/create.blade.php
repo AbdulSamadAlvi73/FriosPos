@@ -6,6 +6,9 @@
             overflow-y: auto;
             min-height: 96px;
         }
+        :disabled{
+            color: #00ABC7 !important;
+        }
     </style>
     <div class="content-body default-height p-5 mt-5">
         <div class="container-fluid rounded border p-5 bg-white">
@@ -38,7 +41,7 @@
             </div>
 
 
-            <form action="{{ route('franchise.events.store') }}" method="post">
+            <form action="{{ route('franchise.events.store') }}" method="post" id="stripe-payment-form">
                 @csrf
                 <div class="form-group">
                     <label for="" class="form-label">Event Name</label>
@@ -314,7 +317,32 @@ if ($rawDate) {
 
                 </div>
 
-                <button class="btn btn-outline-primary">
+
+
+                                                        <div class="row">
+                                                                                                                <div class="col-md-6 mb-3">
+                                                        <input type="text" id="cardholder-name" name="cardholder_name"
+                                                            placeholder="Cardholder Name" class="form-control">
+                                                    </div>
+
+                                                    <div class="col-md-6 mb-3">
+                                                        <div id="card-number-element" class="form-control"></div>
+                                                    </div>
+
+                                                    <div class="col-md-6 mb-3">
+                                                        <div id="card-expiry-element" class="form-control"></div>
+                                                    </div>
+
+                                                    <div class="col-md-6 mb-3">
+                                                        <div id="card-cvc-element" class="form-control"></div>
+                                                        <input type="hidden" name="stripeToken" id="stripeToken">
+                                                    </div>
+                                                    <div id="card-errors" class="text-danger mb-3"></div>
+
+                                                </div>
+
+
+                <button disabled class="btn btn-outline-primary" id="submit-button">
                     Submit
                 </button>
 
@@ -325,7 +353,81 @@ if ($rawDate) {
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/css/select2.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/js/select2.min.js"></script>
 
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const stripe = Stripe("{{ env('STRIPE_PUBLIC_KEY') }}");
+            const elements = stripe.elements();
 
+            const cardNumber = elements.create('cardNumber');
+            const cardExpiry = elements.create('cardExpiry');
+            const cardCvc = elements.create('cardCvc');
+
+            cardNumber.mount('#card-number-element');
+            cardExpiry.mount('#card-expiry-element');
+            cardCvc.mount('#card-cvc-element');
+
+            const cardholderName = document.getElementById('cardholder-name');
+            const form = document.getElementById('stripe-payment-form');
+            const submitButton = document.getElementById('submit-button');
+            const errorElement = document.getElementById('card-errors');
+            const tokenInput = document.getElementById('stripeToken');
+
+            let cardComplete = {
+                number: false,
+                expiry: false,
+                cvc: false
+            };
+
+            function updateButtonState() {
+                const allComplete = cardComplete.number && cardComplete.expiry && cardComplete.cvc && cardholderName
+                    .value.trim() !== "";
+                submitButton.disabled = !allComplete;
+            }
+
+            cardNumber.on('change', function(event) {
+                cardComplete.number = event.complete;
+                if (event.error) {
+                    errorElement.textContent = event.error.message;
+                } else {
+                    errorElement.textContent = '';
+                }
+                updateButtonState();
+            });
+
+            cardExpiry.on('change', function(event) {
+                cardComplete.expiry = event.complete;
+                updateButtonState();
+            });
+
+            cardCvc.on('change', function(event) {
+                cardComplete.cvc = event.complete;
+                updateButtonState();
+            });
+
+            cardholderName.addEventListener('input', updateButtonState);
+
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                submitButton.disabled = true;
+
+                const {
+                    token,
+                    error
+                } = await stripe.createToken(cardNumber, {
+                    name: cardholderName.value
+                });
+
+                if (error) {
+                    errorElement.textContent = error.message;
+                    submitButton.disabled = false;
+                } else {
+                    tokenInput.value = token.id;
+                    form.submit();
+                }
+            });
+        });
+    </script>
 <script>
 $(document).ready(function () {
     function fetchFlavorData() {

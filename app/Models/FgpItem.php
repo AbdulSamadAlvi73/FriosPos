@@ -62,4 +62,9 @@ class FgpItem extends Model
         ->sum('fgp_order_details.unit_number');
 }
 
+    public function allocations()
+    {
+        return $this->hasMany(InventoryAllocation::class, 'fgp_item_id', 'fgp_item_id');
+    }
+
 }

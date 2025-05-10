@@ -21,10 +21,13 @@ use App\Http\Controllers\CorporateAdminControllers\CorporateAdminController;
 // Franchise Staff Controllers
 use App\Http\Controllers\FranchiseAdminControllers\FranchiseAdminController;
 use App\Http\Controllers\CorporateAdminControllers\AdditionalChargesController;
+use App\Http\Controllers\CorporateAdminControllers\PaymentController as CorpPaymentController;
+
 use App\Http\Controllers\Franchise\EventController;
 use App\Http\Controllers\Franchise\ExpenseController;
 use App\Http\Controllers\Franchise\CustomerController;
 use App\Http\Controllers\Franchise\InventoryController;
+use App\Http\Controllers\Franchise\PaymentController;
 use App\Http\Controllers\FranchiseManagerControllers\FranchiseManagerController;
 
 Route::get('/', function () {
@@ -142,6 +145,15 @@ Route::middleware(['auth', 'role:corporate_admin'])->prefix('corporate_admin')->
     // Customer
     Route::get('customer' , [ExpensesCategoryController::class , 'customer'])->name('customer');
     Route::get('customer/{id}/view' , [ExpensesCategoryController::class , 'customerView'])->name('customer.view');
+
+    // Payment
+    Route::get('transactions' , [CorpPaymentController::class , 'transaction'])->name('transaction');
+    Route::get('pos/{id}/expense' , [CorpPaymentController::class , 'posExpense'])->name('pos.expense');
+    Route::get('pos/expenses/{id}/download', [CorpPaymentController::class, 'posDownloadPDF'])->name('expenses.pos.download');
+    Route::get('pos/{id}/order' , [CorpPaymentController::class , 'posOrder'])->name('pos.order');
+    Route::get('pos/order/{id}/download', [CorpPaymentController::class, 'posOrderDownloadPDF'])->name('order.pos.download');
+    Route::get('pos/{id}/event' , [CorpPaymentController::class , 'posEvent'])->name('pos.event');
+    Route::get('pos/event/{id}/download', [CorpPaymentController::class, 'posEventDownloadPDF'])->name('event.pos.download');
 });
 Route::middleware(['auth', 'role:franchise_admin|franchise_manager'])->prefix('franchise')->name('franchise.')->group(function () {
     Route::get('/dashboard', [FranchiseAdminController::class, 'dashboard'])->name('dashboard');
@@ -200,6 +212,17 @@ Route::middleware(['auth', 'role:franchise_admin|franchise_manager'])->prefix('f
     Route::get('customer/{id}/view' , [CustomerController::class , 'view'])->name('customer.view');
     Route::put('customer/{id}/update' , [CustomerController::class , 'update'])->name('customer.update');
     Route::delete('customer/{id}/delete' , [CustomerController::class , 'delete'])->name('customer.delete');
+
+    // Payment
+    Route::get('invoice' , [PaymentController::class , 'invoice'])->name('invoice');
+    Route::post('invoice/store' , [PaymentController::class , 'invoiceStore'])->name('invoice.store');
+    Route::get('transactions' , [PaymentController::class , 'transaction'])->name('transaction');
+    Route::get('pos/{id}/expense' , [PaymentController::class , 'posExpense'])->name('pos.expense');
+    Route::get('pos/expenses/{id}/download', [PaymentController::class, 'posDownloadPDF'])->name('expenses.pos.download');
+    Route::get('pos/{id}/order' , [PaymentController::class , 'posOrder'])->name('pos.order');
+    Route::get('pos/order/{id}/download', [PaymentController::class, 'posOrderDownloadPDF'])->name('order.pos.download');
+    Route::get('pos/{id}/event' , [PaymentController::class , 'posEvent'])->name('pos.event');
+    Route::get('pos/event/{id}/download', [PaymentController::class, 'posEventDownloadPDF'])->name('event.pos.download');
 });
 
 

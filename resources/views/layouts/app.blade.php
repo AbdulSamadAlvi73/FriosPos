@@ -161,7 +161,6 @@
 
 <!-- Laravel Notify -->
 @notifyJs
-@notifyRender
 
 </body>
 

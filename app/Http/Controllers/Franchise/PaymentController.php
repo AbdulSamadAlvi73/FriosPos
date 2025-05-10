@@ -1,0 +1,166 @@
+<?php
+
+namespace App\Http\Controllers\Franchise;
+
+use App\Http\Controllers\Controller;
+use App\Models\Customer;
+use App\Models\FgpItem;
+use App\Models\InventoryAllocation;
+use App\Models\ExpenseTransaction;
+use App\Models\OrderTransaction;
+use App\Models\EventTransaction;
+use App\Models\Expense;
+use App\Models\ExpenseCategory;
+use App\Models\ExpenseSubCategory;
+use App\Models\FgpOrder;
+use App\Models\FgpOrderDetail;
+use App\Models\Franchisee;
+use App\Models\FranchiseEventItem;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Auth;
+use Carbon\Carbon;
+
+
+class PaymentController extends Controller
+{
+    public function invoice()
+    {
+        // Fetch customers for the logged-in franchisee
+        $data['customers'] = Customer::where('franchisee_id', Auth::user()->franchisee_id)->get();
+        $data['franchisee'] = '10';
+
+        // Fetch all flavors (if needed for other purposes)
+        $flavors = FgpItem::all();
+
+        // Prepare the initial pop flavors array (if needed for other purposes)
+        $initialPopFlavors = [];
+        foreach ($flavors as $flavor) {
+            $initialPopFlavors[] = [
+                'name' => $flavor->name,
+                'image1' => $flavor->image1,
+                'available' => $flavor->availableQuantity(),
+            ];
+        }
+
+        // Fetch allocations with the related flavor data
+        $data['allocations'] = InventoryAllocation::with('flavor')
+            ->join('fgp_items', 'fgp_items.fgp_item_id', '=', 'inventory_allocations.fgp_item_id')
+            ->select('inventory_allocations.*', 'fgp_items.name', 'fgp_items.image1', 'fgp_items.case_cost')  // Select necessary columns from fgp_items
+            ->get();
+
+
+        //             return response()->json([
+        //     'location' => $data['allocations']
+        // ]);
+
+        // Return view with data
+        return view('franchise_admin.payment.invoice', $data);
+    }
+
+
+    public function transaction(){
+
+        $franchiseeId = Auth::user()->franchisee_id;
+
+        $today = Carbon::today();
+        $startOfWeek = Carbon::now()->startOfWeek();
+        $startOfMonth = Carbon::now()->startOfMonth();
+        $startOfYear = Carbon::now()->startOfYear();
+
+        $data['expenseAmount'] = [
+            'daily' => ExpenseTransaction::where('franchisee_id', $franchiseeId)->whereDate('created_at', $today)->sum('amount'),
+            'weekly' => ExpenseTransaction::where('franchisee_id', $franchiseeId)->whereBetween('created_at', [$startOfWeek, now()])->sum('amount'),
+            'monthly' => ExpenseTransaction::where('franchisee_id', $franchiseeId)->whereBetween('created_at', [$startOfMonth, now()])->sum('amount'),
+            'yearly' => ExpenseTransaction::where('franchisee_id', $franchiseeId)->whereBetween('created_at', [$startOfYear, now()])->sum('amount'),
+        ];
+
+        $data['orderAmount'] = [
+            'daily' => OrderTransaction::where('franchisee_id', $franchiseeId)->whereDate('created_at', $today)->sum('amount'),
+            'weekly' => OrderTransaction::where('franchisee_id', $franchiseeId)->whereBetween('created_at', [$startOfWeek, now()])->sum('amount'),
+            'monthly' => OrderTransaction::where('franchisee_id', $franchiseeId)->whereBetween('created_at', [$startOfMonth, now()])->sum('amount'),
+            'yearly' => OrderTransaction::where('franchisee_id', $franchiseeId)->whereBetween('created_at', [$startOfYear, now()])->sum('amount'),
+        ];
+
+        $data['eventAmount'] = [
+            'daily' => EventTransaction::where('franchisee_id', $franchiseeId)->whereDate('created_at', $today)->sum('amount'),
+            'weekly' => EventTransaction::where('franchisee_id', $franchiseeId)->whereBetween('created_at', [$startOfWeek, now()])->sum('amount'),
+            'monthly' => EventTransaction::where('franchisee_id', $franchiseeId)->whereBetween('created_at', [$startOfMonth, now()])->sum('amount'),
+            'yearly' => EventTransaction::where('franchisee_id', $franchiseeId)->whereBetween('created_at', [$startOfYear, now()])->sum('amount'),
+        ];
+
+        $data['totalAmount'] = [
+            'daily' => $data['expenseAmount']['daily'] + $data['orderAmount']['daily'] + $data['eventAmount']['daily'],
+            'weekly' => $data['expenseAmount']['weekly'] + $data['orderAmount']['weekly'] + $data['eventAmount']['weekly'],
+            'monthly' => $data['expenseAmount']['monthly'] + $data['orderAmount']['monthly'] + $data['eventAmount']['monthly'],
+            'yearly' => $data['expenseAmount']['yearly'] + $data['orderAmount']['yearly'] + $data['eventAmount']['yearly'],
+        ];
+
+
+        $data['expenseTransactions'] = ExpenseTransaction::where('franchisee_id' , Auth::user()->franchisee_id)->get();
+        $data['orderTransactions'] = OrderTransaction::where('franchisee_id' , Auth::user()->franchisee_id)->get();
+        $data['eventTransactions'] = EventTransaction::where('franchisee_id' , Auth::user()->franchisee_id)->get();
+        return view('franchise_admin.payment.transaction' , $data);
+    }
+
+    public function posExpense($id)
+    {
+        $data['expenseTransaction'] = ExpenseTransaction::where('id' , $id)->firstorfail();
+        $data['expense'] = Expense::where('id' , $data['expenseTransaction']->expense_id)->firstorfail();
+        $data['expenseCategory'] = ExpenseCategory::where('id' , $data['expense']->category_id)->firstorfail();
+        $data['expenseSubCategory'] = ExpenseSubCategory::where('id' , $data['expense']->sub_category_id)->firstorfail();
+        return view('franchise_admin.payment.expense-pos' , $data);
+    }
+
+    public function posDownloadPDF($id)
+    {
+       $expenseTransaction = ExpenseTransaction::where('id' , $id)->firstorfail();
+       $expense = Expense::where('id' , $expenseTransaction->expense_id)->firstorfail();
+       $expenseCategory = ExpenseCategory::where('id' , $expense->category_id)->firstorfail();
+       $expenseSubCategory = ExpenseSubCategory::where('id' , $expense->sub_category_id)->firstorfail();
+
+        $pdf = Pdf::loadView('franchise_admin.payment.pdf.expense-pos', compact('expenseTransaction', 'expense', 'expenseCategory', 'expenseSubCategory'));
+
+        return $pdf->download('expense_invoice_friospos.pdf');
+    }
+
+    public function posOrder($id)
+    {
+       $data['orderTransaction'] = OrderTransaction::where('id' , $id)->firstorfail();
+       $data['order'] = FgpOrder::where('fgp_ordersID' , $data['orderTransaction']->fgp_order_id)->firstorfail();
+       $data['franchisee'] = Franchisee::where('franchisee_id' , $data['order']->user_ID)->firstorfail();
+       $data['orderDetails'] = FgpOrderDetail::where('fgp_order_id' , $data['order']->fgp_ordersID)->get();
+        return view('franchise_admin.payment.order-pos' ,$data);
+    }
+
+    public function posOrderDownloadPDF($id)
+    {
+       $orderTransaction = OrderTransaction::where('id' , $id)->firstorfail();
+       $order = FgpOrder::where('fgp_ordersID' , $orderTransaction->fgp_order_id)->firstorfail();
+       $franchisee = Franchisee::where('franchisee_id' , $order->user_ID)->firstorfail();
+       $orderDetails = FgpOrderDetail::where('fgp_order_id' , $order->fgp_ordersID)->get();
+
+        $pdf = Pdf::loadView('franchise_admin.payment.pdf.order-pos', compact('orderTransaction', 'order', 'franchisee', 'orderDetails'));
+
+        return $pdf->download('order_invoice_friospos.pdf');
+    }
+
+
+    public function posEvent($id)
+    {
+       $data['eventTransaction'] = EventTransaction::where('id' , $id)->firstorfail();
+       $data['franchisee'] = Franchisee::where('franchisee_id' , $data['eventTransaction']->franchisee_id)->firstorfail();
+        $data['eventItems'] = FranchiseEventItem::where('event_id' , $data['eventTransaction']->event_id)->get();
+        return view('franchise_admin.payment.event-pos' ,$data);
+    }
+
+    public function posEventDownloadPDF($id)
+    {
+       $eventTransaction = EventTransaction::where('id' , $id)->firstorfail();
+       $franchisee = Franchisee::where('franchisee_id' , $eventTransaction->franchisee_id)->firstorfail();
+       $eventItems = FranchiseEventItem::where('event_id' , $eventTransaction->event_id)->get();
+
+        $pdf = Pdf::loadView('franchise_admin.payment.pdf.event-pos', compact('eventTransaction', 'franchisee', 'eventItems'));
+
+        return $pdf->download('event_invoice_friospos.pdf');
+    }
+}

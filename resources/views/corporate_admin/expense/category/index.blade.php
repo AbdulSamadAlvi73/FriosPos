@@ -57,7 +57,7 @@
                             <table id="example5" class="table customer-table display mb-4 fs-14 card-table">
                                 <thead>
                                     <tr>
-                                       
+
                                         <th>Main Category</th>
                                         <th>Sub Category</th>
                                         <th>Sub Category Description</th>
