@@ -1,7 +1,6 @@
 @extends('layouts.app')
 @section('content')
 
-<!-- Add CSS for the toggle switch -->
 <style>
     .toggle-switch {
         position: relative;
@@ -49,11 +48,7 @@
         transform: translateX(20px);
     }
 </style>
-<!--**********************************
-            Content body start
-        ***********************************-->
         <div class="content-body default-height">
-            <!-- row -->
 			<div class="container-fluid">
 
 				<div class="form-head mb-4 d-flex flex-wrap align-items-center">
@@ -114,7 +109,6 @@
                                 <tbody id="table-body">
                                     @foreach ($flavors as $flavor)
                                     <tr>
-                                        <!-- Toggle Switch for Active Status -->
                                         <td>
                                             <label class="toggle-switch">
                                                 <input type="checkbox" class="toggle-input" data-id="{{ $flavor->fgp_item_id }}" {{ $flavor->orderable ? 'checked' : '' }}>
@@ -143,53 +137,54 @@
 
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script>
-            $(document).ready(function () {
-                // Update Orderable Status
-                $('.toggle-input').change(function () {
-                    let flavorId = $(this).data('id'); // Using fgp_item_id
-                    let orderable = $(this).is(':checked') ? 1 : 0;
+$(document).ready(function () {
+    // Use event delegation for toggle-input and month-checkbox
+    $('#example5').on('change', '.toggle-input', function () {
+        let flavorId = $(this).data('id');
+        let orderable = $(this).is(':checked') ? 1 : 0;
 
-                    $.ajax({
-                        url: `/corporate_admin/fgpitem/update-status/${flavorId}`,
-                        type: "POST",
-                        data: {
-                            _token: "{{ csrf_token() }}",
-                            orderable: orderable
-                        },
-                        success: function (response) {
-                            console.log("Orderable Updated:", response);
-                        },
-                        error: function (xhr) {
-                            console.error(xhr.responseText);
-                            alert("Error updating orderable status.");
-                        }
-                    });
-                });
+        $.ajax({
+            url: `/corporate_admin/fgpitem/update-status/${flavorId}`,
+            type: "POST",
+            data: {
+                _token: "{{ csrf_token() }}",
+                orderable: orderable
+            },
+            success: function (response) {
+                console.log("Orderable Updated:", response);
+            },
+            error: function (xhr) {
+                console.error(xhr.responseText);
+                alert("Error updating orderable status.");
+            }
+        });
+    });
 
-                // Update Month Availability
-                $('.month-checkbox').change(function () {
-                    let flavorId = $(this).data('flavor-id'); // Using fgp_item_id
-                    let month = $(this).data('month');
-                    let available = $(this).is(':checked') ? 1 : 0;
+    // Delegate event for month-checkbox
+    $('#example5').on('change', '.month-checkbox', function () {
+        let flavorId = $(this).data('flavor-id');
+        let month = $(this).data('month');
+        let available = $(this).is(':checked') ? 1 : 0;
 
-                    $.ajax({
-                        url: `/corporate_admin/fgpitem/update-month/${flavorId}`,
-                        type: "POST",
-                        data: {
-                            _token: "{{ csrf_token() }}",
-                            month: month,
-                            available: available
-                        },
-                        success: function (response) {
-                            console.log("Month Updated:", response);
-                        },
-                        error: function (xhr) {
-                            console.error(xhr.responseText);
-                            alert("Error updating month availability.");
-                        }
-                    });
-                });
-            });
+        $.ajax({
+            url: `/corporate_admin/fgpitem/update-month/${flavorId}`,
+            type: "POST",
+            data: {
+                _token: "{{ csrf_token() }}",
+                month: month,
+                available: available
+            },
+            success: function (response) {
+                console.log("Month Updated:", response);
+            },
+            error: function (xhr) {
+                console.error(xhr.responseText);
+                alert("Error updating month availability.");
+            }
+        });
+    });
+});
+
         </script>
 
 
