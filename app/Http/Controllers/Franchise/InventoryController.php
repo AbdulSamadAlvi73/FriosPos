@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\FgpItem;
 use App\Models\FgpOrder;
 use App\Models\InventoryAllocation;
+use App\Models\Location;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
@@ -74,7 +75,7 @@ class InventoryController extends Controller
     {
         try {
             $flavors = FgpItem::all();
-
+            $locations = Location::where('franchisee_id', Auth::user()->franchisee_id)->get();
             $initialPopFlavors = [];
             foreach ($flavors as $flavor) {
                 $initialPopFlavors[] = [
@@ -91,7 +92,8 @@ class InventoryController extends Controller
             return view('franchise_admin.inventory.locations', compact(
                 'flavors',
                 'initialPopFlavors',
-                'allocatedInventory'
+                'allocatedInventory',
+                'locations'
             ));
         } catch (\Exception $e) {
             // Log error or dd for debug

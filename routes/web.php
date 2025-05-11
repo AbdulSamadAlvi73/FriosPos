@@ -28,6 +28,7 @@ use App\Http\Controllers\Franchise\ExpenseController;
 use App\Http\Controllers\Franchise\CustomerController;
 use App\Http\Controllers\Franchise\InventoryController;
 use App\Http\Controllers\Franchise\PaymentController;
+use App\Http\Controllers\Franchise\LocationController;
 use App\Http\Controllers\FranchiseManagerControllers\FranchiseManagerController;
 
 Route::get('/', function () {
@@ -223,6 +224,9 @@ Route::middleware(['auth', 'role:franchise_admin|franchise_manager'])->prefix('f
     Route::get('pos/order/{id}/download', [PaymentController::class, 'posOrderDownloadPDF'])->name('order.pos.download');
     Route::get('pos/{id}/event' , [PaymentController::class , 'posEvent'])->name('pos.event');
     Route::get('pos/event/{id}/download', [PaymentController::class, 'posEventDownloadPDF'])->name('event.pos.download');
+
+    // Location
+    Route::resource('locations', LocationController::class);
 });
 
 
