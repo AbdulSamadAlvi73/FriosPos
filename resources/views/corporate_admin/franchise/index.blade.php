@@ -73,11 +73,7 @@
                         </div>
                     </div>
                 </div>
-                @if(session('success'))
-                    <div class="alert alert-success">
-                        {{ session('success') }}
-                    </div>
-                @endif
+
 
 				<div class="row">
 					<div class="col-lg-12">
@@ -98,7 +94,7 @@
 								<tbody>
                                     @foreach ($franchisees as $franchisee)
                                         <tr>
-                                      
+
                                             <td>#{{ str_pad($franchisee->franchisee_id, 7, '0', STR_PAD_LEFT) }}</td>
                                             <td>{{ $franchisee->business_name }}</td>
                                             <td>{{ $franchisee->city }}</td>

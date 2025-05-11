@@ -39,11 +39,7 @@
                                         <div class="basic-form">
 
                                             <!-- Display Success Message -->
-                                            @if(session('success'))
-                                                <div class="alert alert-success">
-                                                    {{ session('success') }}
-                                                </div>
-                                            @endif
+
 
                                             <form action="{{ route('corporate_admin.fgpitem.update', $fgpitem->fgp_item_id) }}" method="POST" enctype="multipart/form-data">
                                                 @csrf

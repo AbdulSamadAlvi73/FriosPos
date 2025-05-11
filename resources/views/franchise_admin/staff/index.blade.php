@@ -50,11 +50,7 @@
                         </div>
                     </div>
                 </div>
-                @if(session('success'))
-                    <div class="alert alert-success">
-                        {{ session('success') }}
-                    </div>
-                @endif
+
 
 				<div class="row">
 					<div class="col-lg-12">

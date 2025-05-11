@@ -45,11 +45,7 @@
                         </div>
                     </div>
                 </div>
-                @if(session('success'))
-                    <div class="alert alert-success">
-                        {{ session('success') }}
-                    </div>
-                @endif
+
 
 				<div class="row">
 					<div class="col-lg-12">
@@ -70,7 +66,7 @@
                                 <tbody>
                                     @foreach ($users as $user)
                                         <tr>
-                                         
+
                                             <td>#{{ str_pad($user->user_id, 7, '0', STR_PAD_LEFT) }}</td>
                                             <td>{{ $user->name }}</td>
                                             <td>

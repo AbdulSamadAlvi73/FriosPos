@@ -105,11 +105,7 @@
                     </div>
                 </div>
             </div>
-            @if (session('success'))
-                <div class="alert alert-success">
-                    {{ session('success') }}
-                </div>
-            @endif
+
 
             <div class="row">
                 <div class="col-lg-12">
@@ -117,7 +113,7 @@
                         <table id="example5" class="table customer-table display mb-4 fs-14 card-table">
                             <thead>
                                 <tr>
-                                  
+
                                     <th>Charges ID</th>
                                     <th>Charges Name</th>
                                     <th>Charges Amount</th>

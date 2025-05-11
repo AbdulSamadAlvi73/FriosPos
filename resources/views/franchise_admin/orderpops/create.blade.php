@@ -176,11 +176,7 @@
                                         <div class="basic-form">
 
                                             <!-- Display Success Message -->
-                                            @if(session('success'))
-                                                <div class="alert alert-success">
-                                                    {{ session('success') }}
-                                                </div>
-                                            @endif
+
 
                                                 <div class="row">
                                                     <div class="kanban-container">

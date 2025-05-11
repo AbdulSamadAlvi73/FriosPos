@@ -45,11 +45,7 @@
                         </div>
                     </div>
                 </div>
-                @if(session('success'))
-                    <div class="alert alert-success">
-                        {{ session('success') }}
-                    </div>
-                @endif
+
 
 				<div class="row">
                     <div class="col-lg-12">
@@ -69,7 +65,7 @@
                                 <tbody>
                                     @foreach ($expenses as $index => $expense)
                                     <tr>
-                                     
+
                                         <td>{{ $expense->name }}</td>
                                         <td>{{ isset($expense->category) ? $expense->category->category : '-' }}</td>
                                         <td>{{ isset($expense->sub_category) ? $expense->sub_category->sub_category : '-' }}</td>

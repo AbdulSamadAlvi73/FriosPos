@@ -38,11 +38,7 @@
                                         <div class="basic-form">
 
                                             <!-- Display Success Message -->
-                                            @if(session('success'))
-                                                <div class="alert alert-success">
-                                                    {{ session('success') }}
-                                                </div>
-                                            @endif
+
 
                                             <form action="{{ route('corporate_admin.fgpcategory.update', $fgpcategory->category_ID) }}" method="POST">
                                                 @csrf
