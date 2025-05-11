@@ -29,6 +29,7 @@ use App\Http\Controllers\Franchise\CustomerController;
 use App\Http\Controllers\Franchise\InventoryController;
 use App\Http\Controllers\Franchise\PaymentController;
 use App\Http\Controllers\Franchise\LocationController;
+use App\Http\Controllers\Franchise\InvoiceController;
 use App\Http\Controllers\FranchiseManagerControllers\FranchiseManagerController;
 
 Route::get('/', function () {
@@ -215,8 +216,6 @@ Route::middleware(['auth', 'role:franchise_admin|franchise_manager'])->prefix('f
     Route::delete('customer/{id}/delete' , [CustomerController::class , 'delete'])->name('customer.delete');
 
     // Payment
-    Route::get('invoice' , [PaymentController::class , 'invoice'])->name('invoice');
-    Route::post('invoice/store' , [PaymentController::class , 'invoiceStore'])->name('invoice.store');
     Route::get('transactions' , [PaymentController::class , 'transaction'])->name('transaction');
     Route::get('pos/{id}/expense' , [PaymentController::class , 'posExpense'])->name('pos.expense');
     Route::get('pos/expenses/{id}/download', [PaymentController::class, 'posDownloadPDF'])->name('expenses.pos.download');
@@ -227,6 +226,10 @@ Route::middleware(['auth', 'role:franchise_admin|franchise_manager'])->prefix('f
 
     // Location
     Route::resource('locations', LocationController::class);
+
+    // Invoice
+    Route::resource('invoice', InvoiceController::class);
+
 });
 
 

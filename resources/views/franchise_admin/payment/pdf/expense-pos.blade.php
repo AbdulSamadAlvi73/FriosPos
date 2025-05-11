@@ -4,6 +4,32 @@
     <meta charset="UTF-8">
     <title>POS System</title>
     <style>
+                .footer {
+    background-color: #f8f8f8;
+    padding: 20px 0;
+    text-align: center;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    color: #333;
+    border-top: 1px solid #ddd;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
+
+.footer a {
+    color: #0073e6;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.footer a:hover {
+    text-decoration: underline;
+}
+
+.footer .copyright {
+    margin: 0 auto;
+}
         body {
             margin: 0;
             padding: 40px;
@@ -101,5 +127,20 @@
         </tr>
     </table>
 </div>
+
+
+<footer class="footer">
+    <div class="copyright">
+        <p>
+            Copyright © by
+            <a href="https://friospops.com/" target="_blank">frios</a>
+            <span class="current-year"></span>
+        </p>
+    </div>
+</footer>
+
+<script>
+    document.querySelector('.current-year').textContent = new Date().getFullYear();
+</script>
 </body>
 </html>

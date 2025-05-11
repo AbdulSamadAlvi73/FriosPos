@@ -14,7 +14,11 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Stripe\Stripe;
 use Stripe\Charge;
+use App\Mail\OrderPaidMail;
+use Illuminate\Support\Facades\Mail;
+use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\OrderTransaction;
+use App\Models\User;
 use DB;
 
 class OrderPopsController extends Controller
@@ -131,7 +135,6 @@ public function store(Request $request)
     $minCases = 12;
     $factorCase = 3;
 
-    // ✅ Step 1: Validation
     $validated = $request->validate([
         'stripeToken' => 'required|string',
         'cardholder_name' => 'required|string|max:191',
@@ -143,7 +146,6 @@ public function store(Request $request)
         'items.*.unit_number' => 'required|integer|min:1',
     ]);
 
-    // ✅ Step 2: Case quantity checks
     $totalCaseQty = collect($validated['items'])->sum('unit_number');
 
     if ($totalCaseQty < $minCases) {
@@ -154,7 +156,6 @@ public function store(Request $request)
         return redirect()->back()->withErrors(['Order quantity must be a multiple of ' . $factorCase . '.']);
     }
 
-    // ✅ Step 3: Charge with Stripe
     \Stripe\Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
 
     try {
@@ -173,14 +174,12 @@ public function store(Request $request)
         return redirect()->back()->withErrors(['Stripe Error: ' . $e->getMessage()]);
     }
 
-    // ✅ Step 4: Save Order
     $order = \App\Models\FgpOrder::create([
         'user_ID' => Auth::user()->franchisee_id,
         'date_transaction' => now(),
         'status' => 'Pending',
     ]);
 
-    // ✅ Step 5: Save Transaction
     \App\Models\OrderTransaction::create([
         'franchisee_id' => Auth::user()->franchisee_id,
         'fgp_order_id' => $order->id,
@@ -193,7 +192,6 @@ public function store(Request $request)
         'stripe_status' => $charge->status,
     ]);
 
-    // ✅ Step 6: Save Order Items
     foreach ($validated['items'] as $item) {
         DB::table('fgp_order_details')->insert([
             'fgp_order_id' => $order->id,
@@ -204,6 +202,24 @@ public function store(Request $request)
             'ACH_data' => null,
         ]);
     }
+
+    // $orderTransaction = \App\Models\OrderTransaction::where('fgp_order_id', $order->id)->firstOrFail();
+    // $orderDetails = \App\Models\FgpOrderDetail::where('fgp_order_id', $order->id)->get();
+    // $franchisee = \App\Models\Franchisee::where('franchisee_id', $order->user_ID)->firstOrFail();
+
+    // // Create the PDF
+    // $pdf = PDF::loadView('franchise_admin.payment.pdf.order-pos', compact('orderTransaction', 'order', 'franchisee', 'orderDetails'));
+    // $pdfPath = storage_path('app/public/order_invoice_' . $order->id . '.pdf');
+    // $pdf->save($pdfPath);  // Save PDF to storage path
+
+    // // Send the email with the attachment
+    // $corporateAdmin = User::where('user_id', 17)->first();  // Assuming 17 is the Corporate Admin ID
+    // if ($corporateAdmin) {
+    //     Mail::to($corporateAdmin->email)->send(new OrderPaidMail($corporateAdmin, $order, $pdfPath));  // Send email with attachment
+    // }
+
+    // // Remove PDF after sending
+    // unlink($pdfPath);
 
     return redirect()->route('franchise.orderpops.view')->with('success', 'Order placed and paid successfully!');
 }

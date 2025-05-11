@@ -18,6 +18,10 @@ use Illuminate\Support\Facades\Validator;
 use Stripe\Stripe;
 use Stripe\Charge;
 use App\Models\EventTransaction;
+use App\Mail\EventPaidMail;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Mail;
+
 use DB;
 
 class EventController extends Controller
@@ -120,7 +124,6 @@ class EventController extends Controller
 
     public function store(Request $request)
     {
-        // dd($request->all());
         $validated = $request->validate([
             'event_name' => 'required|string|max:255',
             'start_date' => 'required|date',
@@ -170,15 +173,6 @@ class EventController extends Controller
 
         $finalTotal = $totalCaseCost + $grandTotal;
 
-
-        // dd([
-        //     'finalTotal' => $finalTotal,
-        //     'total_case_cost' => $totalCaseCost,
-        //     'grand_total'     => $grandTotal,
-        //     'case_items'      => $inStockItems,
-        //     'order_items'     => $itemsWithCost,
-        // ]);
-
     \Stripe\Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
 
     try {
@@ -197,7 +191,6 @@ class EventController extends Controller
         return redirect()->back()->withErrors(['Stripe Error: ' . $e->getMessage()]);
     }
 
-        // try {
             $event = \App\Models\Event::create([
                 'franchisee_id' => Auth::user()->franchisee_id,
                 'event_name' => $validated['event_name'],
@@ -227,7 +220,6 @@ class EventController extends Controller
                 'stripe_status' => $charge->status,
             ]);
 
-            // 3. Save Event Items
             foreach ($validated['orderable'] as $index => $orderableId) {
                 FranchiseEventItem::create([
                     'event_id' => $event->id,
@@ -237,10 +229,20 @@ class EventController extends Controller
                 ]);
             }
 
+        // $eventTransaction = \App\Models\EventTransaction::where('event_id', $event->id)->firstOrFail();
+        // $eventItems = \App\Models\FranchiseEventItem::where('event_id', $event->id)->get();
+        // $franchisee = \App\Models\Franchisee::where('franchisee_id', $event->franchisee_id)->firstOrFail();
+
+        // $pdf = PDF::loadView('franchise_admin.payment.pdf.event-pos', compact('eventTransaction', 'franchisee', 'eventItems'));
+        // $pdfPath = storage_path('app/public/event_invoice_' . $event->id . '.pdf');
+        // $pdf->save($pdfPath);
+
+        // Mail::to($franchisee->email)->send(new EventPaidMail($franchisee, $eventTransaction, $eventItems, $pdfPath));
+
+        // unlink($pdfPath);
+
             return redirect()->route('franchise.events.calender')->with('success', 'Event created successfully!');
-        // } catch (\Exception $e) {
-        //     return redirect()->back()->with(['error' => 'Something went wrong: ' . $e->getMessage()]);
-        // }
+
     }
 
     public function compare(FranchiseEvent $event) {

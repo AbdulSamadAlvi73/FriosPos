@@ -23,41 +23,6 @@ use Carbon\Carbon;
 
 class PaymentController extends Controller
 {
-    public function invoice()
-    {
-        // Fetch customers for the logged-in franchisee
-        $data['customers'] = Customer::where('franchisee_id', Auth::user()->franchisee_id)->get();
-        $data['franchisee'] = '10';
-
-        // Fetch all flavors (if needed for other purposes)
-        $flavors = FgpItem::all();
-
-        // Prepare the initial pop flavors array (if needed for other purposes)
-        $initialPopFlavors = [];
-        foreach ($flavors as $flavor) {
-            $initialPopFlavors[] = [
-                'name' => $flavor->name,
-                'image1' => $flavor->image1,
-                'available' => $flavor->availableQuantity(),
-            ];
-        }
-
-        // Fetch allocations with the related flavor data
-        $data['allocations'] = InventoryAllocation::with('flavor')
-            ->join('fgp_items', 'fgp_items.fgp_item_id', '=', 'inventory_allocations.fgp_item_id')
-            ->select('inventory_allocations.*', 'fgp_items.name', 'fgp_items.image1', 'fgp_items.case_cost')  // Select necessary columns from fgp_items
-            ->get();
-
-
-        //             return response()->json([
-        //     'location' => $data['allocations']
-        // ]);
-
-        // Return view with data
-        return view('franchise_admin.payment.invoice', $data);
-    }
-
-
     public function transaction(){
 
         $franchiseeId = Auth::user()->franchisee_id;

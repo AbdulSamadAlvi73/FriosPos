@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="content-body default-height p-5 mt-5">
-        
+
         <div class="container-fluid rounded border p-5 bg-white">
             <div class="d-flex justify-content-between">
                 <div class="container">
@@ -99,7 +99,7 @@
                 </div>
             </div>
         </div>
-    /</div>
+    </div>
 @endsection
 
 @section('scripts')

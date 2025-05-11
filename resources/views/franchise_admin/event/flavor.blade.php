@@ -48,7 +48,7 @@
                     @enderror
                 </td>
                 <td>
-                    <span class="btn btn-success action-btn" onclick="addRow(this)">+</span>
+                    <span class="btn btn-primary action-btn" onclick="addRow(this)">+</span>
                     <span class="btn btn-danger action-btn" onclick="removeRow(this)">−</span>
                 </td>
             </tr>
@@ -103,7 +103,7 @@ $(document).ready(function() {
 
             <!-- Insert the action buttons -->
             <td>
-                <span class="btn btn-success action-btn" onclick="addRow(this)">+</span>
+                <span class="btn btn-primary action-btn" onclick="addRow(this)">+</span>
                 <span class="btn btn-danger action-btn" onclick="removeRow(this)">−</span>
             </td>
         `;

@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Order POS</title>
     <style>
-        .footer {
+                .footer {
     background-color: #f8f8f8;
     padding: 20px 0;
     text-align: center;
@@ -32,7 +33,6 @@
 .footer .copyright {
     margin: 0 auto;
 }
-
         * {
             margin: 0;
             padding: 0;
@@ -57,7 +57,7 @@
             background: #ffffff;
             padding: 20px;
             border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
             width: 280px;
             z-index: 1000;
             transition: all 0.3s ease;
@@ -95,13 +95,14 @@
             display: grid;
             grid-template-columns: 1fr;
             padding: 30px;
+            min-height: 100vh;
         }
 
         .menu-section {
             background: white;
             padding: 25px;
             border-radius: 15px;
-            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
         }
 
         .category-list {
@@ -132,56 +133,58 @@
             margin: 8px 0;
             background: #f8fafc;
             border-radius: 6px;
-            color: #4a5568{;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
 
-        .item:hover {
-            background: #e2e8f0;
-            transform: translateX(5px);
-        }
+            color: #4a5568 {
+                ;
+                cursor: pointer;
+                transition: all 0.2s ease;
+            }
+
+            .item:hover {
+                background: #e2e8f0;
+                transform: translateX(5px);
+            }
     </style>
 </head>
+
 <body>
 
-<div class="pos-container">
-                            <div style="text-align: center; margin-bottom: 20px;">
-                <img height="100px" src="{{ asset('assets/images/IMG_1298.png') }}" alt="">
-            </div>
-    <div class="menu-section">
-        <ul class="category-list">
-            <li class="category-item">
+    <div class="pos-container">
+        <div class="menu-section">
+            <ul class="category-list">
+                <li class="category-item">
 
-                <div class="category-header">{{ $franchisee->business_name }}
-                    <div style="float: right">OR-00{{ $orderTransaction->id }}</div>
-                </div>
-                <ul class="item-list">
-                     @php
-    $total = 0;
-@endphp
+                    <div class="category-header">{{ $franchisee  ?? '-' }}
+                        <div style="float: right">OR-00{{ $invoice->id }}</div>
+                    </div>
+                    <ul class="item-list">
+                        @php
+                            $total = 0;
+                        @endphp
 
-@foreach ($orderDetails as $index => $item)
-    @php
-        $lineTotal = $item->unit_number * $item->unit_cost;
-        $total += $lineTotal;
-    @endphp
-    <li class="item">
-        {{ $item->fgp_item->name ?? '' }} x ({{ $item->unit_number }})
-        <div style="float: right">${{ number_format($lineTotal, 2) }}</div>
-    </li>
-@endforeach
+                        @foreach ($invoiceItems as $item)
+                            @php
+                                $lineTotal = $item->quantity * $item->unit_price;
+                                $total += $lineTotal;
+                            @endphp
+                            <li class="item">
+                                {{ $item->flavor->name ?? '' }} x ({{ $item->quantity }})
+                                <div style="float: right">${{ number_format($lineTotal, 2) }}</div>
+                            </li>
+                        @endforeach
 
 
                     </ul>
                 </li>
-        </ul>
+            </ul>
+        </div>
     </div>
-</div>
 
-<div class="cart-summary">
-    <h3>Total: ${{ number_format($total) }}</h3>
-</div>
+    <div class="cart-summary">
+        <h3>Total: ${{ number_format($total) }}</h3>
+    </div>
+
+
 
 <footer class="footer">
     <div class="copyright">
@@ -196,6 +199,6 @@
 <script>
     document.querySelector('.current-year').textContent = new Date().getFullYear();
 </script>
-
 </body>
+
 </html>
