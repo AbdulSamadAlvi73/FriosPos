@@ -129,7 +129,7 @@
                                                         @enderror
                                                     </div>
 
-                                                    <div class="col-md-6 mb-3">
+                                                    {{-- <div class="col-md-6 mb-3">
                                                         <input type="text" id="cardholder-name" name="cardholder_name"
                                                             placeholder="Cardholder Name" class="form-control">
                                                     </div>
@@ -147,11 +147,14 @@
                                                         <input type="hidden" name="stripeToken" id="stripeToken">
                                                     </div>
 
-                                                    <div id="card-errors" class="text-danger mb-3"></div>
+                                                    <div id="card-errors" class="text-danger mb-3"></div> --}}
 
                                                 </div>
-                                                <button type="submit" class="btn btn-primary bg-primary"
+                                                {{-- <button type="submit" class="btn btn-primary bg-primary"
                                                     id="submit-button" disabled>
+                                                    Add Expense
+                                                </button> --}}
+                                                <button type="submit" class="btn btn-primary bg-primary">
                                                     Add Expense
                                                 </button>
 
@@ -172,7 +175,7 @@
     </div>
 
 
-    <script src="https://js.stripe.com/v3/"></script>
+    {{-- <script src="https://js.stripe.com/v3/"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const stripe = Stripe("{{ env('STRIPE_PUBLIC_KEY') }}");
@@ -246,9 +249,8 @@
                 }
             });
         });
-    </script>
+    </script> --}}
 
-    </script>
 
     <script>
         $(document).ready(function() {

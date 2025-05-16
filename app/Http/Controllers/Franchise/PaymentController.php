@@ -32,12 +32,12 @@ class PaymentController extends Controller
         $startOfMonth = Carbon::now()->startOfMonth();
         $startOfYear = Carbon::now()->startOfYear();
 
-        $data['expenseAmount'] = [
-            'daily' => ExpenseTransaction::where('franchisee_id', $franchiseeId)->whereDate('created_at', $today)->sum('amount'),
-            'weekly' => ExpenseTransaction::where('franchisee_id', $franchiseeId)->whereBetween('created_at', [$startOfWeek, now()])->sum('amount'),
-            'monthly' => ExpenseTransaction::where('franchisee_id', $franchiseeId)->whereBetween('created_at', [$startOfMonth, now()])->sum('amount'),
-            'yearly' => ExpenseTransaction::where('franchisee_id', $franchiseeId)->whereBetween('created_at', [$startOfYear, now()])->sum('amount'),
-        ];
+        // $data['expenseAmount'] = [
+        //     'daily' => ExpenseTransaction::where('franchisee_id', $franchiseeId)->whereDate('created_at', $today)->sum('amount'),
+        //     'weekly' => ExpenseTransaction::where('franchisee_id', $franchiseeId)->whereBetween('created_at', [$startOfWeek, now()])->sum('amount'),
+        //     'monthly' => ExpenseTransaction::where('franchisee_id', $franchiseeId)->whereBetween('created_at', [$startOfMonth, now()])->sum('amount'),
+        //     'yearly' => ExpenseTransaction::where('franchisee_id', $franchiseeId)->whereBetween('created_at', [$startOfYear, now()])->sum('amount'),
+        // ];
 
         $data['orderAmount'] = [
             'daily' => OrderTransaction::where('franchisee_id', $franchiseeId)->whereDate('created_at', $today)->sum('amount'),
@@ -54,14 +54,14 @@ class PaymentController extends Controller
         ];
 
         $data['totalAmount'] = [
-            'daily' => $data['expenseAmount']['daily'] + $data['orderAmount']['daily'] + $data['eventAmount']['daily'],
-            'weekly' => $data['expenseAmount']['weekly'] + $data['orderAmount']['weekly'] + $data['eventAmount']['weekly'],
-            'monthly' => $data['expenseAmount']['monthly'] + $data['orderAmount']['monthly'] + $data['eventAmount']['monthly'],
-            'yearly' => $data['expenseAmount']['yearly'] + $data['orderAmount']['yearly'] + $data['eventAmount']['yearly'],
+            'daily' => $data['orderAmount']['daily'] + $data['eventAmount']['daily'],
+            'weekly' => $data['orderAmount']['weekly'] + $data['eventAmount']['weekly'],
+            'monthly' => $data['orderAmount']['monthly'] + $data['eventAmount']['monthly'],
+            'yearly' => $data['orderAmount']['yearly'] + $data['eventAmount']['yearly'],
         ];
 
 
-        $data['expenseTransactions'] = ExpenseTransaction::where('franchisee_id' , Auth::user()->franchisee_id)->get();
+        // $data['expenseTransactions'] = ExpenseTransaction::where('franchisee_id' , Auth::user()->franchisee_id)->get();
         $data['orderTransactions'] = OrderTransaction::where('franchisee_id' , Auth::user()->franchisee_id)->get();
         $data['eventTransactions'] = EventTransaction::where('franchisee_id' , Auth::user()->franchisee_id)->get();
         return view('franchise_admin.payment.transaction' , $data);

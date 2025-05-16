@@ -37,28 +37,28 @@ public function store(Request $request)
         'name' => 'required|string|max:191',
         'amount' => 'required|numeric|min:0.5',
         'date' => 'required|date',
-        'stripeToken' => 'required',
+        // 'stripeToken' => 'required',
     ]);
 
-    Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
+    // Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
 
-    try {
-        $amountInCents = $request->amount * 100;
+    // try {
+    //     $amountInCents = $request->amount * 100;
 
-        $charge = Charge::create([
-            'amount' => $amountInCents,
-            'currency' => 'usd',
-            'description' => 'Expense Payment for: ' . $request->name,
-            'source' => $request->stripeToken,
-            'metadata' => [
-                'franchise_id' => Auth::user()->franchisee_id,
-                'category_id' => $request->category_id,
-                'sub_category_id' => $request->sub_category_id,
-            ],
-        ]);
-    } catch (\Exception $e) {
-        return redirect()->back()->with('success', $e->getMessage());
-    }
+    //     $charge = Charge::create([
+    //         'amount' => $amountInCents,
+    //         'currency' => 'usd',
+    //         'description' => 'Expense Payment for: ' . $request->name,
+    //         'source' => $request->stripeToken,
+    //         'metadata' => [
+    //             'franchise_id' => Auth::user()->franchisee_id,
+    //             'category_id' => $request->category_id,
+    //             'sub_category_id' => $request->sub_category_id,
+    //         ],
+    //     ]);
+    // } catch (\Exception $e) {
+    //     return redirect()->back()->with('success', $e->getMessage());
+    // }
 
     $expense = Expense::create([
         'franchisee_id' => Auth::user()->franchisee_id,
@@ -69,17 +69,17 @@ public function store(Request $request)
         'date' => $request->date,
     ]);
 
-    ExpenseTransaction::create([
-        'franchisee_id' => Auth::user()->franchisee_id,
-        'expense_id' => $expense->id,
-        'cardholder_name' => $request->cardholder_name,
-        'amount' => $request->amount,
-        'stripe_payment_intent_id' => $charge->id,
-        'stripe_payment_method' => $charge->payment_method ?? null,
-        'stripe_currency' => $charge->currency,
-        'stripe_client_secret' => $charge->client_secret ?? null,
-        'stripe_status' => $charge->status,
-    ]);
+    // ExpenseTransaction::create([
+    //     'franchisee_id' => Auth::user()->franchisee_id,
+    //     'expense_id' => $expense->id,
+    //     'cardholder_name' => $request->cardholder_name,
+    //     'amount' => $request->amount,
+    //     'stripe_payment_intent_id' => $charge->id,
+    //     'stripe_payment_method' => $charge->payment_method ?? null,
+    //     'stripe_currency' => $charge->currency,
+    //     'stripe_client_secret' => $charge->client_secret ?? null,
+    //     'stripe_status' => $charge->status,
+    // ]);
 
     // $expenseTransaction = ExpenseTransaction::where('expense_id', $expense->id)->firstOrFail();
     // $expenseCategory = ExpenseCategory::where('id', $expense->category_id)->firstOrFail();

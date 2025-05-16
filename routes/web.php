@@ -30,6 +30,7 @@ use App\Http\Controllers\Franchise\InventoryController;
 use App\Http\Controllers\Franchise\PaymentController;
 use App\Http\Controllers\Franchise\LocationController;
 use App\Http\Controllers\Franchise\InvoiceController;
+use App\Http\Controllers\Franchise\AccountController;
 use App\Http\Controllers\FranchiseManagerControllers\FranchiseManagerController;
 
 Route::get('/', function () {
@@ -229,6 +230,9 @@ Route::middleware(['auth', 'role:franchise_admin|franchise_manager'])->prefix('f
 
     // Invoice
     Route::resource('invoice', InvoiceController::class);
+
+    // Account
+    Route::resource('account', AccountController::class);
 
 });
 
