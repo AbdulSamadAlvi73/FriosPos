@@ -54,6 +54,7 @@ class InvoiceController extends Controller
         $request->validate([
             'name' => 'required|string',
             'customer_id' => 'required|integer',
+            'note' => 'nullable|max:191',
             'items' => 'required|array',
             'items.*.flavor_id' => 'required|integer',
             'items.*.location' => 'required|string',
@@ -65,14 +66,20 @@ class InvoiceController extends Controller
             'franchisee_id' => Auth::user()->franchisee_id,
             'customer_id' => $request->customer_id,
             'name' => $request->name,
-            'taxable' => $request->has('apply_sales_tax'),
+            'note' => $request->note,
+            'tax_price' => $request->tax_price,
             'total_price' => 0,
         ]);
 
         $total = 0;
+        $taxRate = floatval($request->tax_price ?? 0);
 
         foreach ($request->items as $item) {
             $lineTotal = $item['quantity'] * $item['price'];
+            $isTaxable = isset($item['taxable']) && $item['taxable'] === 'on';
+
+            $taxAmount = $isTaxable ? ($lineTotal * ($taxRate / 100)) : 0;
+            $finalLineTotal = $lineTotal + $taxAmount;
 
             InvoiceItem::create([
                 'invoice_id' => $invoice->id,
@@ -80,25 +87,26 @@ class InvoiceController extends Controller
                 'inventory_allocation_id' => $item['location'],
                 'quantity' => $item['quantity'],
                 'unit_price' => $item['price'],
-                'total_price' => $lineTotal,
+                'taxable' => $isTaxable,
+                'total_price' => $lineTotal + $taxAmount,
             ]);
 
-            $total += $lineTotal;
+            $total += $finalLineTotal;
         }
 
-        if ($request->has('apply_sales_tax')) {
-            $taxRate = floatval(config('your.tax_config.sales_tax_rate', 0));
-            $total += $total * ($taxRate / 100);
-        }
+        $invoice->update([
+            'total_price' => $total,
+        ]);
 
-        $invoice->update(['total_price' => $total]);
 
         $corporateAdmin = User::where('user_id', 17)->first();
         Mail::to($invoice->customer->email ?? $corporateAdmin->email)
             ->send(new \App\Mail\InvoiceMail($invoice, $invoice->items, $invoice->franchisee->business_name));
 
+
         return redirect()->route('franchise.invoice.index')->with('success', 'Invoice created successfully.');
     }
+
 
     public function edit($id)
     {
@@ -146,24 +154,33 @@ class InvoiceController extends Controller
         $request->validate([
             'name' => 'required|string',
             'customer_id' => 'required|integer',
+            'note' => 'nullable|max:191',
             'items' => 'required|array',
             'items.*.flavor_id' => 'required|integer',
             'items.*.location' => 'required|string',
             'items.*.quantity' => 'required|integer|min:1',
             'items.*.price' => 'required|numeric|min:0',
         ]);
-
         $invoice->update([
-            'name' => $request->name,
+            'franchisee_id' => Auth::user()->franchisee_id,
             'customer_id' => $request->customer_id,
-            'taxable' => $request->has('apply_sales_tax'),
+            'name' => $request->name,
+            'note' => $request->note,
+            'tax_price' => $request->tax_price,
+            'total_price' => 0,
         ]);
 
         $invoice->items()->delete();
 
         $total = 0;
+        $taxRate = floatval($request->tax_price ?? 0);
+
         foreach ($request->items as $item) {
             $lineTotal = $item['quantity'] * $item['price'];
+            $isTaxable = isset($item['taxable']) && $item['taxable'] === 'on';
+
+            $taxAmount = $isTaxable ? ($lineTotal * ($taxRate / 100)) : 0;
+            $finalLineTotal = $lineTotal + $taxAmount;
 
             InvoiceItem::create([
                 'invoice_id' => $invoice->id,
@@ -171,18 +188,16 @@ class InvoiceController extends Controller
                 'inventory_allocation_id' => $item['location'],
                 'quantity' => $item['quantity'],
                 'unit_price' => $item['price'],
-                'total_price' => $lineTotal,
+                'taxable' => $isTaxable,
+                'total_price' => $lineTotal + $taxAmount,
             ]);
 
-            $total += $lineTotal;
+            $total += $finalLineTotal;
         }
 
-        if ($request->has('apply_sales_tax')) {
-            $taxRate = floatval(config('your.tax_config.sales_tax_rate', 0));
-            $total += $total * ($taxRate / 100);
-        }
-
-        $invoice->update(['total_price' => $total]);
+        $invoice->update([
+            'total_price' => $total,
+        ]);
 
         return redirect()->route('franchise.invoice.index')->with('success', 'Invoice updated successfully.');
     }

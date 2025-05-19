@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\ProfileController;
@@ -37,10 +38,8 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
-Route::get('/dashboard', function () {
-    notify()->success('Welcome to Laravel Notify ⚡️');
-    return view('dashboard');
-})->name('dashboard')->middleware('auth');
+Route::get('/dashboard', [DashboardController::class , 'dashboard'])->name('dashboard')->middleware('auth');
+Route::get('/load-more-events', [DashboardController::class , 'loadMoreEvents'])->name('loadMoreEvents')->middleware('auth');
 
 Route::middleware('auth')->group(function () {
     // Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -224,6 +223,7 @@ Route::middleware(['auth', 'role:franchise_admin|franchise_manager'])->prefix('f
     Route::get('pos/order/{id}/download', [PaymentController::class, 'posOrderDownloadPDF'])->name('order.pos.download');
     Route::get('pos/{id}/event' , [PaymentController::class , 'posEvent'])->name('pos.event');
     Route::get('pos/event/{id}/download', [PaymentController::class, 'posEventDownloadPDF'])->name('event.pos.download');
+    Route::get('pos/invoice/{id}/download', [PaymentController::class, 'posInvoiceDownloadPDF'])->name('invoice.pos.download');
 
     // Location
     Route::resource('locations', LocationController::class);
@@ -233,6 +233,10 @@ Route::middleware(['auth', 'role:franchise_admin|franchise_manager'])->prefix('f
 
     // Account
     Route::resource('account', AccountController::class);
+
+    // Stripe
+    Route::get('stripe' , [PaymentController::class , 'stripe'])->name('stripe');
+    Route::post('stripes' , [PaymentController::class , 'stripePost'])->name('stripe.post');
 
 });
 
@@ -356,6 +360,8 @@ Route::get('/config_cache', function () {
 });
 
 
-
+// Thankyou
+Route::get('/payment/success/{invoice}', [PaymentController::class, 'success'])->name('payment.success');
+Route::get('/payment/cancel/{invoice}', [PaymentController::class, 'cancel'])->name('payment.cancel');
 
 require __DIR__.'/auth.php';

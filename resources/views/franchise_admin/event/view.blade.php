@@ -51,7 +51,7 @@
                         -
                     @endif
                 </label>
-
+                
                 <label class="mt-1"><b>Type: </b>
                     @if (!empty($event->event_type))
                         {{ ucfirst($event->event_type) }}

@@ -23,7 +23,7 @@ class CustomerController extends Controller
         $request->validate([
             'name' => 'required|max:191',
             'phone' => 'nullable|numeric|digits_between:8,16',
-            'email' => 'nullable|email|max:191',
+            'email' => 'required|email|max:191',
     'state' => 'nullable|alpha|size:2', // 2-letter state code (alphabetic)
     'zip_code' => 'nullable|digits:5', // 5 digits zip code
 
@@ -57,7 +57,7 @@ class CustomerController extends Controller
         $request->validate([
             'name' => 'required|max:191',
             'phone' => 'nullable|numeric|digits_between:8,16',
-            'email' => 'nullable|email|max:191',
+            'email' => 'required|email|max:191',
     'zip_code' => 'nullable|digits:5', // 5 digits zip code
     'state' => 'nullable|alpha|size:2', // 2-letter state code (alphabetic)
 

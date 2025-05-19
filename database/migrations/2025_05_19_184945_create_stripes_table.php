@@ -11,14 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('invoices', function (Blueprint $table) {
+        Schema::create('stripes', function (Blueprint $table) {
             $table->id();
             $table->string('franchisee_id');
-            $table->string('customer_id');
-            $table->string('name');
-            $table->date('date');
-            $table->decimal('total_price', 10, 2);
-            $table->decimal('tax_price', 10, 2);
+            $table->text('public_key');
+            $table->text('secret_key');
             $table->timestamps();
         });
     }
@@ -28,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('invoices');
+        Schema::dropIfExists('stripes');
     }
 };

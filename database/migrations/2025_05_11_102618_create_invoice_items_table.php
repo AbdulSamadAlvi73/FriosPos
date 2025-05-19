@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('quantity');
             $table->decimal('unit_price', 10, 2);
             $table->decimal('total_price', 10, 2);
+            $table->boolean('taxable');
             $table->timestamps();
         });
     }
