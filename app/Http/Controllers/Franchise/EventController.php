@@ -178,23 +178,23 @@ class EventController extends Controller
 
         $finalTotal = $totalCaseCost + $grandTotal;
 
-        \Stripe\Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
+        // \Stripe\Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
 
-        try {
-            $amountInCents = $finalTotal * 100;
+        // try {
+        //     $amountInCents = $finalTotal * 100;
 
-            $charge = \Stripe\Charge::create([
-                'amount' => $amountInCents,
-                'currency' => 'usd',
-                'description' => 'Order Payment by: ' . $request->cardholder_name,
-                'source' => $request->stripeToken,
-                'metadata' => [
-                    'franchisee_id' => Auth::user()->franchisee_id,
-                ],
-            ]);
-        } catch (\Exception $e) {
-            return redirect()->back()->withErrors(['Stripe Error: ' . $e->getMessage()]);
-        }
+        //     $charge = \Stripe\Charge::create([
+        //         'amount' => $amountInCents,
+        //         'currency' => 'usd',
+        //         'description' => 'Order Payment by: ' . $request->cardholder_name,
+        //         'source' => $request->stripeToken,
+        //         'metadata' => [
+        //             'franchisee_id' => Auth::user()->franchisee_id,
+        //         ],
+        //     ]);
+        // } catch (\Exception $e) {
+        //     return redirect()->back()->withErrors(['Stripe Error: ' . $e->getMessage()]);
+        // }
 
         $event = \App\Models\Event::create([
             'franchisee_id' => Auth::user()->franchisee_id,
@@ -213,17 +213,17 @@ class EventController extends Controller
             'planned_payment' => $validated['planned_payment'] ?? null,
         ]);
 
-        \App\Models\EventTransaction::create([
-            'franchisee_id' => Auth::user()->franchisee_id,
-            'event_id' => $event->id,
-            'cardholder_name' => $request->cardholder_name,
-            'amount' => $finalTotal,
-            'stripe_payment_intent_id' => $charge->id,
-            'stripe_payment_method' => $charge->payment_method ?? null,
-            'stripe_currency' => $charge->currency,
-            'stripe_client_secret' => $charge->client_secret ?? null,
-            'stripe_status' => $charge->status,
-        ]);
+        // \App\Models\EventTransaction::create([
+        //     'franchisee_id' => Auth::user()->franchisee_id,
+        //     'event_id' => $event->id,
+        //     'cardholder_name' => $request->cardholder_name,
+        //     'amount' => $finalTotal,
+        //     'stripe_payment_intent_id' => $charge->id,
+        //     'stripe_payment_method' => $charge->payment_method ?? null,
+        //     'stripe_currency' => $charge->currency,
+        //     'stripe_client_secret' => $charge->client_secret ?? null,
+        //     'stripe_status' => $charge->status,
+        // ]);
 
         foreach ($validated['orderable'] as $index => $orderableId) {
             FranchiseEventItem::create([

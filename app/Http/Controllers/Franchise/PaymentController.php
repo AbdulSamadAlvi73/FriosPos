@@ -185,6 +185,7 @@ class PaymentController extends Controller
             InvoiceTransaction::create([
                 'invoice_id' => $invoice->id,
                 'franchisee_id' => $invoice->franchisee_id,
+                'user_id' => $invoice->user_id ?? null,
                 'transaction_id' => $session->payment_intent,
                 'status' => 'paid',
                 'amount' => $invoice->total_price,

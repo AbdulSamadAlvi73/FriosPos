@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\FranchiseStaffController\PosController;
+use App\Http\Controllers\FranchiseStaffController\SaleController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\ProfileController;
@@ -238,6 +240,14 @@ Route::middleware(['auth', 'role:franchise_admin|franchise_manager'])->prefix('f
     Route::get('stripe' , [PaymentController::class , 'stripe'])->name('stripe');
     Route::post('stripes' , [PaymentController::class , 'stripePost'])->name('stripe.post');
 
+    // Expense Category
+    Route::get('expense-category' , [ExpensesCategoryController::class , 'indexExpense'])->name('expense-category');
+    Route::get('expense-category/create' , [ExpensesCategoryController::class , 'createExpense'])->name('expense-category.create');
+    Route::get('expense-category/{id}/edit' , [ExpensesCategoryController::class , 'editExpense'])->name('expense-category.edit');
+    Route::put('expense-category/{id}/update' , [ExpensesCategoryController::class , 'updateExpense'])->name('expense-category.update');
+    Route::post('expense-category/store' , [ExpensesCategoryController::class , 'storeExpense'])->name('expense-category.store');
+    Route::post('expense-sub-category/store' , [ExpensesCategoryController::class , 'SubstoreExpense'])->name('expense-sub-category.store');
+    Route::delete('expense-sub-category/{id}/delete' , [ExpensesCategoryController::class , 'deleteExpense'])->name('expense-sub-category.delete');
 });
 
 
@@ -299,6 +309,14 @@ Route::middleware(['auth', 'role:franchise_staff'])->group(function () {
         Route::get('customer/{id}/view' , [FranchiseStaffController::class , 'view'])->name('customer.view');
         Route::put('customer/{id}/update' , [FranchiseStaffController::class , 'update'])->name('customer.update');
         Route::delete('customer/{id}/delete' , [FranchiseStaffController::class , 'delete'])->name('customer.delete');
+
+        // Sale
+        Route::resource('sales', SaleController::class);
+        Route::get('pos/sales/{id}/download', [PaymentController::class, 'posInvoiceDownloadPDF'])->name('sales.pos.download');
+
+
+        // Transaction
+        Route::get('pos' , [PosController::class , 'pos'])->name('pos');
     });
 
 });
