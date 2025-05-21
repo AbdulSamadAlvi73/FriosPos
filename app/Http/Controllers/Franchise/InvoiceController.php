@@ -53,7 +53,7 @@ class InvoiceController extends Controller
     {
         $request->validate([
             'name' => 'required|string',
-            'customer_id' => 'required|integer',
+            'customer_id' => 'nullable',
             'note' => 'nullable|max:191',
             'items' => 'required|array',
             'items.*.flavor_id' => 'required|integer',

@@ -38,7 +38,7 @@
                             <div class="col-md-6">
                                 <div class="form-group mb-3">
                                     <label for="customer">Customer</label>
-                                    <select name="customer_id" id="customer_id" class="form-control" required>
+                                    <select name="customer_id" id="customer_id" class="form-control">
                                         <option value="">-- Select Customer --</option>
                                         @foreach ($customers as $customer)
                                             <option value="{{ $customer->customer_id }}">{{ $customer->name }}</option>

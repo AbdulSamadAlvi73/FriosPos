@@ -232,7 +232,7 @@ Route::middleware(['auth', 'role:franchise_admin|franchise_manager'])->prefix('f
     Route::resource('invoice', InvoiceController::class);
 
     // Account
-    Route::resource('account', AccountController::class);
+    // Route::resource('account', AccountController::class);
 
     // Stripe
     Route::get('stripe' , [PaymentController::class , 'stripe'])->name('stripe');
