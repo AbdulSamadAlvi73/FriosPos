@@ -85,9 +85,14 @@ class EventController extends Controller
         $month = Carbon::parse($monthYear)->month;
 
         // Fetch the data based on the selected or default month/year
-        $eventItems = FranchiseEventItem::whereYear('created_at', $year)
+          $eventItems = FranchiseEventItem::whereYear('created_at', $year)
             ->whereMonth('created_at', $month)
+            ->whereHas('events', function ($query) {
+                $query->where('franchisee_id', Auth::user()->franchisee_id);
+            })
             ->get();
+
+
         return view('franchise_admin.event.report', compact('eventItems'));
     }
 
@@ -351,7 +356,7 @@ class EventController extends Controller
         $month = Carbon::parse($monthYear)->month;
 
         // Fetch the data based on the selected or default month/year
-        $eventItems = FranchiseEventItem::whereYear('created_at', $year)
+        $eventItems = FranchiseEventItem::where('franchisee_id' , Auth::user()->franchisee_id)->whereYear('created_at', $year)
             ->whereMonth('created_at', $month)
             ->get();
         return view('corporate_admin.event.report', compact('eventItems'));

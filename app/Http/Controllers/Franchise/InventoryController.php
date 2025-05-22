@@ -16,10 +16,10 @@ class InventoryController extends Controller
 {
     public function index()
     {
-        $deliveredOrders = FgpOrder::where('status', 'delivered')->get();
-        $shippedOrders = FgpOrder::where('status', 'shipped')->count();
-        $paidOrders = FgpOrder::where('status', 'paid')->count();
-        $pendingOrders = FgpOrder::where('status', 'pending')->count();
+        $deliveredOrders = FgpOrder::where('user_ID' , Auth::user()->franchisee_id)->where('status', 'delivered')->get();
+        $shippedOrders = FgpOrder::where('user_ID' , Auth::user()->franchisee_id)->where('status', 'shipped')->count();
+        $paidOrders = FgpOrder::where('user_ID' , Auth::user()->franchisee_id)->where('status', 'paid')->count();
+        $pendingOrders = FgpOrder::where('user_ID' , Auth::user()->franchisee_id)->where('status', 'pending')->count();
 
 
         // $orders = FgpOrder::where('user_ID', Auth::user()->franchisee_id)
@@ -88,7 +88,6 @@ class InventoryController extends Controller
             $allocatedInventory = InventoryAllocation::join('fgp_items', 'fgp_items.fgp_item_id', '=', 'inventory_allocations.fgp_item_id')
                 ->select('fgp_items.name as flavor', 'inventory_allocations.location', 'inventory_allocations.quantity as cases')
                 ->get();
-
             return view('franchise_admin.inventory.locations', compact(
                 'flavors',
                 'initialPopFlavors',
