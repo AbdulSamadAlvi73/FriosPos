@@ -10,7 +10,9 @@ use App\Models\Location;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
-use DB;
+use Illuminate\Support\Facades\DB;
+
+// use DB;
 
 class InventoryController extends Controller
 {
@@ -39,12 +41,12 @@ class InventoryController extends Controller
         //     return $order;
         // });
 
-        $orders = FgpOrder::where('user_ID' , Auth::user()->franchisee_id)->get();
+        $orders = FgpOrder::where('user_ID', Auth::user()->franchisee_id)->get();
 
-    $totalOrders = $orders->count();
+        $totalOrders = $orders->count();
 
 
-        return view('franchise_admin.inventory.index', compact('deliveredOrders', 'shippedOrders', 'pendingOrders','paidOrders', 'orders', 'totalOrders'));
+        return view('franchise_admin.inventory.index', compact('deliveredOrders', 'shippedOrders', 'pendingOrders', 'paidOrders', 'orders', 'totalOrders'));
     }
 
     public function inventoryDetail(Request $request)
@@ -52,16 +54,16 @@ class InventoryController extends Controller
         $orderId = $request->input('id');
 
         $orderDetails = DB::table('fgp_order_details as od')
-        ->join('fgp_items as fi', 'od.fgp_item_id', '=', 'fi.fgp_item_id')
-        ->where('od.fgp_order_id', $orderId)
-        ->select('od.*', 'fi.name')
-        ->get();
+            ->join('fgp_items as fi', 'od.fgp_item_id', '=', 'fi.fgp_item_id')
+            ->where('od.fgp_order_id', $orderId)
+            ->select('od.*', 'fi.name')
+            ->get();
 
-    // Format the date_transaction for each order detail
-    foreach ($orderDetails as $detail) {
-        // Format the date using Carbon
-        $detail->formatted_date = Carbon::parse($detail->date_transaction)->format('M d, Y h:i A');
-    }
+        // Format the date_transaction for each order detail
+        foreach ($orderDetails as $detail) {
+            // Format the date using Carbon
+            $detail->formatted_date = Carbon::parse($detail->date_transaction)->format('M d, Y h:i A');
+        }
 
 
         return response()->json([
@@ -87,6 +89,7 @@ class InventoryController extends Controller
 
             $allocatedInventory = InventoryAllocation::join('fgp_items', 'fgp_items.fgp_item_id', '=', 'inventory_allocations.fgp_item_id')
                 ->select('fgp_items.name as flavor', 'inventory_allocations.location', 'inventory_allocations.quantity as cases')
+                ->where('franchise_id', Auth::id())
                 ->get();
 
             return view('franchise_admin.inventory.locations', compact(
@@ -110,19 +113,19 @@ class InventoryController extends Controller
                 if (!$fgp_item_id) {
                     continue;
                 }
-                $exists = InventoryAllocation::where('fgp_item_id', $fgp_item_id)->where('location', $item['location'])->first();
-                if($exists){
+                $exists = InventoryAllocation::where('franchise_id', Auth::id())->where('fgp_item_id', $fgp_item_id)->where('location', $item['location'])->first();
+                if ($exists) {
                     $exists->update([
-                    'quantity' => $item['cases'],
+                        'quantity' => $item['cases'],
                     ]);
-                }else{
+                } else {
                     // return $fgp_item_id;
                     InventoryAllocation::create([
                         'fgp_item_id' => $fgp_item_id,
                         'quantity' => $item['cases'],
-                        'location' => $item['location']
+                        'location' => $item['location'],
+                        'franchise_id' => Auth::id()
                     ]);
-
                 }
             }
             return response()->json([
@@ -151,7 +154,8 @@ class InventoryController extends Controller
                 ]);
             }
 
-            $allocation = InventoryAllocation::where('fgp_item_id', $fgp_item_id)
+            $allocation = InventoryAllocation::where('franchise_id', Auth::id())
+                ->where('fgp_item_id', $fgp_item_id)
                 ->where('location', $request->location)
                 ->first();
 
@@ -196,7 +200,8 @@ class InventoryController extends Controller
                 ]);
             }
 
-            InventoryAllocation::where('fgp_item_id', $fgp_item_id)
+            InventoryAllocation::where('franchise_id', Auth::id())
+                ->where('fgp_item_id', $fgp_item_id)
                 ->where('location', $request->location)
                 ->delete();
 
@@ -211,5 +216,4 @@ class InventoryController extends Controller
             ]);
         }
     }
-
 }
