@@ -126,7 +126,7 @@
                     </a>
                     <ul aria-expanded="false">
                         <li><a href="{{ route('franchise.expense') }}">Expenses List</a></li>
-                        <li><a href="expense_categories.html">Expense Categories</a></li>
+                        <li><a href="{{ route('franchise.expense-category') }}">Expense Categories</a></li>
                     </ul>
                 </li>
                 <li><a class="ai-icon" href="{{ route('franchise.customer') }}" aria-expanded="false">
@@ -189,7 +189,7 @@
                     </a>
                     <ul aria-expanded="false">
                         <li><a href="{{ route('franchise.expense') }}">Expenses List</a></li>
-                        <li><a href="expense_categories.html">Expense Categories</a></li>
+                        <li><a href="{{ route('franchise.expense-category') }}">Expense Categories</a></li>
                     </ul>
                 </li>
                 <li><a class="ai-icon" href="{{ route('franchise.customer') }}" aria-expanded="false">
@@ -209,7 +209,7 @@
                 </li>
             @endrole
             @role('franchise_staff')
-                <li><a class="ai-icon" href="pos.html" aria-expanded="false">
+                <li><a class="ai-icon" href="{{ route('franchise_staff.pos') }}" aria-expanded="false">
                         <i class="bi bi-cart-check-fill"></i>
                         <span class="nav-text">POS</span>
                     </a></li>
@@ -226,7 +226,7 @@
                         <li><a href="{{ route('franchise_staff.customer.create') }}">Add Customer</a></li>
                     </ul>
                 </li>
-                <li><a class="ai-icon" href="sales.html" aria-expanded="false">
+                <li><a class="ai-icon" href="{{ route('franchise_staff.sales.index') }}" aria-expanded="false">
                         <i class="bi bi-coin"></i>
                         <span class="nav-text">Sales</span>
                     </a></li>

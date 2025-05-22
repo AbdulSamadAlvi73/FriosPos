@@ -309,7 +309,7 @@
 
 
 
-                <div class="row">
+                {{-- <div class="row">
                     <div class="col-md-6 mb-3">
                         <input type="text" id="cardholder-name" name="cardholder_name" placeholder="Cardholder Name"
                             class="form-control">
@@ -329,10 +329,14 @@
                     </div>
                     <div id="card-errors" class="text-danger mb-3"></div>
 
-                </div>
+                </div> --}}
 
 
-                <button disabled class="btn btn-outline-primary" id="submit-button">
+                {{-- <button disabled class="btn btn-outline-primary" id="submit-button">
+                    Submit
+                </button> --}}
+
+                <button class="btn btn-outline-primary" >
                     Submit
                 </button>
 
@@ -343,7 +347,7 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/css/select2.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/js/select2.min.js"></script>
 
-    <script src="https://js.stripe.com/v3/"></script>
+    {{-- <script src="https://js.stripe.com/v3/"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const stripe = Stripe("{{ env('STRIPE_PUBLIC_KEY') }}");
@@ -417,7 +421,7 @@
                 }
             });
         });
-    </script>
+    </script> --}}
     <script>
         $(document).ready(function() {
             function fetchFlavorData() {

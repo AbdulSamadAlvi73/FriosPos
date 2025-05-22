@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Franchise;
+namespace App\Http\Controllers\FranchiseStaffController;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -12,23 +12,24 @@ use App\Models\FgpItem;
 use App\Models\InventoryAllocation;
 use Illuminate\Support\Facades\Auth;
 use App\Mail\InvoiceMail;
+use App\Models\Stripe;
 use Illuminate\Support\Facades\Mail;
 
-class InvoiceController extends Controller
+class SaleController extends Controller
 {
     public function index()
     {
-        $data['invoices'] = Invoice::where('franchisee_id', Auth::user()->franchisee_id)->get();
-        $data['invoiceCount'] = Invoice::where('franchisee_id', Auth::user()->franchisee_id)->count();
+        $data['invoices'] = Invoice::where('user_id', auth()->user()->user_id)->get();
+        $data['invoiceCount'] = Invoice::where('user_id', auth()->user()->user_id)->count();
 
-        return view('franchise_admin.payment.invoice.index', $data);
+        return view('franchise_staff.sale.index', $data);
     }
 
     public function create()
     {
         $data['customers'] = Customer::where('franchisee_id', Auth::user()->franchisee_id)->get();
         $data['franchisee'] = '10';
-
+        $data['stripe'] = Stripe::where('franchisee_id', Auth::user()->franchisee_id)->first();
         $flavors = FgpItem::all();
 
         $initialPopFlavors = [];
@@ -46,7 +47,7 @@ class InvoiceController extends Controller
             ->get();
 
 
-        return view('franchise_admin.payment.invoice.create', $data);
+        return view('franchise_staff.sale.create', $data);
     }
 
     public function store(Request $request)
@@ -64,6 +65,7 @@ class InvoiceController extends Controller
 
         $invoice = Invoice::create([
             'franchisee_id' => Auth::user()->franchisee_id,
+            'user_id' => auth()->user()->user_id,
             'customer_id' => $request->customer_id,
             'name' => $request->name,
             'note' => $request->note,
@@ -106,7 +108,7 @@ class InvoiceController extends Controller
         }
 
 
-        return redirect()->route('franchise.invoice.index')->with('success', 'Invoice created successfully.');
+        return redirect()->route('franchise_staff.sales.index')->with('success', 'Sale created successfully.');
     }
 
 
@@ -140,7 +142,7 @@ class InvoiceController extends Controller
 
         $franchisee = $taxRate;
 
-        return view('franchise_admin.payment.invoice.edit', compact(
+        return view('franchise_staff.sale.edit', compact(
             'invoice',
             'franchisee',
             'customers',
@@ -201,7 +203,7 @@ class InvoiceController extends Controller
             'total_price' => $total,
         ]);
 
-        return redirect()->route('franchise.invoice.index')->with('success', 'Invoice updated successfully.');
+        return redirect()->route('franchise_staff.sales.index')->with('success', 'Sale updated successfully.');
     }
 
     public function destroy($id)
@@ -212,7 +214,7 @@ class InvoiceController extends Controller
 
         $invoice->delete();
 
-        return redirect()->route('franchise.invoice.index')->with('success', 'Invoice deleted successfully.');
+        return redirect()->route('franchise_staff.sales.index')->with('success', 'Sale deleted successfully.');
     }
 
 
@@ -247,7 +249,7 @@ class InvoiceController extends Controller
 
         $franchisee = $taxRate;
 
-        return view('franchise_admin.payment.invoice.view', compact(
+        return view('franchise_staff.sale.view', compact(
             'invoice',
             'franchisee',
             'customers',
