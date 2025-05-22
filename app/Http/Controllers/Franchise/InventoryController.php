@@ -84,7 +84,7 @@ class InventoryController extends Controller
                     'available' => $flavor->availableQuantity(),
                 ];
             }
-
+            
             $allocatedInventory = InventoryAllocation::join('fgp_items', 'fgp_items.fgp_item_id', '=', 'inventory_allocations.fgp_item_id')
                 ->select('fgp_items.name as flavor', 'inventory_allocations.location', 'inventory_allocations.quantity as cases')
                 ->get();
