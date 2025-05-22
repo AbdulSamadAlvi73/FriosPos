@@ -10,6 +10,7 @@
     <div class="content-body default-height p-5 mt-5">
 
         <div class="container-fluid rounded border p-5 bg-white">
+
             <div class="row">
                 <div class="col-md-12">
                     <div style="float: right;">
@@ -19,13 +20,21 @@
                     </div>
                 </div>
             </div>
+
             <div class="d-flex justify-content-between">
                 <div class="container">
+                                @if ($stripe == null)
+                <div class="alert alert-danger">
+                    Franchise admin need to create a Stripe account.
+                </div>
+            @endif
                     <h1 style="font-size: 28px; font-weight: bold">
                         Create Sale
                     </h1>
-                    <form action="{{ route('franchise_staff.sales.store') }}" method="POST" id="invoice-form">
-                        @csrf
+                    @if ($stripe)
+                        <form action="{{ route('franchise_staff.sales.store') }}" method="POST" id="invoice-form">
+                            @csrf
+                    @endif
 
                         <div class="row mt-5">
                             <div class="col-md-6">
@@ -127,8 +136,10 @@
 
                             </div>
                         </div>
-                        <button class="btn btn-success action-btn">Create Sale</button>
+                        @if ($stripe)
+                                                    <button class="btn btn-success action-btn">Create Sale</button>
                     </form>
+                        @endif
                 </div>
             </div>
         </div>

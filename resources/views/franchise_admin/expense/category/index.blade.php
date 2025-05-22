@@ -16,10 +16,11 @@
 
 				</div>
                 <div class="row mb-4 align-items-center">
-                    <div class="col-xl-3 col-lg-4 mb-4 mb-lg-0">
+                    {{-- <div class="col-xl-3 col-lg-4 mb-4 mb-lg-0">
                         <a href="{{ route('franchise.expense-category.create') }}" class="btn btn-secondary btn-lg btn-block rounded text-white">+ New Sub category</a>
-                    </div>
-                    <div class="col-xl-9 col-lg-8">
+                    </div> --}}
+                    <div class="col-xl-12 col-lg-12">
+                    {{-- <div class="col-xl-9 col-lg-8"> --}}
                         <div class="card m-0">
                             <div class="card-body py-3 py-md-2">
                                 <div class="d-sm-flex d-block align-items-center">
@@ -57,7 +58,7 @@
                                         <th>Main Category</th>
                                         <th>Sub Category</th>
                                         <th>Sub Category Description</th>
-                                        <th>Actions</th>
+                                        {{-- <th>Actions</th> --}}
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -67,7 +68,7 @@
                                         <td>{{ isset($expenseSubCategory->category) ? $expenseSubCategory->category->category : '-' }}</td>
                                         <td>{{ $expenseSubCategory->sub_category }}</td>
                                         <td>{{ $expenseSubCategory->sub_category_description }}</td>
-                                        <td>
+                                        {{-- <td>
                                             <div class="d-flex">
                                                 <a href="{{ route('franchise.expense-category.edit', $expenseSubCategory->id) }}" class="edit-expenseSubCategory">
                                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -86,7 +87,7 @@
                                                     </button>
                                                 </form>
                                             </div>
-                                        </td>
+                                        </td> --}}
                                     </tr>
                                     @endforeach
                                 </tbody>

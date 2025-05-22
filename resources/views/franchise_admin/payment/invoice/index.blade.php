@@ -59,16 +59,16 @@
                         <table id="example5" class="table customer-table display mb-4 fs-14 card-table">
                             <thead>
                                 <tr>
-                                    <th>Customer Name</th>
                                     <th>Name</th>
+                                    <th>Customer Name</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($invoices as $index=>$invoice)
                                     <tr>
-                                        <td>{{ $invoice->customer->name ?? '-' }}</td>
                                         <td>{{ $invoice->name ?: '-' }}</td>
+                                        <td>{{ $invoice->customer->name ?? '-' }}</td>
                                         <td>
                                             <div class="d-flex">
                                                 <a href="{{ route('franchise.invoice.show', $invoice->id) }}" class="me-4">

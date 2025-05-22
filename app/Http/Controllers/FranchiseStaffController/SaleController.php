@@ -12,6 +12,7 @@ use App\Models\FgpItem;
 use App\Models\InventoryAllocation;
 use Illuminate\Support\Facades\Auth;
 use App\Mail\InvoiceMail;
+use App\Models\Stripe;
 use Illuminate\Support\Facades\Mail;
 
 class SaleController extends Controller
@@ -28,7 +29,7 @@ class SaleController extends Controller
     {
         $data['customers'] = Customer::where('franchisee_id', Auth::user()->franchisee_id)->get();
         $data['franchisee'] = '10';
-
+        $data['stripe'] = Stripe::where('franchisee_id', Auth::user()->franchisee_id)->first();
         $flavors = FgpItem::all();
 
         $initialPopFlavors = [];
