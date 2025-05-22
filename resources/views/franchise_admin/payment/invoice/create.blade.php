@@ -108,13 +108,14 @@
                                 <select id="item-flavor" class="form-control">
                                     <option value="">-- Select Flavor &amp; Location --</option>
                                     @foreach ($allocations as $alloc)
-                                        <!-- Check if the flavor exists -->
-                                        <option value="{{ $alloc->flavor->fgp_item_id }}"
-                                            data-price="{{ $alloc->flavor->case_cost }}"
+                                        <option value="{{ $alloc->fgp_item_id }}"
+                                            data-price="{{ $alloc->case_cost }}"
                                             data-location="{{ $alloc->location }}">
-                                            {{ $alloc->flavor->name }} ({{ $alloc->location }})
+                                            {{ $alloc->name }} ({{ $alloc->location }})
                                         </option>
                                     @endforeach
+
+
 
                                 </select>
                             </div>

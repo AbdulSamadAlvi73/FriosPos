@@ -10,6 +10,7 @@ use App\Models\Customer;
 use App\Models\User;
 use App\Models\FgpItem;
 use App\Models\InventoryAllocation;
+use App\Models\FgpOrderDetail;
 use Illuminate\Support\Facades\Auth;
 use App\Mail\InvoiceMail;
 use Illuminate\Support\Facades\Mail;
@@ -40,11 +41,16 @@ class InvoiceController extends Controller
             ];
         }
 
-        $data['allocations'] = InventoryAllocation::with('flavor')
-            ->join('fgp_items', 'fgp_items.fgp_item_id', '=', 'inventory_allocations.fgp_item_id')
-            ->select('inventory_allocations.*', 'fgp_items.name', 'fgp_items.image1', 'fgp_items.case_cost')  // Select necessary columns from fgp_items
-            ->get();
-
+$data['allocations'] = \DB::table('inventory_allocations')
+    ->join('fgp_items', 'fgp_items.fgp_item_id', '=', 'inventory_allocations.fgp_item_id')
+    ->where('inventory_allocations.franchise_id', Auth::user()->franchisee_id)
+    ->select(
+        'inventory_allocations.*',
+        'fgp_items.name',
+        'fgp_items.image1',
+        'fgp_items.case_cost'
+    )
+    ->get();
 
         return view('franchise_admin.payment.invoice.create', $data);
     }

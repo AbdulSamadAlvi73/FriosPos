@@ -215,7 +215,7 @@
     <script src="https://js.stripe.com/v3/"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            const stripe = Stripe("{{ env('STRIPE_PUBLIC_KEY') }}");
+            const stripe = Stripe("{{ config('stripe.public_key') }}");
             const elements = stripe.elements();
 
             const cardNumber = elements.create('cardNumber');

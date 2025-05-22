@@ -156,7 +156,7 @@ public function store(Request $request)
         return redirect()->back()->withErrors(['Order quantity must be a multiple of ' . $factorCase . '.']);
     }
 
-    \Stripe\Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
+    \Stripe\Stripe::setApiKey(config('stripe.secret_key'));
 
     try {
         $amountInCents = $request->grandTotal * 100;

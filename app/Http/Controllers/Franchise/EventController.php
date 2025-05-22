@@ -279,6 +279,7 @@ class EventController extends Controller
         }
 
         $orders = DB::table('fgp_orders')
+            ->where('user_ID', Auth::user()->franchisee_id)
             ->where('status', 'Delivered')
             ->get();
 
@@ -356,7 +357,7 @@ class EventController extends Controller
         $month = Carbon::parse($monthYear)->month;
 
         // Fetch the data based on the selected or default month/year
-        $eventItems = FranchiseEventItem::where('franchisee_id' , Auth::user()->franchisee_id)->whereYear('created_at', $year)
+        $eventItems = FranchiseEventItem::whereYear('created_at', $year)
             ->whereMonth('created_at', $month)
             ->get();
         return view('corporate_admin.event.report', compact('eventItems'));

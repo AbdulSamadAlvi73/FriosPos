@@ -87,11 +87,12 @@ class InventoryController extends Controller
                 ];
             }
             // dd($initialPopFlavors);
-            
+
             $allocatedInventory = InventoryAllocation::join('fgp_items', 'fgp_items.fgp_item_id', '=', 'inventory_allocations.fgp_item_id')
                 ->select('fgp_items.name as flavor', 'inventory_allocations.location', 'inventory_allocations.quantity as cases')
                 ->where('franchise_id', Auth::id())
                 ->get();
+
             return view('franchise_admin.inventory.locations', compact(
                 'flavors',
                 'initialPopFlavors',
