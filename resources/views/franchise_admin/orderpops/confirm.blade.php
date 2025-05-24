@@ -164,7 +164,7 @@
                                                             </tbody>
                                                         </table>
 
-                                                        <div class="row">
+                                                        {{-- <div class="row">
                                                                                                                 <div class="col-md-6 mb-3">
                                                         <input type="text" id="cardholder-name" name="cardholder_name"
                                                             placeholder="Cardholder Name" class="form-control">
@@ -184,9 +184,10 @@
                                                     </div>
                                                         </div>
 
-                                                    <div id="card-errors" class="text-danger mb-3"></div>
+                                                    <div id="card-errors" class="text-danger mb-3"></div> --}}
 
-                                                        <button disabled type="submit" id="submit-button" class="btn btn-primary bg-primary">Confirm Order</button>
+                                                        {{-- <button disabled type="submit" id="submit-button" class="btn btn-primary bg-primary">Confirm Order</button> --}}
+                                                        <button type="submit" class="btn btn-primary bg-primary">Confirm Order</button>
                                                     </form>
                                                 @else
                                                     <p>No items in the order.</p>
@@ -212,7 +213,7 @@
     <!--**********************************
                 Content body end
             ***********************************-->
-    <script src="https://js.stripe.com/v3/"></script>
+    {{-- <script src="https://js.stripe.com/v3/"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const stripe = Stripe("{{ config('stripe.public_key') }}");
@@ -286,7 +287,7 @@
                 }
             });
         });
-    </script>
+    </script> --}}
             <script>
 function calculateTotals() {
     let subtotal = 0;

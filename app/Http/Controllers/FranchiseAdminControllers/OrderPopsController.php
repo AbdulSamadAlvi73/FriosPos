@@ -136,8 +136,8 @@ public function store(Request $request)
     $factorCase = 3;
 
     $validated = $request->validate([
-        'stripeToken' => 'required|string',
-        'cardholder_name' => 'required|string|max:191',
+        // 'stripeToken' => 'required|string',
+        // 'cardholder_name' => 'required|string|max:191',
         'grandTotal' => 'required|numeric|min:1',
         'items' => 'required|array',
         'items.*.fgp_item_id' => 'required|exists:fgp_items,fgp_item_id',
@@ -156,23 +156,23 @@ public function store(Request $request)
         return redirect()->back()->withErrors(['Order quantity must be a multiple of ' . $factorCase . '.']);
     }
 
-    \Stripe\Stripe::setApiKey(config('stripe.secret_key'));
+    // \Stripe\Stripe::setApiKey(config('stripe.secret_key'));
 
-    try {
-        $amountInCents = $request->grandTotal * 100;
+    // try {
+    //     $amountInCents = $request->grandTotal * 100;
 
-        $charge = \Stripe\Charge::create([
-            'amount' => $amountInCents,
-            'currency' => 'usd',
-            'description' => 'Order Payment by: ' . $request->cardholder_name,
-            'source' => $request->stripeToken,
-            'metadata' => [
-                'franchisee_id' => Auth::user()->franchisee_id,
-            ],
-        ]);
-    } catch (\Exception $e) {
-        return redirect()->back()->withErrors(['Stripe Error: ' . $e->getMessage()]);
-    }
+    //     $charge = \Stripe\Charge::create([
+    //         'amount' => $amountInCents,
+    //         'currency' => 'usd',
+    //         'description' => 'Order Payment by: ' . $request->cardholder_name,
+    //         'source' => $request->stripeToken,
+    //         'metadata' => [
+    //             'franchisee_id' => Auth::user()->franchisee_id,
+    //         ],
+    //     ]);
+    // } catch (\Exception $e) {
+    //     return redirect()->back()->withErrors(['Stripe Error: ' . $e->getMessage()]);
+    // }
 
     $order = \App\Models\FgpOrder::create([
         'user_ID' => Auth::user()->franchisee_id,
@@ -180,21 +180,21 @@ public function store(Request $request)
         'status' => 'Pending',
     ]);
 
-    \App\Models\OrderTransaction::create([
-        'franchisee_id' => Auth::user()->franchisee_id,
-        'fgp_order_id' => $order->id,
-        'cardholder_name' => $request->cardholder_name,
-        'amount' => $request->grandTotal,
-        'stripe_payment_intent_id' => $charge->id,
-        'stripe_payment_method' => $charge->payment_method ?? null,
-        'stripe_currency' => $charge->currency,
-        'stripe_client_secret' => $charge->client_secret ?? null,
-        'stripe_status' => $charge->status,
-    ]);
+    // \App\Models\OrderTransaction::create([
+    //     'franchisee_id' => Auth::user()->franchisee_id,
+    //     'fgp_order_id' => $order->id,
+    //     'cardholder_name' => $request->cardholder_name,
+    //     'amount' => $request->grandTotal,
+    //     'stripe_payment_intent_id' => $charge->id,
+    //     'stripe_payment_method' => $charge->payment_method ?? null,
+    //     'stripe_currency' => $charge->currency,
+    //     'stripe_client_secret' => $charge->client_secret ?? null,
+    //     'stripe_status' => $charge->status,
+    // ]);
 
     foreach ($validated['items'] as $item) {
         DB::table('fgp_order_details')->insert([
-            'fgp_order_id' => $order->id,
+            'fgp_order_id' => $order->fgp_ordersID,
             'fgp_item_id' => $item['fgp_item_id'],
             'unit_cost' => $item['unit_cost'],
             'unit_number' => $item['unit_number'],

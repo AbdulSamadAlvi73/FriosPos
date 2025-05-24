@@ -90,7 +90,7 @@ class InventoryController extends Controller
 
             $allocatedInventory = InventoryAllocation::join('fgp_items', 'fgp_items.fgp_item_id', '=', 'inventory_allocations.fgp_item_id')
                 ->select('fgp_items.name as flavor', 'inventory_allocations.location', 'inventory_allocations.quantity as cases')
-                ->where('franchise_id', Auth::id())
+                ->where('franchise_id', Auth::user()->franchisee_id)
                 ->get();
 
             return view('franchise_admin.inventory.locations', compact(
@@ -114,7 +114,7 @@ class InventoryController extends Controller
                 if (!$fgp_item_id) {
                     continue;
                 }
-                $exists = InventoryAllocation::where('franchise_id', Auth::id())->where('fgp_item_id', $fgp_item_id)->where('location', $item['location'])->first();
+                $exists = InventoryAllocation::where('franchise_id', Auth::user()->franchisee_id)->where('fgp_item_id', $fgp_item_id)->where('location', $item['location'])->first();
                 if ($exists) {
                     $exists->update([
                         'quantity' => $item['cases'],
@@ -125,7 +125,7 @@ class InventoryController extends Controller
                         'fgp_item_id' => $fgp_item_id,
                         'quantity' => $item['cases'],
                         'location' => $item['location'],
-                        'franchise_id' => Auth::id()
+                        'franchise_id' => Auth::user()->franchisee_id
                     ]);
                 }
             }
@@ -155,7 +155,7 @@ class InventoryController extends Controller
                 ]);
             }
 
-            $allocation = InventoryAllocation::where('franchise_id', Auth::id())
+            $allocation = InventoryAllocation::where('franchise_id', Auth::user()->franchisee_id)
                 ->where('fgp_item_id', $fgp_item_id)
                 ->where('location', $request->location)
                 ->first();
@@ -201,7 +201,7 @@ class InventoryController extends Controller
                 ]);
             }
 
-            InventoryAllocation::where('franchise_id', Auth::id())
+            InventoryAllocation::where('franchise_id', Auth::user()->franchisee_id)
                 ->where('fgp_item_id', $fgp_item_id)
                 ->where('location', $request->location)
                 ->delete();

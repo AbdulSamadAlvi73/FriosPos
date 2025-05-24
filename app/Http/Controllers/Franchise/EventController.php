@@ -107,7 +107,7 @@ class EventController extends Controller
                 return in_array($currentMonth, $availableMonths ?? []);
             });
 
-        $staffs = User::where('role', 'franchise_staff')->get();
+        $staffs = User::where('role', 'franchise_staff')->where('franchisee_id' , Auth::user()->franchisee_id)->get();
 
 
         $orders = DB::table('fgp_orders')
@@ -127,7 +127,7 @@ class EventController extends Controller
             ->groupBy('fgp_order_details.fgp_item_id', 'fgp_items.name')
             ->get();
 
-        $customers = Customer::get();
+        $customers = Customer::where('franchisee_id' , Auth()->user()->franchisee_id)->get();
 
         return view('franchise_admin.event.create', compact('pops', 'staffs', 'orderDetails', 'customers'));
     }
@@ -157,10 +157,12 @@ class EventController extends Controller
             'quantity.*' => 'required|numeric|min:0',
         ]);
 
-        $instock    = $request->in_stock;
-        $quantities = $request->quantity;
-        $orderable  = $request->orderable;
+        $instock    = $request->in_stock ?? [];
+        $quantities = $request->quantity ?? [];
+        $orderable  = $request->orderable ?? [];
 
+
+        // dd($request->all());
 
         $inStockItems = FgpItem::whereIn('fgp_item_id', $instock)->get();
 
@@ -171,6 +173,7 @@ class EventController extends Controller
             $totalCaseCost += $itemTotal;
             $item->total_cost = $itemTotal;
         }
+
 
         $orderItems = FgpOrderDetail::whereIn('id', $orderable)->get();
 
@@ -200,6 +203,8 @@ class EventController extends Controller
         // } catch (\Exception $e) {
         //     return redirect()->back()->withErrors(['Stripe Error: ' . $e->getMessage()]);
         // }
+
+
 
         $event = \App\Models\Event::create([
             'franchisee_id' => Auth::user()->franchisee_id,

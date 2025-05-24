@@ -1,11 +1,11 @@
 @extends('layouts.app')
 @section('content')
     <style>
-        .dropdown-menu.show {
+        /* .dropdown-menu.show {
             max-height: 184.306px !important;
             overflow-y: auto;
             min-height: 96px;
-        }
+        } */
 
         :disabled {
             color: #00ABC7 !important;
@@ -18,7 +18,7 @@
                     Create Event
                 </h1>
 
-                <a href="{{ route('franchise.events.calender') }}" class="btn btn-primary">
+                <a href="{{ route('franchise.events.calender') }}" class="mb-3 btn btn-secondary btn-sm">
                     Back
                 </a>
             </div>
@@ -336,7 +336,7 @@
                     Submit
                 </button> --}}
 
-                <button class="btn btn-outline-primary" >
+                <button class="btn btn-primary" >
                     Submit
                 </button>
 

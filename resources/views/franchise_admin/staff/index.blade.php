@@ -58,12 +58,6 @@
 							<table id="example5" class="table customer-table display mb-4 fs-14 card-table">
 								<thead>
                                     <tr>
-                                        <th>
-                                            <div class="form-check checkbox-secondary">
-                                                <input class="form-check-input" type="checkbox" value="" id="checkAll">
-                                                <label class="form-check-label" for="checkAll"></label>
-                                            </div>
-                                        </th>
                                         {{-- <th>Staff ID</th> --}}
                                         <th>Staff Name</th>
                                         <th>Staff Of</th>
@@ -77,12 +71,6 @@
                                 <tbody>
                                     @foreach ($users as $user)
                                         <tr>
-                                            <td>
-                                                <div class="form-check checkbox-secondary">
-                                                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault{{ $user->user_id }}">
-                                                    <label class="form-check-label" for="flexCheckDefault{{ $user->user_id }}"></label>
-                                                </div>
-                                            </td>
                                             {{-- <td>#{{ str_pad($user->user_id, 7, '0', STR_PAD_LEFT) }}</td> --}}
                                             <td>{{ $user->name }}</td>
                                             <td>
