@@ -64,7 +64,7 @@
                     <ul aria-expanded="false">
                         <li><a href="{{ route('corporate_admin.expense-category') }}">Expenses by Category</a></li>
                         <li><a href="{{ route('corporate_admin.expense.franchisee') }}">Expenses by Franchisee</a></li>
-                        <li><a href="edit_expense_categories.html">Edit Expense Categories</a></li>
+                        {{-- <li><a href="edit_expense_categories.html">Edit Expense Categories</a></li> --}}
                     </ul>
                 </li>
                 <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
@@ -116,7 +116,7 @@
                     <ul aria-expanded="false">
                         {{-- <li><a href="{{ route('franchise.account.index') }}">Accounts</a></li> --}}
                         <li><a href="{{ route('franchise.invoice.index') }}">Invoices</a></li>
-                        <li><a href="sales.html">Sales</a></li>
+                        {{-- <li><a href="sales.html">Sales</a></li> --}}
                         <li><a href="{{ route('franchise.transaction') }}">Transactions</a></li>
                     </ul>
                 </li>
