@@ -167,62 +167,48 @@
 @endsection
 @push('scripts')
 <script>
-$(document).ready(function () {
-    $('.order-detail-trigger').on('click', function () {
-        const orderId = $(this).data('id'); // Get the order ID from the data-id attribute
+$(document).on('click', '.order-detail-trigger', function () {
+    const orderId = $(this).data('id');
 
-        $.ajax({
-            url: '{{ route('franchise.inventory.detail') }}', // Backend route to fetch order details
-            method: 'GET',
-            data: { id: orderId }, // Pass orderId to backend
-            success: function (response) {
-    // Assuming response contains the orderDetails array
-    let orderDetails = response.orderDetails;
+    $.ajax({
+        url: '{{ route('franchise.inventory.detail') }}', // Backend route to fetch order details
+        method: 'GET',
+        data: { id: orderId },
+        success: function (response) {
+            let orderDetails = response.orderDetails;
+            let detailsHtml = `
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th scope="col">Item</th>
+                            <th scope="col">Unit Cost</th>
+                            <th scope="col">Quantity</th>
+                            <th scope="col">Transaction Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
 
-    // Prepare HTML to display the order details inside a table
-    let detailsHtml = `
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th scope="col">Item</th>
-                    <th scope="col">Unit Cost</th>
-                    <th scope="col">Quantity</th>
-                    <th scope="col">Transaction Date</th>
-                </tr>
-            </thead>
-            <tbody>
-    `;
+            orderDetails.forEach(function(detail) {
+                detailsHtml += `
+                    <tr>
+                        <td>${detail.name}</td>
+                        <td>$${detail.unit_cost}</td>
+                        <td>${detail.unit_number}</td>
+                        <td>${detail.formatted_date}</td>
+                    </tr>
+                `;
+            });
 
-    // Loop through orderDetails and create table rows
-    orderDetails.forEach(function(detail) {
-        detailsHtml += `
-            <tr>
-                <td>${detail.name}</td>
-                <td>$${detail.unit_cost}</td>
-                <td>${detail.unit_number}</td>
-                <td>${detail.formatted_date}</td>
-            </tr>
-        `;
-    });
-
-    // Close the table
-    detailsHtml += `</tbody></table>`;
-
-    // Insert the details HTML into the modal body
-    $('#orderModal .modal-body').html(detailsHtml);
-
-    // Show the modal
-    $('#orderModal').modal('show');
-},
-
-            error: function () {
-                alert('Error loading order details.');
-            }
-        });
+            detailsHtml += `</tbody></table>`;
+            $('#orderModal .modal-body').html(detailsHtml);
+            $('#orderModal').modal('show');
+        },
+        error: function () {
+            alert('Error loading order details.');
+        }
     });
 });
-
-
 
 </script>
 @endpush
