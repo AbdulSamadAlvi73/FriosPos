@@ -133,7 +133,7 @@
 
 
             <div class="row card pt-4">
-                <h4 class="card-title">Invoice Transaction</h4>
+                <h4 class="card-title">Sale Transaction</h4>
                 <div class="col-lg-12 pt-4">
                     <div class="table-responsive rounded">
                         <table id="example8" class="table customer-table display mb-4 fs-14 card-table">
