@@ -23,15 +23,15 @@
 
             <div class="d-flex justify-content-between">
                 <div class="container">
-                                @if ($stripe == null)
+                                @if ($user->stripe_account_id == null)
                 <div class="alert alert-danger">
-                    Franchise admin need to create a Stripe account.
+                    Franchise admin need to connect a Stripe account.
                 </div>
             @endif
                     <h1 style="font-size: 28px; font-weight: bold">
                         Create Sale
                     </h1>
-                    @if ($stripe)
+                    @if ($user->stripe_account_id)
                         <form action="{{ route('franchise_staff.sales.store') }}" method="POST" id="invoice-form">
                             @csrf
                     @endif
@@ -136,7 +136,7 @@
 
                             </div>
                         </div>
-                        @if ($stripe)
+                        @if ($user->stripe_account_id)
                                                     <button class="btn btn-success action-btn">Create Sale</button>
                     </form>
                         @endif

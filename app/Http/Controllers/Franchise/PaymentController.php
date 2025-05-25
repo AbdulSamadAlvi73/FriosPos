@@ -182,9 +182,8 @@ class PaymentController extends Controller
     {
         $invoice = Invoice::findOrFail($invoiceId);
 
-        $stripe = StripeModel::where('franchisee_id', $invoice->franchisee_id)->first();
 
-        Stripe::setApiKey($stripe->secret_key);
+Stripe::setApiKey(config('services.stripe.secret'));
 
         $session = Session::retrieve($invoice->stripe_session_id);
 

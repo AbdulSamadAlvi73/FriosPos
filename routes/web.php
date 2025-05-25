@@ -27,6 +27,7 @@ use App\Http\Controllers\CorporateAdminControllers\AdditionalChargesController;
 use App\Http\Controllers\CorporateAdminControllers\PaymentController as CorpPaymentController;
 
 use App\Http\Controllers\Franchise\EventController;
+use App\Http\Controllers\Franchise\StripeController;
 use App\Http\Controllers\Franchise\ExpenseController;
 use App\Http\Controllers\Franchise\CustomerController;
 use App\Http\Controllers\Franchise\InventoryController;
@@ -250,8 +251,18 @@ Route::middleware(['auth', 'role:franchise_admin|franchise_manager' , StripeMidd
     Route::post('expense-category/store' , [ExpensesCategoryController::class , 'storeExpense'])->name('expense-category.store');
     Route::post('expense-sub-category/store' , [ExpensesCategoryController::class , 'SubstoreExpense'])->name('expense-sub-category.store');
     Route::delete('expense-sub-category/{id}/delete' , [ExpensesCategoryController::class , 'deleteExpense'])->name('expense-sub-category.delete');
+
+
 });
 
+
+    // Stripe Connect
+    Route::get('/stripe/onboard', [StripeController::class, 'createConnectedAccount'])->name('franchise.stripe.onboard');
+    Route::get('/stripe/refresh', [StripeController::class, 'refreshOnboarding'])->name('franchise.stripe.refresh');
+    Route::get('/stripe/return', [StripeController::class, 'returnOnboarding'])->name('franchise.stripe.return');
+
+    Route::get('/pay/{recipient}', [StripeController::class, 'showPayForm'])->name('franchise.pay.form');
+    Route::post('/pay/{recipient}/intent', [StripeController::class, 'createPaymentIntent'])->name('franchise.pay.intent');
 
     // Stripe
     Route::get('stripe' , [PaymentController::class , 'stripe'])->name('franchise.stripe');

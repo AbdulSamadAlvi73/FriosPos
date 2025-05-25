@@ -29,7 +29,7 @@ class SaleController extends Controller
     {
         $data['customers'] = Customer::where('franchisee_id', Auth::user()->franchisee_id)->get();
         $data['franchisee'] = '10';
-        $data['stripe'] = Stripe::where('franchisee_id', Auth::user()->franchisee_id)->first();
+        $data['user'] = User::where('franchisee_id', Auth::user()->franchisee_id)->first();
         $flavors = FgpItem::all();
 
         $initialPopFlavors = [];
