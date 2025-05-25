@@ -18,6 +18,7 @@ use App\Mail\OrderPaidMail;
 use Illuminate\Support\Facades\Mail;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\OrderTransaction;
+use Stripe\Checkout\Session as StripeSession;
 use App\Models\User;
 use DB;
 
@@ -136,8 +137,6 @@ public function store(Request $request)
     $factorCase = 3;
 
     $validated = $request->validate([
-        // 'stripeToken' => 'required|string',
-        // 'cardholder_name' => 'required|string|max:191',
         'grandTotal' => 'required|numeric|min:1',
         'items' => 'required|array',
         'items.*.fgp_item_id' => 'required|exists:fgp_items,fgp_item_id',
@@ -156,41 +155,11 @@ public function store(Request $request)
         return redirect()->back()->withErrors(['Order quantity must be a multiple of ' . $factorCase . '.']);
     }
 
-    // \Stripe\Stripe::setApiKey(config('stripe.secret_key'));
-
-    // try {
-    //     $amountInCents = $request->grandTotal * 100;
-
-    //     $charge = \Stripe\Charge::create([
-    //         'amount' => $amountInCents,
-    //         'currency' => 'usd',
-    //         'description' => 'Order Payment by: ' . $request->cardholder_name,
-    //         'source' => $request->stripeToken,
-    //         'metadata' => [
-    //             'franchisee_id' => Auth::user()->franchisee_id,
-    //         ],
-    //     ]);
-    // } catch (\Exception $e) {
-    //     return redirect()->back()->withErrors(['Stripe Error: ' . $e->getMessage()]);
-    // }
-
     $order = \App\Models\FgpOrder::create([
         'user_ID' => Auth::user()->franchisee_id,
         'date_transaction' => now(),
         'status' => 'Pending',
     ]);
-
-    // \App\Models\OrderTransaction::create([
-    //     'franchisee_id' => Auth::user()->franchisee_id,
-    //     'fgp_order_id' => $order->id,
-    //     'cardholder_name' => $request->cardholder_name,
-    //     'amount' => $request->grandTotal,
-    //     'stripe_payment_intent_id' => $charge->id,
-    //     'stripe_payment_method' => $charge->payment_method ?? null,
-    //     'stripe_currency' => $charge->currency,
-    //     'stripe_client_secret' => $charge->client_secret ?? null,
-    //     'stripe_status' => $charge->status,
-    // ]);
 
     foreach ($validated['items'] as $item) {
         DB::table('fgp_order_details')->insert([
@@ -203,26 +172,60 @@ public function store(Request $request)
         ]);
     }
 
-    // $orderTransaction = \App\Models\OrderTransaction::where('fgp_order_id', $order->id)->firstOrFail();
-    // $orderDetails = \App\Models\FgpOrderDetail::where('fgp_order_id', $order->id)->get();
-    // $franchisee = \App\Models\Franchisee::where('franchisee_id', $order->user_ID)->firstOrFail();
+    // Stripe Checkout Session Creation
+    \Stripe\Stripe::setApiKey(apiKey: config('stripe.secret_key'));
 
-    // // Create the PDF
-    // $pdf = PDF::loadView('franchise_admin.payment.pdf.order-pos', compact('orderTransaction', 'order', 'franchisee', 'orderDetails'));
-    // $pdfPath = storage_path('app/public/order_invoice_' . $order->id . '.pdf');
-    // $pdf->save($pdfPath);  // Save PDF to storage path
+    try {
+        $amountInCents = $request->grandTotal * 100;
 
-    // // Send the email with the attachment
-    // $corporateAdmin = User::where('user_id', 17)->first();  // Assuming 17 is the Corporate Admin ID
-    // if ($corporateAdmin) {
-    //     Mail::to($corporateAdmin->email)->send(new OrderPaidMail($corporateAdmin, $order, $pdfPath));  // Send email with attachment
-    // }
+        $checkoutSession = \Stripe\Checkout\Session::create([
+            'payment_method_types' => ['card'],
+            'line_items' => [[
+                'price_data' => [
+                    'currency' => 'usd',
+                    'product_data' => [
+                        'name' => 'Order Payment - ' . Auth::user()->name,
+                    ],
+                    'unit_amount' => $amountInCents,
+                ],
+                'quantity' => 1,
+            ]],
+            'mode' => 'payment',
+            'success_url' => route('payment.successs') . '?session_id={CHECKOUT_SESSION_ID}',
+            'cancel_url' => route('payment.cancell'),
+            'metadata' => [
+                'order_id' => $order->fgp_ordersID,
+                'franchisee_id' => Auth::user()->franchisee_id,
+            ],
+        ]);
 
-    // // Remove PDF after sending
-    // unlink($pdfPath);
+        $paymentUrl = $checkoutSession->url;
 
-    return redirect()->route('franchise.orderpops.view')->with('success', 'Order placed and paid successfully!');
+    } catch (\Exception $e) {
+        return redirect()->back()->withErrors(['Stripe Error: ' . $e->getMessage()]);
+    }
+
+    // Generate PDF
+    $orderDetails = \App\Models\FgpOrderDetail::where('fgp_order_id', $order->fgp_ordersID)->get();
+    $franchisee = \App\Models\Franchisee::where('franchisee_id', $order->user_ID)->firstOrFail();
+
+    $pdf = \PDF::loadView('franchise_admin.payment.pdf.order-pos', compact('order', 'franchisee', 'orderDetails'));
+    $pdfPath = storage_path('app/public/order_invoice_' . $order->id . '.pdf');
+    $pdf->save($pdfPath);
+
+    // Send Email
+    $franchiseeadmin = \App\Models\User::where(['franchisee_id' => Auth()->user()->franchisee_id , 'role' => 'franchise_admin'])->first();
+    if ($franchiseeadmin) {
+        \Mail::to($franchiseeadmin->email)->send(
+            new \App\Mail\OrderPaidMail($franchiseeadmin, $order, $pdfPath, $paymentUrl)
+        );
+    }
+
+    unlink($pdfPath); // Remove the PDF after sending
+
+    return redirect()->route('franchise.orderpops.view')->with('success', 'Order placed successfully!');
 }
+
 
 
 
@@ -260,6 +263,64 @@ public function customer($franchisee_id)
     return response()->json([
         'data' => $customers,
     ]);
+}
+
+
+public function success(Request $request){
+        $sessionId = $request->get('session_id');
+
+    if (!$sessionId) {
+        return 'Missing Stripe session ID.';
+    }
+
+    \Stripe\Stripe::setApiKey(config('stripe.secret_key'));
+
+    try {
+        // Get the Checkout Session
+        $session = StripeSession::retrieve($sessionId);
+
+        // Get PaymentIntent if available
+        $paymentIntent = \Stripe\PaymentIntent::retrieve($session->payment_intent);
+
+        // Get metadata
+        $orderId = $session->metadata->order_id ?? null;
+        $franchiseeId = $session->metadata->franchisee_id ?? null;
+
+        if (!$orderId || !$franchiseeId) {
+            return 'Missing metadata from Stripe.';
+        }
+
+        // Check if transaction already exists (avoid duplicates)
+        $existing = OrderTransaction::where('stripe_payment_intent_id', $session->payment_intent)->first();
+        if ($existing) {
+            return 'Payment already recorded.';
+        }
+
+        // Create the transaction
+        OrderTransaction::create([
+            'franchisee_id' => $franchiseeId,
+            'fgp_order_id' => $orderId,
+            'cardholder_name' => $session->customer_details->name ?? 'Unknown',
+            'amount' => $session->amount_total / 100,
+            'stripe_payment_intent_id' => $session->payment_intent,
+            'stripe_payment_method' => $paymentIntent->payment_method ?? null,
+            'stripe_currency' => $session->currency,
+            'stripe_client_secret' => $paymentIntent->client_secret ?? null,
+            'stripe_status' => $session->payment_status,
+        ]);
+
+        // Optionally: update order status
+        $order = FgpOrder::find($orderId);
+        if ($order) {
+            $order->status = 'Paid';
+            $order->save();
+        }
+
+            return view('thankyou');
+
+    } catch (\Exception $e) {
+        return 'Stripe error: ' . $e->getMessage();
+    }
 }
 }
 

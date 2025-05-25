@@ -255,6 +255,13 @@ Route::middleware(['auth', 'role:franchise_admin|franchise_manager' , StripeMidd
 
 });
 
+Route::get('/payment/success', [OrderPopsController::class , 'success'])->name('payment.successs');
+
+Route::get('/payment/cancel', function () {
+    return 'Payment was cancelled.';
+})->name('payment.cancell');
+
+
 
     // Stripe Connect
     Route::get('/stripe/onboard', [StripeController::class, 'createConnectedAccount'])->name('franchise.stripe.onboard');
