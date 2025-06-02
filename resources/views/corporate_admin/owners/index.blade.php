@@ -54,7 +54,7 @@
 								<thead>
                                     <tr>
 
-                                        <th>Owners ID</th>
+                                        {{-- <th>Owners ID</th> --}}
                                         <th>Owner Name</th>
                                         <th>Owner Of</th>
                                         <th>Email</th>
@@ -67,7 +67,7 @@
                                     @foreach ($users as $user)
                                         <tr>
 
-                                            <td>#{{ str_pad($user->user_id, 7, '0', STR_PAD_LEFT) }}</td>
+                                            {{-- <td>#{{ str_pad($user->user_id, 7, '0', STR_PAD_LEFT) }}</td> --}}
                                             <td>{{ $user->name }}</td>
                                             <td>
                                                 @if ($user->franchisee)
@@ -78,7 +78,7 @@
                                             </td>
                                             <td>{{ $user->email }}</td>
                                             <td>{{ ucwords(str_replace('_', ' ', $user->role)) }}</td>
-                                            <td>{{ $user->created_date ? \Carbon\Carbon::parse($user->created_date)->format('d/m/Y') : 'N/A' }}</td>
+                                            <td>{{ $user->created_date ? \Carbon\Carbon::parse($user->created_date)->format('m/d/Y') : 'N/A' }}</td>
                                             <td>
                                                 <div class="d-flex">
                                                     <a href="{{ route('corporate_admin.owner.edit', $user->user_id) }}" class="edit-user">

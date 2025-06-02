@@ -89,7 +89,7 @@
                                                     No Phone number
                                                 @endif
                                             </td>
-                                            <td>{{ $user->created_date ? \Carbon\Carbon::parse($user->created_date)->format('d/m/Y') : 'N/A' }}</td>
+                                            <td>{{ $user->created_date ? \Carbon\Carbon::parse($user->created_date)->format('m/d/Y') : 'N/A' }}</td>
                                             <td>
                                                 @role('franchise_admin')
                                                 <div class="d-flex">

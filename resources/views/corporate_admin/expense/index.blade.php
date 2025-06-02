@@ -69,7 +69,7 @@
                                         <td>{{ isset($expense->category) ? $expense->category->category : '-' }}</td>
                                         <td>{{ isset($expense->sub_category) ? $expense->sub_category->sub_category : '-' }}</td>
                                         <td>${{ number_format($expense->amount) }}</td>
-                                        <td>{{ $expense->date }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($expense->date)->format('m/d/Y') }}</td>
                                         {{-- <td>
                                             <div class="d-flex">
                                                 <a href="{{ route('franchise.expense.edit', $expense->id) }}" class="edit-expense">

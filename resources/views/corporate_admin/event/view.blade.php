@@ -39,7 +39,7 @@
             <div class="row mt-5">
                 <label class="mt-1"><b>Start Date: </b>
                     @if (!empty($event->start_date))
-                    {{ date('d M Y h:i A', strtotime($event->start_date)) }}
+                    {{ date('m/d/Y h:i A', strtotime($event->start_date)) }}
                     @else
                         -
                     @endif
@@ -47,7 +47,7 @@
 
                 <label class="mt-1"><b>End Date: </b>
                     @if (!empty($event->end_date))
-                    {{ date('d M Y h:i A', strtotime($event->end_date)) }}
+                    {{ date('m/d/Y h:i A', strtotime($event->end_date)) }}
                     @else
                         -
                     @endif

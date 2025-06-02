@@ -73,7 +73,7 @@
                                         </td>
                                         <td>{{ $order->status }}</td>
                                         <td>${{ number_format($totalAmount, 2) }}</td>
-                                        <td>{{ \Carbon\Carbon::parse($order->date_transaction)->format('M d, Y h:i A') }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($order->date_transaction)->format('m/d/Y h:i A') }}</td>
                                     </tr>
                                 @endforeach
                                 </tbody>

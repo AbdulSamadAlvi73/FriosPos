@@ -81,7 +81,7 @@
 
                             </td>
                             <td>
-                                {{ date('d M Y', strtotime($event->start_date)) }}
+                                {{ date('m/d/Y', strtotime($event->start_date)) }}
                             </td>
                             <td>
                                 {{ $event->event_type ?: '-' }}
